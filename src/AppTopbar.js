@@ -6,7 +6,7 @@ import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { CSSTransition } from 'react-transition-group';
 import { RTLContext } from './App';
-
+import { SplitButton } from 'primereact/splitbutton';
 const AppTopbar = (props) => {
     const isRTL = useContext(RTLContext);
     const navigate = useNavigate();
@@ -30,6 +30,7 @@ const AppTopbar = (props) => {
         }
     };
 
+
     const botonEstilo = {
         fontSize: '30px',
         color: "#ffffff",
@@ -41,7 +42,7 @@ const AppTopbar = (props) => {
         color: "#ffffff",
         background: "#5180ce"
     };
-    const [inlineMenuActive, setInlineMenuActive] = useState({}); // State for inline menu
+    const [inlineMenuActive, setInlineMenuActive] = useState({}); 
 
     const handleInlineMenuClick = (e, menuKey) => {
         setInlineMenuActive((prevMenuActive) => ({
@@ -80,37 +81,38 @@ const AppTopbar = (props) => {
             </div>
 
             <div className={classNames('layout-topbar-right', { 'layout-topbar-mobile-active': props.mobileTopbarActive })}>
-    <div className="layout-topbar-actions-left"></div>
-    <div className="layout-topbar-actions-right">
-        <ul className="layout-topbar-items">
-            <li className="layout-topbar-item notifications">
-                <div className="dropdown-container">
-                    <button className="dropdown-toggle" onClick={toggleMenu} style={{ background: 'transparent', border: 'none', padding: '0' }}>
-                        <i className="pi pi-cog p-button-icon p-link" style={botonEstilo}></i>
-                    </button>
-                    {isMenuOpen && (
-                        <ul ref={inlineMenuRef} className="layout-inline-menu-action-panel custom-dropdown-panel">
-                        {[
-                            { icon: 'pi-cog', label: 'Settings' },
-                            { icon: 'pi-compass', label: 'Support' },
-                            { icon: 'pi-power-off', label: 'Logout', onClick: handleLogout },
-                        ].map((item, index) => (
-                            <li className="layout-inline-menu-action-item tooltip" data-pr-tooltip={item.label} key={index}>
-                                <button className="flex flex-row align-items-center p-link" onClick={item.onClick}>
-                                    <div className="menu-item-box">
-                                        <i className={`pi ${item.icon} pi-fw`}></i>
-                                        <span>{item.label}</span>
-                                    </div>
+                <div className="layout-topbar-actions-left"></div>
+                <div className="layout-topbar-actions-right">
+                    <ul className="layout-topbar-items">
+                        <li className="layout-topbar-item notifications">
+                            <div className="dropdown-container">
+                                <button className="dropdown-toggle" onClick={toggleMenu} style={{ background: 'transparent', border: 'none', padding: '0' }}>
+                                    <i className="pi pi-cog p-button-icon p-link" style={botonEstilo}></i>
                                 </button>
-                            </li>
-                        ))}
+                                {isMenuOpen && (
+                                    <ul ref={inlineMenuRef} className="layout-inline-menu-action-panel custom-dropdown-panel">
+                                        {[
+                                            { icon: 'pi-cog', label: 'Settings' },
+                                            { icon: 'pi-compass', label: 'Support' },
+                                            { icon: 'pi-power-off', label: 'Logout ', onClick: handleLogout },
+
+                                        ].map((item, index) => (
+                                            <li className="layout-inline-menu-action-item tooltip" data-pr-tooltip={item.label} key={index}>
+                                                <button className="flex flex-row align-items-center p-link" onClick={item.onClick}>
+                                                    <div className="menu-item-box">
+                                                        <i className={`pi ${item.icon} pi-fw`}></i>
+                                                        <span>{item.label}</span>
+                                                    </div>
+                                                </button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        </li>
                     </ul>
-                    )}
                 </div>
-            </li>
-        </ul>
-    </div>
-</div>
+            </div>
         </div>
     );
 };

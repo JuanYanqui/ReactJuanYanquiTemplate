@@ -145,7 +145,7 @@ export default function LazyLoadDemo() {
 
     const rowExpansionTemplate = (rowData) => {
         if (!rowData.children || rowData.children.length === 0) return null;
-    
+
         return (
             <div className="p-mb-4">
                 {rowData.children.map((child, index) => (
@@ -165,7 +165,7 @@ export default function LazyLoadDemo() {
             </div>
         );
     };
-    
+
     const openNew = () => {
         setDialogVisible(true);
     };
@@ -196,9 +196,9 @@ export default function LazyLoadDemo() {
 
     const filteredData = preparedData.filter(
         (row) =>
-          row.name.toLowerCase().includes(searchText.toLowerCase()) ||
-          (row.url && row.url.toLowerCase().includes(searchText.toLowerCase()))
-      );
+            row.name.toLowerCase().includes(searchText.toLowerCase()) ||
+            (row.url && row.url.toLowerCase().includes(searchText.toLowerCase()))
+    );
 
     const productDialogFooter = (
         <React.Fragment>
@@ -219,77 +219,85 @@ export default function LazyLoadDemo() {
         </React.Fragment>
     );
 
+
     return (
         <div>
             <div className="card">
                 <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
                 <DataTable
-                value={filteredData}
-                dataKey="id"
-                rowExpansionTemplate={rowExpansionTemplate}
-                paginator
-                rows={2}
-                rowsPerPageOptions={[5, 10, 25]}
-                expandedRows={expandedRows}
-                onRowToggle={(e) => toggleRow(e.data)} 
-                header={header} 
-            >
-                <Column
-                    expander
-                    style={{ width: '3em' }}
-                    body={(rowData) =>
-                        rowData.children && rowData.children.length > 0 ? (
-                            <Button
-                                icon="pi pi-angle-down"
-                                className={`p-row-toggler p-link`}
-                                onClick={() => toggleRow(rowData)}
-                                aria-expanded={expandedRows.includes(rowData.id)}
-                            />
-                        ) : null
-                    }
-                />
-                <Column selectionMode="multiple" exportable={false}></Column>
-                <Column field="icon" header="" body={(rowData) => <i className={rowData.icon}></i>} style={{ textAlign: 'center' }} />
-                <Column field="name" header="Name" sortable filter filterPlaceholder="Search" />
-                <Column field="url" header="URL" body={(rowData) => <a href={rowData.url}>{rowData.url}</a>} />
-            </DataTable>
+                    value={filteredData}
+                    dataKey="id"
+                    rowExpansionTemplate={rowExpansionTemplate}
+                    paginator
+                    rows={2}
+                    rowsPerPageOptions={[5, 10, 25]}
+                    expandedRows={expandedRows}
+                    onRowToggle={(e) => toggleRow(e.data)}
+                    header={header}
+                >
+                    <Column
+                        expander
+                        style={{ width: '3em' }}
+                        body={(rowData) =>
+                            rowData.children && rowData.children.length > 0 ? (
+                                <Button
+                                    icon="pi pi-angle-down"
+                                    className={`p-row-toggler p-link`}
+                                    onClick={() => toggleRow(rowData)}
+                                    aria-expanded={expandedRows.includes(rowData.id)}
+                                />
+                            ) : null
+                        }
+                    />
+                    <Column field="name" header="Name" sortable filter filterPlaceholder="Search" />
+                    <Column field="url" header="URL" sortable filter filterPlaceholder="Search" body={(rowData) => <a href={rowData.url}>{rowData.url}</a>} />
+                    <Column field="icon" header="" body={(rowData) => <i className={rowData.icon}></i>} style={{ textAlign: 'center' }} />
+                </DataTable>
             </div>
             <Dialog visible={isDialogVisible} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Detalle" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-            <div className="grid">
+                <div className="grid">
 
 
-            <div className="col-12">
-                <div className="card">
-                    <h5>Advanced</h5>
-                    <div className="p-fluid formgrid grid">
-                        <div className="field col-12 md:col-6">
-                            <label htmlFor="firstname2">Firstname</label>
-                            <InputText id="firstname2" type="text" />
-                        </div>
-                        <div className="field col-12 md:col-6">
-                            <label htmlFor="lastname2">Lastname</label>
-                            <InputText id="lastname2" type="text" />
-                        </div>
-                        <div className="field col-12">
-                            <label htmlFor="address">Address</label>
-                            <InputTextarea id="address" rows="4" />
-                        </div>
-                        <div className="field col-12 md:col-6">
-                            <label htmlFor="city">City</label>
-                            <InputText id="city" type="text" />
-                        </div>
-                        <div className="field col-12 md:col-3">
-                            <label htmlFor="state">State</label>
-                            <Dropdown id="state" value={dropdownItem} onChange={(e) => setDropdownItem(e.value)} options={dropdownItems} optionLabel="name" placeholder="Select One"></Dropdown>
-                        </div>
-                        <div className="field col-12 md:col-3">
-                            <label htmlFor="zip">Zip</label>
-                            <InputText id="zip" type="text" />
+                    <div className="col-12">
+                        <div className="card">
+                            <h5>Advanced</h5>
+                            <div className="p-fluid formgrid grid">
+                                <div className="field col-12 md:col-6">
+                                    <span className="p-input-icon-left">
+                                        <i className="pi pi-user" />
+                                        <InputText placeholder="Nombre" />
+                                    </span>
+                                </div>
+                                <div className="field col-12 md:col-6">
+                                <span className="p-input-icon-left">
+                                        <i className="pi pi-user" />
+                                        <InputText placeholder="Apellido" />
+                                    </span>
+                                </div>
+                                <div className="field col-12">
+                                <span className="p-input-icon-left">
+                                        <i className="pi pi-whatsapp" />
+                                        <InputText placeholder="Celular" />
+                                    </span>
+                                </div>
+                                <div className="field col-12 md:col-6">
+                                    <span className="p-input-icon-left">
+                                        <i className="pi pi-map-marker" />
+                                        <InputText placeholder="Ciudad" />
+                                    </span>
+                                </div>
+                                <div className="field col-12 md:col-3">
+                                    <label htmlFor="state">State</label>
+                                    <Dropdown id="state" value={dropdownItem} onChange={(e) => setDropdownItem(e.value)} options={dropdownItems} optionLabel="name" placeholder="Select One"></Dropdown>
+                                </div>
+                                <div className="field col-12 md:col-3">
+                                    <label htmlFor="zip">Zip</label>
+                                    <InputText id="zip" type="text" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
             </Dialog>
 
         </div>
@@ -297,3 +305,16 @@ export default function LazyLoadDemo() {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
