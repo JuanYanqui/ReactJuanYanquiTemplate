@@ -19,7 +19,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import * as XLSX from 'xlsx';
 import { Toast } from 'primereact/toast';
-export default function LazyLoadDemo() {
+
+export default function LazyLoadDemo({CategoriaCoralData}) {
     const [isDialogVisible, setDialogVisible] = useState(false);
     const [isDialogVisible2, setDialogVisible2] = useState(false);
     const [expandedRows, setExpandedRows] = useState([]);
