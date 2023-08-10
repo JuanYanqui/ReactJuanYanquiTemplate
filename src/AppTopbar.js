@@ -43,7 +43,7 @@ const AppTopbar = (props) => {
         color: "#ffffff",
         background: "#5180ce"
     };
-    const [inlineMenuActive, setInlineMenuActive] = useState({}); 
+    const [inlineMenuActive, setInlineMenuActive] = useState({});
 
     const handleInlineMenuClick = (e, menuKey) => {
         setInlineMenuActive((prevMenuActive) => ({

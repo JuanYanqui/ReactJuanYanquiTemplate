@@ -31,12 +31,13 @@ export default function LazyLoadDemo() {
     const [visible, setVisible] = useState(false);
     const [position, setPosition] = useState('center');
     const toast = useRef(null);
+
     const dropdownItems = [
         { name: 'Option 1', code: 'Option 1' },
         { name: 'Option 2', code: 'Option 2' },
         { name: 'Option 3', code: 'Option 3' }
     ];
-    // Inside your component
+
     const userData = {
         object: [
             {
@@ -197,6 +198,7 @@ export default function LazyLoadDemo() {
 
     const hideDialog2 = () => {
         setDialogVisible2(false);
+        setUploadedFileName("");
     };
     /*const leftToolbarTemplate = () => {
         return (
@@ -231,10 +233,34 @@ export default function LazyLoadDemo() {
         );
     };
 
+    const toastRef = useRef(null);
+
+    const showSuccess = () => {
+        toast.current.show({ severity: 'success', summary: 'Success Message', detail: 'Operación Completada.' });
+    };
+
+    const showError = () => {
+        toast.current.show({ severity: 'error', summary: 'Error', detail: 'Formato Invalido.', life: 3000 });
+    }
+
+    const showErrorcancel = () => {
+        toast.current.show({ severity: 'error', summary: 'Error', detail: 'Proceso Cancelado.', life: 3000 });
+    }
+
+    const handleYesClick = () => {
+        setVisible(false);
+        showSuccess();
+    };
+
+    const handleNoClick = () => {
+        setVisible(false);
+        showErrorcancel();
+    };
+
     const footerContent = (
         <div>
-            <Button label="No" icon="pi pi-times" onClick={() => setVisible(false)} className="p-button-text" />
-            <Button label="Yes" icon="pi pi-check" onClick={() => setVisible(false)} autoFocus />
+            <Button label="No" icon="pi pi-times" onClick={handleNoClick} className="p-button-text" />
+            <Button label="Yes" icon="pi pi-check" onClick={handleYesClick} autoFocus />
         </div>
     );
 
@@ -322,45 +348,52 @@ export default function LazyLoadDemo() {
         </React.Fragment>
     );
 
-
+    const [uploadedFileName, setUploadedFileName] = useState('');
 
     const handleFileUpload = (event) => {
-        console.log("entro al exelsss");
         const file = event.target.files[0];
-
+    
         if (file) {
-            const reader = new FileReader();
-            console.log("entro al exel");
-            reader.onload = (e) => {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[sheetName];
-
-                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-                setExcelData(jsonData);
-                console.log(jsonData);
-            };
-
-            reader.readAsArrayBuffer(file);
+            const validExtensions = ['xls', 'xlsx'];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+    
+            if (validExtensions.includes(fileExtension)) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+    
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                    setExcelData(jsonData);
+                    setUploadedFileName(file.name); 
+                };
+    
+                reader.readAsArrayBuffer(file);
+            } else {
+                showError();
+                setUploadedFileName("");
+            }
         } else {
-
-
+            showError();
+            setUploadedFileName("");
         }
     };
 
     const productDialogFooter2 = (
-        <div>
-            <label htmlFor="idarchivo" style={{ cursor: 'pointer' }}>
-                <img src="../assets/layout/images/sobresalir.png" alt="Excel Icon" style={{ width: '25px', height: '25px' }} />
-            </label>
-            <input
-                id="idarchivo"
-                type="file"
-                onChange={handleFileUpload}
-                style={{ display: 'none' }}
-            />
-        </div>
+        <div className="p-d-flex p-ai-center" style={{ alignItems: 'center' }}>
+        <label htmlFor="idarchivo" style={{ cursor: 'pointer' }}>
+            <img src="../assets/layout/images/sobresalir.png" alt="Excel Icon" style={{ width: '25px', height: '25px' }} />
+        </label>
+        <input
+            id="idarchivo"
+            type="file"
+            onChange={handleFileUpload}
+            style={{ display: 'none' }}
+        />
+        <span className="p-ml-2">{uploadedFileName}</span>
+    </div>
     );
     const show = (position) => {
         setPosition(position);
@@ -448,6 +481,7 @@ export default function LazyLoadDemo() {
                     Esta seguro de insertar exel.
                 </p>
             </Dialog>
+            <Toast ref={toast} />
 
         </div>
     );

@@ -5,6 +5,7 @@ import AppWrapper from './AppWrapper';
 import reportWebVitals from './reportWebVitals';
 import UsuarioService from './service/UsuarioService';
 import Keycloak from 'keycloak-js';
+import CategoriaCoralService from './service/CategoriaCoralService';
 const keycloakConfig = {
     realm: "gocorp",
     url: "https://goauth.gerardoortiz.com/auth/",
@@ -58,6 +59,7 @@ initKeycloak()
                 <HashRouter>
                         <UsuarioService>
                         </UsuarioService>
+                        <CategoriaCoralService></CategoriaCoralService>
                 </HashRouter>
             </React.StrictMode>
         );
