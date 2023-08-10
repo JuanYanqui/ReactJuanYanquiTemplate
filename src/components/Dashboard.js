@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
@@ -11,13 +11,26 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import { Panel } from 'primereact/panel';
-
+import { FileUpload } from 'primereact/fileupload';
+import { Calendar } from 'primereact/calendar';
+import { MultiSelect } from 'primereact/multiselect';
+import { Splitter, SplitterPanel } from 'primereact/splitter';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileExcel } from '@fortawesome/free-solid-svg-icons';
+import * as XLSX from 'xlsx';
+import { Toast } from 'primereact/toast';
 export default function LazyLoadDemo() {
     const [isDialogVisible, setDialogVisible] = useState(false);
     const [isDialogVisible2, setDialogVisible2] = useState(false);
     const [expandedRows, setExpandedRows] = useState([]);
     const [dropdownItem, setDropdownItem] = useState(null);
     const [searchText, setSearchText] = useState("");
+    const [date, setDate] = useState(null);
+    const [selectedCities, setSelectedCities] = useState(null);
+    const [excelData, setExcelData] = useState([]);
+    const [visible, setVisible] = useState(false);
+    const [position, setPosition] = useState('center');
+    const toast = useRef(null);
     const dropdownItems = [
         { name: 'Option 1', code: 'Option 1' },
         { name: 'Option 2', code: 'Option 2' },
@@ -101,6 +114,7 @@ export default function LazyLoadDemo() {
 
         ]
     };
+
 
     const preparedData = [];
     userData.object.forEach((parentItem) => {
@@ -196,16 +210,86 @@ export default function LazyLoadDemo() {
     const leftToolbarTemplate2 = () => {
         return (
             <div className="flex flex-wrap gap-2">
-                <Button label="Agregar Categoria" icon="pi pi-plus" severity="success" onClick={openNew} />
+                <Button label="Agregar Categoria" icon="pi pi-plus" onClick={openNew} style={{ backgroundColor: '#e0e0e0' }} />
             </div>
         );
     };
+
+    const ingresoexel = () => {
+        return (
+            <div className="flex flex-wrap gap-2">
+                <Button label="Agregar" icon="pi pi-plus" onClick={() => show('top')} className="success" style={{ minWidth: '10rem' }} />
+            </div>
+        );
+    };
+
+    const ingresoidividual = () => {
+        return (
+            <div className="flex flex-wrap gap-2">
+                <Button label="Agregar" icon="pi pi-plus" className="success" style={{ minWidth: '10rem' }} />
+            </div>
+        );
+    };
+
+    const footerContent = (
+        <div>
+            <Button label="No" icon="pi pi-times" onClick={() => setVisible(false)} className="p-button-text" />
+            <Button label="Yes" icon="pi pi-check" onClick={() => setVisible(false)} autoFocus />
+        </div>
+    );
+
+
+
+
+
+    const cities = [
+        { name: 'Nivel 1' },
+        { name: 'Nivel 2' },
+        { name: 'Nivel 3' },
+        { name: 'Nivel 4' },
+        { name: 'Nivel 5' },
+        { name: 'Nivel 6' },
+    ];
+    const [selectedCity, setSelectedCity] = useState(null);
+
+    const filtrotabla = () => {
+        return (
+            <div className="flex flex-wrap gap-2">
+                <div className="p-field p-col-12 p-md-12 p-lg-4">
+                    <label htmlFor="username">Nombre</label>
+                    <span className="p-inputgroup">
+                        <span className="p-inputgroup-addon"></span>
+                        <InputText placeholder="Nombre" />
+                    </span>
+                </div>
+
+                <div className="p-field p-col-12 p-md-12 p-lg-4">
+                    <label htmlFor="price">Nivel</label>
+                    <span className="p-inputgroup">
+                        <span className="p-inputgroup-addon"><i className="pi pi-co" /></span>
+                        <Dropdown value={selectedCity} options={cities} onChange={(e) => setSelectedCity(e.value)} optionLabel="name"
+                            placeholder="Seleccionar" className="w-full md:w-20rem" />
+                    </span>
+                </div>
+
+                <div className="p-field p-col-12 p-md-12 p-lg-4">
+                    <label htmlFor="username">Filtrar</label>
+                    <span className="p-inputgroup">
+                        <Button label="Selecionar" icon="pi pi-search" style={{ backgroundColor: '#e0e0e0' }} />
+                    </span>
+                </div>
+            </div>
+        );
+    };
+
+
     const rightToolbarTemplate = () => {
         return <Button label="Carga Masiva" icon="pi pi-upload" className="secondary" onClick={openNew2} />;
     };
+
     const header = (
-        <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
-            <h4 className="m-0">Prueba</h4>
+        <div className="flex flex-wrap gap-2 align-items-center justify-content-between" >
+            <h4 className="m-0"></h4>
             <span className="p-input-icon-left">
                 <i className="pi pi-search" />
                 <InputText value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder="Search..." />
@@ -239,9 +323,53 @@ export default function LazyLoadDemo() {
     );
 
 
+
+    const handleFileUpload = (event) => {
+        console.log("entro al exelsss");
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            console.log("entro al exel");
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                setExcelData(jsonData);
+                console.log(jsonData);
+            };
+
+            reader.readAsArrayBuffer(file);
+        } else {
+
+
+        }
+    };
+
+    const productDialogFooter2 = (
+        <div>
+            <label htmlFor="idarchivo" style={{ cursor: 'pointer' }}>
+                <img src="../assets/layout/images/sobresalir.png" alt="Excel Icon" style={{ width: '25px', height: '25px' }} />
+            </label>
+            <input
+                id="idarchivo"
+                type="file"
+                onChange={handleFileUpload}
+                style={{ display: 'none' }}
+            />
+        </div>
+    );
+    const show = (position) => {
+        setPosition(position);
+        setVisible(true);
+    };
+
     return (
         <div>
-            <div className="card">
+            <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
                 <Toolbar className="mb-4" right={rightToolbarTemplate}></Toolbar>
                 <DataTable
                     value={filteredData}
@@ -254,77 +382,71 @@ export default function LazyLoadDemo() {
                     onRowToggle={(e) => toggleRow(e.data)}
                     header={header}
                 >
-                    <Column
-                        expander
-                        style={{ width: '3em' }}
-                        body={(rowData) =>
-                            rowData.children && rowData.children.length > 0 ? (
-                                <Button
-                                    icon="pi pi-angle-down"
-                                    className={`p-row-toggler p-link`}
-                                    onClick={() => toggleRow(rowData)}
-                                    aria-expanded={expandedRows.includes(rowData.id)}
-                                />
-                            ) : null
-                        }
-                    />
                     <Column field="name" header="Name" sortable filter filterPlaceholder="Search" />
                     <Column field="url" header="URL" sortable filter filterPlaceholder="Search" body={(rowData) => <a href={rowData.url}>{rowData.url}</a>} />
                     <Column field="icon" header="" body={(rowData) => <i className={rowData.icon}></i>} style={{ textAlign: 'center' }} />
                     <Column field="icon" header="" body={leftToolbarTemplate2} />
                 </DataTable>
             </div>
-            <Dialog visible={isDialogVisible} style={{ width: '50rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Categoria Coral" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-                <div className="grid">
+            <Dialog visible={isDialogVisible} style={{ width: '78rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Categoria Coral" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
+                <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
 
-                    <Panel style={{ width: '50rem' }} >
-                        <div className="col-12">
-                          
-
-                                <div className="p-inputgroup">
-                                    <span className="p-inputgroup-addon">
-                                        <i className="pi pi-user"></i>
-                                    </span>
-                                    <InputText placeholder="Username" />
-                                </div>
-                         
-                        </div>
-                        <div className="col-12">
-                          
-
-                          <div className="p-inputgroup">
-                              <span className="p-inputgroup-addon">
-                                  <i className="pi pi-user"></i>
-                              </span>
-                              <InputText placeholder="Username" />
-                          </div>
-                   
-                  </div>
-
-                    </Panel>
-
+                    <Toolbar className="mb-4" right={filtrotabla}></Toolbar>
+                    <DataTable value={filteredData}
+                        dataKey="id"
+                        rowExpansionTemplate={rowExpansionTemplate}
+                        paginator
+                        rows={2}
+                        rowsPerPageOptions={[5, 10, 25]}
+                        expandedRows={expandedRows}
+                        onRowToggle={(e) => toggleRow(e.data)}
+                        header={header}>
+                        <Column field="name" header="Name" sortable filter filterPlaceholder="Search" />
+                        <Column field="url" header="URL" sortable filter filterPlaceholder="Search" body={(rowData) => <a href={rowData.url}>{rowData.url}</a>} />
+                        <Column field="icon" header="" body={(rowData) => <i className={rowData.icon}></i>} style={{ textAlign: 'center' }} />
+                        <Column field="icon" header="" body={ingresoidividual} />
+                    </DataTable>
                 </div>
             </Dialog>
 
-            <Dialog visible={isDialogVisible2} style={{ width: '50rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Categoria Coral" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog2}>
-                <div className="grid">
 
-                    <Panel style={{ width: '50rem' }} >
-                        <div className="col-12">
-                          
 
-                                <div className="p-inputgroup">
-                                    <span className="p-inputgroup-addon">
-                                        <i className="pi pi-user"></i>
-                                    </span>
-                                    <InputText placeholder="Username" />
-                                </div>
-                         
-                        </div>
 
-                    </Panel>
 
+            <Dialog
+                visible={isDialogVisible2}
+                style={{ width: '78rem' }}
+                breakpoints={{ '960px': '75vw', '641px': '90vw' }}
+                header="Categoria Coral"
+                modal
+                className="p-fluid"
+                onHide={hideDialog2}
+            >
+                <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
+                    <Toolbar className="mb-4" right={productDialogFooter2} left={filtrotabla} ></Toolbar>
+                    <DataTable
+                        value={filteredData}
+                        dataKey="id"
+                        rowExpansionTemplate={rowExpansionTemplate}
+                        paginator
+                        rows={2}
+                        rowsPerPageOptions={[5, 10, 25]}
+                        expandedRows={expandedRows}
+                        onRowToggle={(e) => toggleRow(e.data)}
+                        header={header}
+                    >
+                        <Column field="name" header="Name" sortable filter filterPlaceholder="Search" />
+                        <Column field="url" header="URL" sortable filter filterPlaceholder="Search" body={(rowData) => <a href={rowData.url}>{rowData.url}</a>} />
+                        <Column field="icon" header="" body={(rowData) => <i className={rowData.icon}></i>} style={{ textAlign: 'center' }} />
+                        <Column field="icon" header="" body={ingresoexel} />
+                    </DataTable>
                 </div>
+            </Dialog>
+
+            <Dialog header="Información" visible={visible} position={position} style={{ width: '50vw' }} onHide={() => setVisible(false)} footer={footerContent} draggable={false} resizable={false}>
+                <p className="m-0">
+                    Esta seguro de insertar exel.
+                </p>
             </Dialog>
 
         </div>
@@ -332,16 +454,5 @@ export default function LazyLoadDemo() {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
