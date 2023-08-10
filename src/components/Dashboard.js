@@ -10,8 +10,11 @@ import { RadioButton } from 'primereact/radiobutton';
 import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
+import { Panel } from 'primereact/panel';
+
 export default function LazyLoadDemo() {
     const [isDialogVisible, setDialogVisible] = useState(false);
+    const [isDialogVisible2, setDialogVisible2] = useState(false);
     const [expandedRows, setExpandedRows] = useState([]);
     const [dropdownItem, setDropdownItem] = useState(null);
     const [searchText, setSearchText] = useState("");
@@ -173,16 +176,32 @@ export default function LazyLoadDemo() {
     const hideDialog = () => {
         setDialogVisible(false);
     };
-    const leftToolbarTemplate = () => {
+
+    const openNew2 = () => {
+        setDialogVisible2(true);
+    };
+
+    const hideDialog2 = () => {
+        setDialogVisible2(false);
+    };
+    /*const leftToolbarTemplate = () => {
         return (
             <div className="flex flex-wrap gap-2">
                 <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} />
                 <Button label="Delete" icon="pi pi-trash" severity="danger" />
             </div>
         );
+    };*/
+
+    const leftToolbarTemplate2 = () => {
+        return (
+            <div className="flex flex-wrap gap-2">
+                <Button label="Agregar Categoria" icon="pi pi-plus" severity="success" onClick={openNew} />
+            </div>
+        );
     };
     const rightToolbarTemplate = () => {
-        return <Button label="Export" icon="pi pi-upload" className="p-button-help" />;
+        return <Button label="Carga Masiva" icon="pi pi-upload" className="secondary" onClick={openNew2} />;
     };
     const header = (
         <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
@@ -223,7 +242,7 @@ export default function LazyLoadDemo() {
     return (
         <div>
             <div className="card">
-                <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
+                <Toolbar className="mb-4" right={rightToolbarTemplate}></Toolbar>
                 <DataTable
                     value={filteredData}
                     dataKey="id"
@@ -252,51 +271,59 @@ export default function LazyLoadDemo() {
                     <Column field="name" header="Name" sortable filter filterPlaceholder="Search" />
                     <Column field="url" header="URL" sortable filter filterPlaceholder="Search" body={(rowData) => <a href={rowData.url}>{rowData.url}</a>} />
                     <Column field="icon" header="" body={(rowData) => <i className={rowData.icon}></i>} style={{ textAlign: 'center' }} />
+                    <Column field="icon" header="" body={leftToolbarTemplate2} />
                 </DataTable>
             </div>
-            <Dialog visible={isDialogVisible} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Detalle" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
+            <Dialog visible={isDialogVisible} style={{ width: '50rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Categoria Coral" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
                 <div className="grid">
 
+                    <Panel style={{ width: '50rem' }} >
+                        <div className="col-12">
+                          
 
-                    <div className="col-12">
-                        <div className="card">
-                            <h5>Advanced</h5>
-                            <div className="p-fluid formgrid grid">
-                                <div className="field col-12 md:col-6">
-                                    <span className="p-input-icon-left">
-                                        <i className="pi pi-user" />
-                                        <InputText placeholder="Nombre" />
+                                <div className="p-inputgroup">
+                                    <span className="p-inputgroup-addon">
+                                        <i className="pi pi-user"></i>
                                     </span>
+                                    <InputText placeholder="Username" />
                                 </div>
-                                <div className="field col-12 md:col-6">
-                                <span className="p-input-icon-left">
-                                        <i className="pi pi-user" />
-                                        <InputText placeholder="Apellido" />
-                                    </span>
-                                </div>
-                                <div className="field col-12">
-                                <span className="p-input-icon-left">
-                                        <i className="pi pi-whatsapp" />
-                                        <InputText placeholder="Celular" />
-                                    </span>
-                                </div>
-                                <div className="field col-12 md:col-6">
-                                    <span className="p-input-icon-left">
-                                        <i className="pi pi-map-marker" />
-                                        <InputText placeholder="Ciudad" />
-                                    </span>
-                                </div>
-                                <div className="field col-12 md:col-3">
-                                    <label htmlFor="state">State</label>
-                                    <Dropdown id="state" value={dropdownItem} onChange={(e) => setDropdownItem(e.value)} options={dropdownItems} optionLabel="name" placeholder="Select One"></Dropdown>
-                                </div>
-                                <div className="field col-12 md:col-3">
-                                    <label htmlFor="zip">Zip</label>
-                                    <InputText id="zip" type="text" />
-                                </div>
-                            </div>
+                         
                         </div>
-                    </div>
+                        <div className="col-12">
+                          
+
+                          <div className="p-inputgroup">
+                              <span className="p-inputgroup-addon">
+                                  <i className="pi pi-user"></i>
+                              </span>
+                              <InputText placeholder="Username" />
+                          </div>
+                   
+                  </div>
+
+                    </Panel>
+
+                </div>
+            </Dialog>
+
+            <Dialog visible={isDialogVisible2} style={{ width: '50rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Categoria Coral" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog2}>
+                <div className="grid">
+
+                    <Panel style={{ width: '50rem' }} >
+                        <div className="col-12">
+                          
+
+                                <div className="p-inputgroup">
+                                    <span className="p-inputgroup-addon">
+                                        <i className="pi pi-user"></i>
+                                    </span>
+                                    <InputText placeholder="Username" />
+                                </div>
+                         
+                        </div>
+
+                    </Panel>
+
                 </div>
             </Dialog>
 
