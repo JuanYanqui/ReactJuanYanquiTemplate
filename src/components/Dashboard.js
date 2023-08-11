@@ -15,7 +15,6 @@ import { FileUpload } from 'primereact/fileupload';
 import { Calendar } from 'primereact/calendar';
 import { MultiSelect } from 'primereact/multiselect';
 import { Splitter, SplitterPanel } from 'primereact/splitter';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import * as XLSX from 'xlsx';
 import { Toast } from 'primereact/toast';
@@ -29,15 +28,39 @@ const Dashboard = ({ categoriaCoralData }) => {
     const [date, setDate] = useState(null);
     const [selectedCities, setSelectedCities] = useState(null);
     const [excelData, setExcelData] = useState([]);
+    const [cate, setCateData] = useState([]);
     const [visible, setVisible] = useState(false);
     const [position, setPosition] = useState('center');
     const toast = useRef(null);
 
-    const dropdownItems = [
-        { name: 'Option 1', code: 'Option 1' },
-        { name: 'Option 2', code: 'Option 2' },
-        { name: 'Option 3', code: 'Option 3' }
-    ];
+    useEffect(() => {
+        if (categoriaCoralData) {
+            localStorage.setItem('capturedCategoriaCoralData', JSON.stringify(categoriaCoralData));
+        }
+    }, [categoriaCoralData]);
+
+    const [capturedCategoriaCoralData, setCapturedCategoriaCoralData] = useState(
+        JSON.parse(localStorage.getItem('capturedCategoriaCoralData')) || []
+    );
+    console.log("Captured categoriaCoralData:", capturedCategoriaCoralData);
+
+
+    const [usuario, setUsuario] = useState(localStorage.getItem('capturedCategoriaCoralData'));
+
+    useEffect(() => {
+      const handleStorageUpdate = () => {
+        setUsuario(localStorage.getItem('capturedCategoriaCoralData'));
+      };
+  
+      window.addEventListener('storageUpdated', handleStorageUpdate);
+  
+      return () => {
+        window.removeEventListener('storageUpdated', handleStorageUpdate);
+      };
+    }, []);
+
+
+    console.log("localstorage", usuario);
 
 
     const userData = {
