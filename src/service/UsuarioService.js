@@ -47,7 +47,6 @@ const UsuarioService = () => {
             if (xhr.status === 200) {
               const response = JSON.parse(xhr.responseText);
               setUserData(response);
-              console.log(response);
             } else {
               console.error('Error al obtener datos del usuario');
             }
@@ -79,7 +78,6 @@ const UsuarioService = () => {
           .then(response => response.json())
           .then(data => {
             setUserData2(data);
-            console.log(data);
           })
           .catch(error => {
             console.error('Error al obtener datos del usuario', error);

@@ -20,7 +20,7 @@ import { faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import * as XLSX from 'xlsx';
 import { Toast } from 'primereact/toast';
 
-export default function LazyLoadDemo({CategoriaCoralData}) {
+const Dashboard = ({ categoriaCoralData }) => {
     const [isDialogVisible, setDialogVisible] = useState(false);
     const [isDialogVisible2, setDialogVisible2] = useState(false);
     const [expandedRows, setExpandedRows] = useState([]);
@@ -38,6 +38,7 @@ export default function LazyLoadDemo({CategoriaCoralData}) {
         { name: 'Option 2', code: 'Option 2' },
         { name: 'Option 3', code: 'Option 3' }
     ];
+
 
     const userData = {
         object: [
@@ -353,11 +354,11 @@ export default function LazyLoadDemo({CategoriaCoralData}) {
 
     const handleFileUpload = (event) => {
         const file = event.target.files[0];
-    
+
         if (file) {
             const validExtensions = ['xls', 'xlsx'];
             const fileExtension = file.name.split('.').pop().toLowerCase();
-    
+
             if (validExtensions.includes(fileExtension)) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -365,12 +366,12 @@ export default function LazyLoadDemo({CategoriaCoralData}) {
                     const workbook = XLSX.read(data, { type: 'array' });
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
-    
+
                     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                     setExcelData(jsonData);
-                    setUploadedFileName(file.name); 
+                    setUploadedFileName(file.name);
                 };
-    
+
                 reader.readAsArrayBuffer(file);
             } else {
                 showError();
@@ -384,22 +385,29 @@ export default function LazyLoadDemo({CategoriaCoralData}) {
 
     const productDialogFooter2 = (
         <div className="p-d-flex p-ai-center" style={{ alignItems: 'center' }}>
-        <label htmlFor="idarchivo" style={{ cursor: 'pointer' }}>
-            <img src="../assets/layout/images/sobresalir.png" alt="Excel Icon" style={{ width: '25px', height: '25px' }} />
-        </label>
-        <input
-            id="idarchivo"
-            type="file"
-            onChange={handleFileUpload}
-            style={{ display: 'none' }}
-        />
-        <span className="p-ml-2">{uploadedFileName}</span>
-    </div>
+            <label htmlFor="idarchivo" style={{ cursor: 'pointer' }}>
+                <img src="../assets/layout/images/sobresalir.png" alt="Excel Icon" style={{ width: '25px', height: '25px' }} />
+            </label>
+            <input
+                id="idarchivo"
+                type="file"
+                onChange={handleFileUpload}
+                style={{ display: 'none' }}
+            />
+            <span className="p-ml-2">{uploadedFileName}</span>
+        </div>
     );
     const show = (position) => {
         setPosition(position);
         setVisible(true);
     };
+    console.log("categoriaCoralData:", categoriaCoralData);
+    const data = categoriaCoralData ? categoriaCoralData.map((row) => ({
+        id: row[0],
+        name: row[1],
+        code: row[2],
+    })) : [];
+
 
     return (
         <div>
@@ -458,21 +466,11 @@ export default function LazyLoadDemo({CategoriaCoralData}) {
             >
                 <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
                     <Toolbar className="mb-4" right={productDialogFooter2} left={filtrotabla} ></Toolbar>
-                    <DataTable
-                        value={filteredData}
-                        dataKey="id"
-                        rowExpansionTemplate={rowExpansionTemplate}
-                        paginator
-                        rows={2}
-                        rowsPerPageOptions={[5, 10, 25]}
-                        expandedRows={expandedRows}
-                        onRowToggle={(e) => toggleRow(e.data)}
-                        header={header}
-                    >
-                        <Column field="name" header="Name" sortable filter filterPlaceholder="Search" />
-                        <Column field="url" header="URL" sortable filter filterPlaceholder="Search" body={(rowData) => <a href={rowData.url}>{rowData.url}</a>} />
-                        <Column field="icon" header="" body={(rowData) => <i className={rowData.icon}></i>} style={{ textAlign: 'center' }} />
-                        <Column field="icon" header="" body={ingresoexel} />
+                    <DataTable value={data} dataKey="id" rowExpansionTemplate={rowExpansionTemplate} paginator rows={2} rowsPerPageOptions={[5, 10, 25]} expandedRows={expandedRows} onRowToggle={(e) => toggleRow(e.data)} header={header}>
+                        {data && data.length > 0 && Object.keys(data[0]).map((key, index) => (
+                            <Column key={index} field={key} header={key} sortable filter filterPlaceholder="Search" />
+                        ))}
+                        <Column field="icon" header="" body={leftToolbarTemplate2} />
                     </DataTable>
                 </div>
             </Dialog>
@@ -488,6 +486,9 @@ export default function LazyLoadDemo({CategoriaCoralData}) {
     );
 
 
-}
+};
+
+export default Dashboard;
+
 
 

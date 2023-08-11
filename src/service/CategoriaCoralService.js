@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import App from '../App';
 import { sassNull } from 'sass';
-import LazyLoadDemo from '../components/Dashboard';
+import Dashboard from '../components/Dashboard';
 
 const CategoriaCoralService = () => {
 
@@ -18,7 +18,7 @@ const CategoriaCoralService = () => {
           object: JSON.stringify({
             codigo: "",
             descripcion: "",
-            nivel: null 
+            nivel: null
           }),
           rowCount: 0
         };
@@ -32,21 +32,17 @@ const CategoriaCoralService = () => {
         })
           .then(response => response.json())
           .then(data => {
-            setCategoriaCoralData(data);
-            console.log(data);
+            const objectData = JSON.parse(data.object);
+            setCategoriaCoralData(objectData);
+            console.log(objectData);
           })
           .catch(error => {
             console.error('Error al obtener datos de la categoría', error);
           });
       };
-  
-      //////MANDA EL OBJETO A LA SIGUIENTE VENTANA JS ////////////
-      return (
-        <>
-          {CategoriaCoralData && <LazyLoadDemo CategoriaCoralData={CategoriaCoralData} />},
-        </>
-      );
+      return <Dashboard categoriaCoralData={CategoriaCoralData} />;
   
     }
 
 export default CategoriaCoralService;
+
