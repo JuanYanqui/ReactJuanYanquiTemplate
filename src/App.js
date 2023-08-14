@@ -477,7 +477,6 @@ const [isSearching, setIsSearching] = useState(false);
                 </div>
                 <AppRightMenu rightMenuActive={rightMenuActive} onRightMenuButtonClick={onRightMenuButtonClick} />
 
-                {mobileMenuActive && <div className="layout-mask modal-in"></div>}
             </div>
         </RTLContext.Provider>
     );

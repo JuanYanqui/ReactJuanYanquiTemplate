@@ -18,8 +18,8 @@ import { Splitter, SplitterPanel } from 'primereact/splitter';
 import { faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import * as XLSX from 'xlsx';
 import { Toast } from 'primereact/toast';
-
-const Dashboard = ({ categoriaCoralData }) => {
+import CategoriaCoralService from '../service/CategoriaCoralService';
+const Dashboard = ({ categoriaCoralData, articuloData }) => {
     const [isDialogVisible, setDialogVisible] = useState(false);
     const [isDialogVisible2, setDialogVisible2] = useState(false);
     const [expandedRows, setExpandedRows] = useState([]);
@@ -32,6 +32,9 @@ const Dashboard = ({ categoriaCoralData }) => {
     const [visible, setVisible] = useState(false);
     const [position, setPosition] = useState('center');
     const toast = useRef(null);
+    const [codigoFiltro, setCodigoFiltro] = useState("");
+    const [descripcionFiltro, setDescripcionFiltro] = useState("");
+    const [nivelFiltro, setNivelFiltro] = useState(null);
 
     useEffect(() => {
         if (categoriaCoralData) {
@@ -39,134 +42,203 @@ const Dashboard = ({ categoriaCoralData }) => {
         }
     }, [categoriaCoralData]);
 
+    useEffect(() => {
+        if (articuloData) {
+            localStorage.setItem('capturedArticulosData', JSON.stringify(articuloData));
+        }
+    }, [articuloData]);
+
     const [capturedCategoriaCoralData, setCapturedCategoriaCoralData] = useState(
         JSON.parse(localStorage.getItem('capturedCategoriaCoralData')) || []
     );
-    console.log("Captured categoriaCoralData:", capturedCategoriaCoralData);
 
-
-    const [usuario, setUsuario] = useState(localStorage.getItem('capturedCategoriaCoralData'));
+    const [categoriaLocal, setCategoriaLocal] = useState(localStorage.getItem('capturedCategoriaCoralData'));
+    const [articulosLocal, setArticulosLocal] = useState(localStorage.getItem('capturedArticulosData'));
 
     useEffect(() => {
-      const handleStorageUpdate = () => {
-        setUsuario(localStorage.getItem('capturedCategoriaCoralData'));
-      };
-  
-      window.addEventListener('storageUpdated', handleStorageUpdate);
-  
-      return () => {
-        window.removeEventListener('storageUpdated', handleStorageUpdate);
-      };
+        const handleStorageUpdate = () => {
+            setCategoriaLocal(localStorage.getItem('capturedCategoriaCoralData'));
+            setArticulosLocal(localStorage.getItem('capturedArticulosData'));
+        };
+
+        window.addEventListener('storageUpdated', handleStorageUpdate);
+
+        return () => {
+            window.removeEventListener('storageUpdated', handleStorageUpdate);
+        };
     }, []);
 
+    const categoriaLocalData = JSON.parse(categoriaLocal);
+    //console.log("nuevo:", categoriaLocalData);
+    const articulosLocalData = JSON.parse(articulosLocal);
+    console.log("nuevo:", articulosLocalData);
 
-    console.log("localstorage", usuario);
+    const CustomDataTable = ({ data2 }) => {
+        if (!data2) {
+            return <p>No hay datos disponibles.</p>;
+        }
 
+        return (
+            <DataTable value={data2} paginator
+                rows={5}
+                rowsPerPageOptions={[5, 10, 25]}>
+                <Column field="0" header="Código" />
+                <Column field="1" header="Descripción" />
+                <Column field="2" header="Nivel" />
+                <Column field="icon" header="" body={ingresoexel} />
+            </DataTable>
+        );
+    };
 
-    const userData = {
-        object: [
-            {
-                menId: 652,
-                nombre: "Coral Seccion",
-                url: "https://www.gerardoortiz.com/coralSeccion/",
-                icono: "fa fa-tags",
-                hijos: [
-                    {
-                        menId: 653,
-                        nombre: "Reporte Factura TEST",
-                        url: "https://www.gerardoortiz.com/coralSeccion/reportes/factura_codigo_cliente.jsf",
-                        icono: "fa fa-crosshairs"
-                    },
-                    {
-                        menId: 658,
-                        nombre: "Precio historico de articulo",
-                        url: "https://www.gerardoortiz.com/coralSeccion/reportes/ingresos_historicos.jsf",
-                        icono: "fa fa-dollar"
-                    }
-                ]
-            },
-            {
-                menId: 805,
-                nombre: "Activos Fijos",
-                url: "#",
-                icono: "fas fa-book",
-                hijos: [
-                    {
-                        menId: 806,
-                        nombre: "Formar Activo",
-                        url: "https://www.gerardoortiz.com/activosFijos/activosFijos/formaActivo.jsf",
-                        icono: "fas fa-clipboard-list"
-                    },
-                    {
-                        menId: 807,
-                        nombre: "Ingresar Activo",
-                        url: "https://www.gerardoortiz.com/activosFijos/activosFijos/ingresaActivo.jsf",
-                        icono: "fas fa-clipboard-list"
-                    },
-                    {
-                        menId: 808,
-                        nombre: "Recepcion Entrega",
-                        url: "https://www.gerardoortiz.com/activosFijos/activosFijos/recepcionEntrega.jsf",
-                        icono: "fas fa-clipboard-list"
-                    },
-                    {
-                        menId: 809,
-                        nombre: "Depreciacion del Activo",
-                        url: "https://www.gerardoortiz.com/activosFijos/activosFijos/depreciaActivo.jsf",
-                        icono: "fas fa-clipboard-list"
-                    },
-                    {
-                        menId: 810,
-                        nombre: "Gestion Sitio",
-                        url: "https://www.gerardoortiz.com/activosFijos/activosFijos/gestionSitio.jsf",
-                        icono: "fas fa-clipboard-list"
-                    }
-                ]
-            },
-            {
-                menId: 288,
-                nombre: "Regalos",
-                url: "#",
-                icono: "fas fa-book",
-                hijos: [
-                    {
-                        menId: 107,
-                        nombre: "Regalos Activos",
-                        url: "https://www.gerardoortiz.com/activosFijos/activosFijos/formaActivo.jsf",
-                        icono: "fas fa-clipboard-list"
-                    },
-                ]
-            }
-
-        ]
+    const DataTablaar = ({ dataar }) => {
+        return (
+            <div>
+                {dataar && dataar.length > 0 ? (
+                    <DataTable value={dataar} paginator rows={10} rowsPerPageOptions={[5, 10, 25]}>
+                        <Column field="codigo" header="Código" />
+                        <Column field="descripcion" header="Descripción" />
+                        <Column field="precio" header="Precio" />
+                        <Column field="unidadPedido" header="Unidad de Pedido" />
+                        <Column field="rowKey" header="Rowkey" />
+                        <Column field="icon" header="" body={leftToolbarTemplate2} />
+                    </DataTable>
+                ) : (
+                    'Cargando datos...'
+                )}
+            </div>
+        );
     };
 
 
-    const preparedData = [];
-    userData.object.forEach((parentItem) => {
-        const parentRow = {
-            id: parentItem.menId,
-            name: parentItem.nombre,
-            url: parentItem.url,
-            icon: parentItem.icono,
-            children: parentItem.hijos || [],
-        };
-
-        preparedData.push(parentRow);
-
-        if (parentItem.hijos) {
-            parentItem.hijos.forEach((childItem) => {
-                const childRow = {
-                    id: childItem.menId,
-                    name: childItem.nombre,
-                    url: childItem.url,
-                    icon: childItem.icono,
-                    parent: parentItem.menId,
-                };
-                preparedData.push(childRow);
-            });
+    const CustomDataTable3 = ({ data3 }) => {
+        if (!data3) {
+            return <p>No hay datos disponibles.</p>;
         }
-    });
+
+        return (
+            <DataTable value={data3} paginator
+                rows={5}
+                rowsPerPageOptions={[5, 10, 25]}>
+                <Column field="0" header="Código" />
+                <Column field="1" header="Descripción" />
+                <Column field="2" header="Nivel" />
+                <Column field="icon" header="" body={ingresoidividual} />
+            </DataTable>
+        );
+    };
+
+    const handleButtonClick = (codigo) => {
+        console.log('Código de la fila:', codigo);
+        if (codigo != null) {
+            openNew();
+        }
+    };
+
+    /*  const userData = {
+          object: [
+              {
+                  menId: 652,
+                  nombre: "Coral Seccion",
+                  url: "https://www.gerardoortiz.com/coralSeccion/",
+                  icono: "fa fa-tags",
+                  hijos: [
+                      {
+                          menId: 653,
+                          nombre: "Reporte Factura TEST",
+                          url: "https://www.gerardoortiz.com/coralSeccion/reportes/factura_codigo_cliente.jsf",
+                          icono: "fa fa-crosshairs"
+                      },
+                      {
+                          menId: 658,
+                          nombre: "Precio historico de articulo",
+                          url: "https://www.gerardoortiz.com/coralSeccion/reportes/ingresos_historicos.jsf",
+                          icono: "fa fa-dollar"
+                      }
+                  ]
+              },
+              {
+                  menId: 805,
+                  nombre: "Activos Fijos",
+                  url: "#",
+                  icono: "fas fa-book",
+                  hijos: [
+                      {
+                          menId: 806,
+                          nombre: "Formar Activo",
+                          url: "https://www.gerardoortiz.com/activosFijos/activosFijos/formaActivo.jsf",
+                          icono: "fas fa-clipboard-list"
+                      },
+                      {
+                          menId: 807,
+                          nombre: "Ingresar Activo",
+                          url: "https://www.gerardoortiz.com/activosFijos/activosFijos/ingresaActivo.jsf",
+                          icono: "fas fa-clipboard-list"
+                      },
+                      {
+                          menId: 808,
+                          nombre: "Recepcion Entrega",
+                          url: "https://www.gerardoortiz.com/activosFijos/activosFijos/recepcionEntrega.jsf",
+                          icono: "fas fa-clipboard-list"
+                      },
+                      {
+                          menId: 809,
+                          nombre: "Depreciacion del Activo",
+                          url: "https://www.gerardoortiz.com/activosFijos/activosFijos/depreciaActivo.jsf",
+                          icono: "fas fa-clipboard-list"
+                      },
+                      {
+                          menId: 810,
+                          nombre: "Gestion Sitio",
+                          url: "https://www.gerardoortiz.com/activosFijos/activosFijos/gestionSitio.jsf",
+                          icono: "fas fa-clipboard-list"
+                      }
+                  ]
+              },
+              {
+                  menId: 288,
+                  nombre: "Regalos",
+                  url: "#",
+                  icono: "fas fa-book",
+                  hijos: [
+                      {
+                          menId: 107,
+                          nombre: "Regalos Activos",
+                          url: "https://www.gerardoortiz.com/activosFijos/activosFijos/formaActivo.jsf",
+                          icono: "fas fa-clipboard-list"
+                      },
+                  ]
+              }
+  
+          ]
+      };
+  
+  
+      const preparedData = [];
+      userData.object.forEach((parentItem) => {
+          const parentRow = {
+              id: parentItem.menId,
+              name: parentItem.nombre,
+              url: parentItem.url,
+              icon: parentItem.icono,
+              children: parentItem.hijos || [],
+          };
+  
+          preparedData.push(parentRow);
+  
+          if (parentItem.hijos) {
+              parentItem.hijos.forEach((childItem) => {
+                  const childRow = {
+                      id: childItem.menId,
+                      name: childItem.nombre,
+                      url: childItem.url,
+                      icon: childItem.icono,
+                      parent: parentItem.menId,
+                  };
+                  preparedData.push(childRow);
+              });
+          }
+      });
+      */
     const [activeSubMenuIndex, setActiveSubMenuIndex] = useState(null);
 
     const toggleRow = (rowData) => {
@@ -234,10 +306,10 @@ const Dashboard = ({ categoriaCoralData }) => {
         );
     };*/
 
-    const leftToolbarTemplate2 = () => {
+    const leftToolbarTemplate2 = (rowData) => {
         return (
             <div className="flex flex-wrap gap-2">
-                <Button label="Agregar Categoria" icon="pi pi-plus" onClick={openNew} style={{ backgroundColor: '#e0e0e0' }} />
+                <Button label="Agregar Categoria" onClick={() => handleButtonClick(rowData.codigo)} icon="pi pi-plus" style={{ backgroundColor: '#e0e0e0' }} />
             </div>
         );
     };
@@ -294,44 +366,95 @@ const Dashboard = ({ categoriaCoralData }) => {
 
 
     const cities = [
-        { name: 'Nivel 1' },
-        { name: 'Nivel 2' },
-        { name: 'Nivel 3' },
-        { name: 'Nivel 4' },
-        { name: 'Nivel 5' },
-        { name: 'Nivel 6' },
+        { label: 'Seleccionar', value: null },
+        { label: 'Nivel 1', value: 1 },
+        { label: 'Nivel 2', value: 2 },
+        { label: 'Nivel 3', value: 3 },
+        { label: 'Nivel 4', value: 4 },
+        { label: 'Nivel 5', value: 5 },
+        { label: 'Nivel 6', value: 6 },
     ];
+
+    const [codigo, setCodigo] = useState("");
+    const [descripcion, setDescripcion] = useState("");
     const [selectedCity, setSelectedCity] = useState(null);
+
+
+
+
+    const [selectedLevel, setSelectedLevel] = useState(null);
+
+    const handleCityChange = (e) => {
+        setSelectedCity(e.value);
+        setSelectedLevel(e.value);
+    };
+
+
+    const handleFilterClick = () => {
+        console.log("Código:", codigo);
+        console.log("Descripción:", descripcion);
+        console.log("Nivel:", selectedCity);
+        localStorage.setItem('codigocap', codigo);
+        localStorage.setItem('descripcioncap', descripcion);
+        localStorage.setItem('nivelcap', selectedCity);
+        console.log("hadlllleckil")
+    };
 
     const filtrotabla = () => {
         return (
             <div className="flex flex-wrap gap-2">
                 <div className="p-field p-col-12 p-md-12 p-lg-4">
-                    <label htmlFor="username">Nombre</label>
+                    <label htmlFor="username">Código</label>
                     <span className="p-inputgroup">
                         <span className="p-inputgroup-addon"></span>
-                        <InputText placeholder="Nombre" />
+                        <InputText
+                            placeholder="Código"
+                            value={codigo}
+                            onChange={(e) => setCodigo(e.target.value)}
+                        />
                     </span>
                 </div>
-
+                <div className="p-field p-col-12 p-md-12 p-lg-4">
+                    <label htmlFor="username">Descripción</label>
+                    <span className="p-inputgroup">
+                        <span className="p-inputgroup-addon"></span>
+                        <InputText
+                            placeholder="Descripción"
+                            value={descripcion}
+                            onChange={(e) => setDescripcion(e.target.value)}
+                        />
+                    </span>
+                </div>
                 <div className="p-field p-col-12 p-md-12 p-lg-4">
                     <label htmlFor="price">Nivel</label>
                     <span className="p-inputgroup">
                         <span className="p-inputgroup-addon"><i className="pi pi-co" /></span>
-                        <Dropdown value={selectedCity} options={cities} onChange={(e) => setSelectedCity(e.value)} optionLabel="name"
-                            placeholder="Seleccionar" className="w-full md:w-20rem" />
+                        <Dropdown
+                            value={selectedCity}
+                            options={cities}
+                            onChange={handleCityChange}
+                            optionLabel="label"
+                            placeholder="Seleccionar"
+                            className="w-full md:w-20rem"
+                        />
                     </span>
                 </div>
-
                 <div className="p-field p-col-12 p-md-12 p-lg-4">
                     <label htmlFor="username">Filtrar</label>
                     <span className="p-inputgroup">
-                        <Button label="Selecionar" icon="pi pi-search" style={{ backgroundColor: '#e0e0e0' }} />
+                    <Button label="Seleccionar" icon="pi pi-search" className="secondary" onClick={handleFilterClick} style={{ backgroundColor: '#e0e0e0' }}/>
                     </span>
                 </div>
             </div>
         );
     };
+
+    const nuevo= () => {
+
+        console.log("holaa")
+
+    }
+    console.log("numero", selectedLevel);
 
 
     const rightToolbarTemplate = () => {
@@ -348,28 +471,16 @@ const Dashboard = ({ categoriaCoralData }) => {
         </div>
     );
 
-    const filteredData = preparedData.filter(
+    /*const filteredData = preparedData.filter(
         (row) =>
             row.name.toLowerCase().includes(searchText.toLowerCase()) ||
             (row.url && row.url.toLowerCase().includes(searchText.toLowerCase()))
-    );
+    );*/
 
     const productDialogFooter = (
         <React.Fragment>
             <Button label="Cancel" icon="pi pi-times" onClick={hideDialog} />
             <Button label="Save" icon="pi pi-check" />
-        </React.Fragment>
-    );
-    const deleteProductDialogFooter = (
-        <React.Fragment>
-            <Button label="No" icon="pi pi-times" />
-            <Button label="Yes" icon="pi pi-check" severity="danger" />
-        </React.Fragment>
-    );
-    const deleteProductsDialogFooter = (
-        <React.Fragment>
-            <Button label="No" icon="pi pi-times" outlined />
-            <Button label="Yes" icon="pi pi-check" severity="danger" />
         </React.Fragment>
     );
 
@@ -393,6 +504,7 @@ const Dashboard = ({ categoriaCoralData }) => {
                     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                     setExcelData(jsonData);
                     setUploadedFileName(file.name);
+                    console.log(jsonData)
                 };
 
                 reader.readAsArrayBuffer(file);
@@ -424,53 +536,30 @@ const Dashboard = ({ categoriaCoralData }) => {
         setPosition(position);
         setVisible(true);
     };
-    console.log("categoriaCoralData:", categoriaCoralData);
-    const data = categoriaCoralData ? categoriaCoralData.map((row) => ({
-        id: row[0],
-        name: row[1],
-        code: row[2],
-    })) : [];
+
 
 
     return (
         <div>
             <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
                 <Toolbar className="mb-4" right={rightToolbarTemplate}></Toolbar>
-                <DataTable
-                    value={filteredData}
-                    dataKey="id"
-                    rowExpansionTemplate={rowExpansionTemplate}
-                    paginator
-                    rows={2}
-                    rowsPerPageOptions={[5, 10, 25]}
-                    expandedRows={expandedRows}
-                    onRowToggle={(e) => toggleRow(e.data)}
-                    header={header}
-                >
-                    <Column field="name" header="Name" sortable filter filterPlaceholder="Search" />
-                    <Column field="url" header="URL" sortable filter filterPlaceholder="Search" body={(rowData) => <a href={rowData.url}>{rowData.url}</a>} />
-                    <Column field="icon" header="" body={(rowData) => <i className={rowData.icon}></i>} style={{ textAlign: 'center' }} />
-                    <Column field="icon" header="" body={leftToolbarTemplate2} />
-                </DataTable>
+                <div>
+                    <h1>Tabla de Artículos</h1>
+                    {articulosLocalData && articulosLocalData.data.length > 0 ? (
+                        <DataTablaar dataar={articulosLocalData.data} />
+                    ) : (
+                        'Cargando datos...'
+                    )}
+                </div>
             </div>
+
             <Dialog visible={isDialogVisible} style={{ width: '78rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Categoria Coral" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
                 <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
 
                     <Toolbar className="mb-4" right={filtrotabla}></Toolbar>
-                    <DataTable value={filteredData}
-                        dataKey="id"
-                        rowExpansionTemplate={rowExpansionTemplate}
-                        paginator
-                        rows={2}
-                        rowsPerPageOptions={[5, 10, 25]}
-                        expandedRows={expandedRows}
-                        onRowToggle={(e) => toggleRow(e.data)}
-                        header={header}>
-                        <Column field="name" header="Name" sortable filter filterPlaceholder="Search" />
-                        <Column field="url" header="URL" sortable filter filterPlaceholder="Search" body={(rowData) => <a href={rowData.url}>{rowData.url}</a>} />
-                        <Column field="icon" header="" body={(rowData) => <i className={rowData.icon}></i>} style={{ textAlign: 'center' }} />
-                        <Column field="icon" header="" body={ingresoidividual} />
-                    </DataTable>
+                    <div>
+                        <CustomDataTable3 data3={categoriaLocalData} />
+                    </div>
                 </div>
             </Dialog>
 
@@ -489,12 +578,9 @@ const Dashboard = ({ categoriaCoralData }) => {
             >
                 <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
                     <Toolbar className="mb-4" right={productDialogFooter2} left={filtrotabla} ></Toolbar>
-                    <DataTable value={data} dataKey="id" rowExpansionTemplate={rowExpansionTemplate} paginator rows={2} rowsPerPageOptions={[5, 10, 25]} expandedRows={expandedRows} onRowToggle={(e) => toggleRow(e.data)} header={header}>
-                        {data && data.length > 0 && Object.keys(data[0]).map((key, index) => (
-                            <Column key={index} field={key} header={key} sortable filter filterPlaceholder="Search" />
-                        ))}
-                        <Column field="icon" header="" body={leftToolbarTemplate2} />
-                    </DataTable>
+                    <div>
+                        <CustomDataTable data2={categoriaLocalData} />
+                    </div>
                 </div>
             </Dialog>
 

@@ -7,18 +7,44 @@ const CategoriaCoralService = () => {
 
       const [CategoriaCoralData, setCategoriaCoralData] = useState(null);
 
+        const [codigo, setCodigo] = useState(localStorage.getItem('cod'));
+        const [descripcion, setDescripcion] = useState(localStorage.getItem('des'));
+        const [nivel, setNivel] = useState(localStorage.getItem('ni'));
+  
+     
+
+        useEffect(() => {
+          const handleStorageUpdate = () => {
+            setCodigo(localStorage.getItem('cod'));
+            setDescripcion(localStorage.getItem('des'));
+            setNivel(localStorage.getItem('ni'));
+            console.log("pass",codigo);
+            console.log("pass",descripcion);
+            console.log("pass",nivel);
+
+          };
+      
+          window.addEventListener('storageUpdated', handleStorageUpdate);
+      
+          return () => {
+            window.removeEventListener('storageUpdated', handleStorageUpdate);
+          };
+        }, []);
+  
       //////////PETICION POST//////////////////////
+
       useEffect(() => {
         fetchUserData2();
       }, []);
+
 
       const fetchUserData2 = () => {
         const url = 'http://192.168.200.24:8080/intermediaws/ws/categoriascoral/listarCategoriasCoralVista';
         const body = {
           object: JSON.stringify({
-            codigo: "",
-            descripcion: "",
-            nivel: null
+            codigo: codigo,
+            descripcion: descripcion,
+            nivel: nivel
           }),
           rowCount: 0
         };
@@ -45,4 +71,3 @@ const CategoriaCoralService = () => {
     }
 
 export default CategoriaCoralService;
-
