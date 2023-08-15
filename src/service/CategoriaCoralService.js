@@ -1,12 +1,12 @@
 import axios from 'axios';
 
 export class CategoriaCoralService {
-  PostCategoriaCoralData(cod,des, niv) {
+  PostCategoriaCoralData(cod, des, niv) {
     const url = 'http://192.168.200.24:8080/intermediaws/ws/categoriascoral/listarCategoriasCoralVista';
     const body = {
       object: JSON.stringify({
         codigo: cod,
-        descripcion:des,
+        descripcion: des,
         nivel: niv,
       }),
       rowCount: 0,

@@ -5,25 +5,17 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Toolbar } from 'primereact/toolbar';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { RadioButton } from 'primereact/radiobutton';
-import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
-import { Panel } from 'primereact/panel';
-import { FileUpload } from 'primereact/fileupload';
-import { Calendar } from 'primereact/calendar';
-import { MultiSelect } from 'primereact/multiselect';
-import { Splitter, SplitterPanel } from 'primereact/splitter';
-import { faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import * as XLSX from 'xlsx';
 import { Toast } from 'primereact/toast';
 import { CategoriaCoralService } from '../service/CategoriaCoralService';
 import { ArticulosService } from '../service/ArticulosService';
+
+
 const Dashboard = () => {
     const [isDialogVisible, setDialogVisible] = useState(false);
     const [isDialogVisible2, setDialogVisible2] = useState(false);
-    const [searchText, setSearchText] = useState("");
     const [excelData, setExcelData] = useState([]);
     const [visible, setVisible] = useState(false);
     const [position, setPosition] = useState('center');
@@ -80,6 +72,29 @@ const Dashboard = () => {
             </DataTable>
         );
     };
+
+
+    const CustomDataTable3 = ({ data3 }) => {
+        if (!data3) {
+            return <p>No hay datos disponibles.</p>;
+        }
+        const filteredData3 = data3.filter(item =>
+            (item[0] && item[0].toLowerCase().includes(searchQuery3.toLowerCase())) ||
+            (item[1] && item[1].toLowerCase().includes(searchQuery3.toLowerCase())) ||
+            (item[2] && item[2].toLowerCase().includes(searchQuery3.toLowerCase()))
+        );
+        return (
+            <DataTable value={filteredData3} paginator
+                rows={5}
+                rowsPerPageOptions={[5, 10, 25]}>
+                <Column field="0" header="Código" />
+                <Column field="1" header="Descripción" />
+                <Column field="2" header="Nivel" />
+                <Column field="icon" header="" body={ingresoidividual} />
+            </DataTable>
+        );
+    };
+
 
     const handleButtonClick = (codigo) => {
         console.log('Código de la fila:', codigo);
@@ -182,41 +197,17 @@ const Dashboard = () => {
 
 
     const handleFilterClick = () => {
-        
         console.log('codigocap', codigo);
         console.log('descripcioncap', descripcion);
         console.log('nivelcap', selectedCity);
         categoriasdata.PostCategoriaCoralData(codigo, descripcion, selectedCity).then((data) => {
-            console.log("datossss",data);
+            console.log("API response data", data);
             setDataCategoria(data);
         });
     };
 
 
 
-    const CustomDataTable3 = ({ data3 }) => {
-        if (!data3) {
-            return <p>No hay datos disponibles.</p>;
-        }
-        const filteredData3 = data3.filter(item =>
-            (item[0] && item[0].toLowerCase().includes(searchQuery3.toLowerCase())) ||
-            (item[1] && item[1].toLowerCase().includes(searchQuery3.toLowerCase())) ||
-            (item[2] && item[2].toLowerCase().includes(searchQuery3.toLowerCase()))
-        );
-        return (
-            <DataTable value={filteredData3} paginator
-                rows={5}
-                rowsPerPageOptions={[5, 10, 25]}>
-                <Column field="0" header="Código" />
-                <Column field="1" header="Descripción" />
-                <Column field="2" header="Nivel" />
-                <Column field="icon" header="" body={ingresoidividual} />
-            </DataTable>
-        );
-    };
-
-
-   
 
     const filtrotabla = () => {
         return (
@@ -267,13 +258,6 @@ const Dashboard = () => {
         );
     };
 
-    const nuevo = () => {
-
-        console.log("holaa")
-
-    }
-    console.log("numero", selectedLevel);
-
     const [loading, setLoading] = useState(false);
 
     const handleCargaDatos = () => {
@@ -287,15 +271,15 @@ const Dashboard = () => {
         }, 2000);
     };
     const CargarDatosArticulos = () => {
-        return     <Button
-        label="Carga Datos"
-        icon={loading ? "pi pi-spin pi-spinner" : ""}
-        style={{ backgroundColor: 'silver', color: 'black', fontSize: '1rem' }}
-        onClick={handleCargaDatos}
-        disabled={loading}
-    />
+        return <Button
+            label="Carga Datos"
+            icon={loading ? "pi pi-spin pi-spinner" : ""}
+            style={{ backgroundColor: 'silver', color: 'black', fontSize: '1rem' }}
+            onClick={handleCargaDatos}
+            disabled={loading}
+        />
     };
-    
+
 
     const rightToolbarTemplate = () => {
         return <Button label="Carga Masiva" icon="pi pi-upload" className="secondary" onClick={openNew2} />;
@@ -395,7 +379,7 @@ const Dashboard = () => {
 
                     <Toolbar className="mb-4" right={filtrotabla}></Toolbar>
                     <div>
-                    <div className="p-field p-col-12 p-md-12 p-lg-4">
+                        <div className="p-field p-col-12 p-md-12 p-lg-4">
                             <label htmlFor="search">Buscar</label>
                             <span className="p-inputgroup">
                                 <span className="p-inputgroup-addon"><i className="pi pi-search" /></span>
