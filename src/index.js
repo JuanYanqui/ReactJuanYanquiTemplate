@@ -60,8 +60,6 @@ initKeycloak()
                 <HashRouter>
                         <UsuarioService>
                         </UsuarioService>
-                        <CategoriaCoralService></CategoriaCoralService>
-                        <ArticulosService></ArticulosService>
                 </HashRouter>
             </React.StrictMode>
         );

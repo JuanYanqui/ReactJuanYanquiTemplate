@@ -18,111 +18,65 @@ import { Splitter, SplitterPanel } from 'primereact/splitter';
 import { faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import * as XLSX from 'xlsx';
 import { Toast } from 'primereact/toast';
-import CategoriaCoralService from '../service/CategoriaCoralService';
-const Dashboard = ({ categoriaCoralData, articuloData }) => {
+import { CategoriaCoralService } from '../service/CategoriaCoralService';
+import { ArticulosService } from '../service/ArticulosService';
+const Dashboard = () => {
     const [isDialogVisible, setDialogVisible] = useState(false);
     const [isDialogVisible2, setDialogVisible2] = useState(false);
-    const [expandedRows, setExpandedRows] = useState([]);
-    const [dropdownItem, setDropdownItem] = useState(null);
     const [searchText, setSearchText] = useState("");
-    const [date, setDate] = useState(null);
-    const [selectedCities, setSelectedCities] = useState(null);
     const [excelData, setExcelData] = useState([]);
-    const [cate, setCateData] = useState([]);
     const [visible, setVisible] = useState(false);
     const [position, setPosition] = useState('center');
     const toast = useRef(null);
-    const [codigoFiltro, setCodigoFiltro] = useState("");
-    const [descripcionFiltro, setDescripcionFiltro] = useState("");
-    const [nivelFiltro, setNivelFiltro] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery2, setSearchQuery2] = useState("");
+    const [searchQuery3, setSearchQuery3] = useState("");
+    const [codigo, setCodigo] = useState("");
+    const [descripcion, setDescripcion] = useState("");
+    const [selectedCity, setSelectedCity] = useState(null);
+    const [selectedLevel, setSelectedLevel] = useState(null);
 
-    useEffect(() => {
-        if (categoriaCoralData) {
-            localStorage.setItem('capturedCategoriaCoralData', JSON.stringify(categoriaCoralData));
-        }
-    }, [categoriaCoralData]);
+    const [DataCategoria, setDataCategoria] = useState([]);
+    const categoriasdata = new CategoriaCoralService();
 
-    useEffect(() => {
-        if (articuloData) {
-            localStorage.setItem('capturedArticulosData', JSON.stringify(articuloData));
-        }
-    }, [articuloData]);
+    const [DataArticulos, setDataArticulos] = useState([]);
+    const articulosdata = new ArticulosService();
 
-    const [capturedCategoriaCoralData, setCapturedCategoriaCoralData] = useState(
-        JSON.parse(localStorage.getItem('capturedCategoriaCoralData')) || []
-    );
 
-    const [categoriaLocal, setCategoriaLocal] = useState(localStorage.getItem('capturedCategoriaCoralData'));
-    const [articulosLocal, setArticulosLocal] = useState(localStorage.getItem('capturedArticulosData'));
 
-    useEffect(() => {
-        const handleStorageUpdate = () => {
-            setCategoriaLocal(localStorage.getItem('capturedCategoriaCoralData'));
-            setArticulosLocal(localStorage.getItem('capturedArticulosData'));
-        };
-
-        window.addEventListener('storageUpdated', handleStorageUpdate);
-
-        return () => {
-            window.removeEventListener('storageUpdated', handleStorageUpdate);
-        };
-    }, []);
-
-    const categoriaLocalData = JSON.parse(categoriaLocal);
-    //console.log("nuevo:", categoriaLocalData);
-    const articulosLocalData = JSON.parse(articulosLocal);
-    console.log("nuevo:", articulosLocalData);
+    const DataTablaar = ({ dataar }) => {
+        return (
+            <div>
+                <DataTable value={dataar} paginator rows={10} rowsPerPageOptions={[5, 10, 25]}>
+                    <Column field="codigo" header="Código" />
+                    <Column field="descripcion" header="Descripción" />
+                    <Column field="precio" header="Precio" />
+                    <Column field="unidadPedido" header="Unidad de Pedido" />
+                    <Column field="rowKey" header="Rowkey" />
+                    <Column field="icon" header="" body={leftToolbarTemplate2} />
+                </DataTable>
+            </div>
+        );
+    };
 
     const CustomDataTable = ({ data2 }) => {
         if (!data2) {
             return <p>No hay datos disponibles.</p>;
         }
+        const filteredData2 = data2.filter(item =>
+            (item[0] && item[0].toLowerCase().includes(searchQuery2.toLowerCase())) ||
+            (item[1] && item[1].toLowerCase().includes(searchQuery2.toLowerCase())) ||
+            (item[2] && item[2].toLowerCase().includes(searchQuery2.toLowerCase()))
+        );
 
         return (
-            <DataTable value={data2} paginator
+            <DataTable value={filteredData2} paginator
                 rows={5}
                 rowsPerPageOptions={[5, 10, 25]}>
                 <Column field="0" header="Código" />
                 <Column field="1" header="Descripción" />
                 <Column field="2" header="Nivel" />
                 <Column field="icon" header="" body={ingresoexel} />
-            </DataTable>
-        );
-    };
-
-    const DataTablaar = ({ dataar }) => {
-        return (
-            <div>
-                {dataar && dataar.length > 0 ? (
-                    <DataTable value={dataar} paginator rows={10} rowsPerPageOptions={[5, 10, 25]}>
-                        <Column field="codigo" header="Código" />
-                        <Column field="descripcion" header="Descripción" />
-                        <Column field="precio" header="Precio" />
-                        <Column field="unidadPedido" header="Unidad de Pedido" />
-                        <Column field="rowKey" header="Rowkey" />
-                        <Column field="icon" header="" body={leftToolbarTemplate2} />
-                    </DataTable>
-                ) : (
-                    'Cargando datos...'
-                )}
-            </div>
-        );
-    };
-
-
-    const CustomDataTable3 = ({ data3 }) => {
-        if (!data3) {
-            return <p>No hay datos disponibles.</p>;
-        }
-
-        return (
-            <DataTable value={data3} paginator
-                rows={5}
-                rowsPerPageOptions={[5, 10, 25]}>
-                <Column field="0" header="Código" />
-                <Column field="1" header="Descripción" />
-                <Column field="2" header="Nivel" />
-                <Column field="icon" header="" body={ingresoidividual} />
             </DataTable>
         );
     };
@@ -134,152 +88,6 @@ const Dashboard = ({ categoriaCoralData, articuloData }) => {
         }
     };
 
-    /*  const userData = {
-          object: [
-              {
-                  menId: 652,
-                  nombre: "Coral Seccion",
-                  url: "https://www.gerardoortiz.com/coralSeccion/",
-                  icono: "fa fa-tags",
-                  hijos: [
-                      {
-                          menId: 653,
-                          nombre: "Reporte Factura TEST",
-                          url: "https://www.gerardoortiz.com/coralSeccion/reportes/factura_codigo_cliente.jsf",
-                          icono: "fa fa-crosshairs"
-                      },
-                      {
-                          menId: 658,
-                          nombre: "Precio historico de articulo",
-                          url: "https://www.gerardoortiz.com/coralSeccion/reportes/ingresos_historicos.jsf",
-                          icono: "fa fa-dollar"
-                      }
-                  ]
-              },
-              {
-                  menId: 805,
-                  nombre: "Activos Fijos",
-                  url: "#",
-                  icono: "fas fa-book",
-                  hijos: [
-                      {
-                          menId: 806,
-                          nombre: "Formar Activo",
-                          url: "https://www.gerardoortiz.com/activosFijos/activosFijos/formaActivo.jsf",
-                          icono: "fas fa-clipboard-list"
-                      },
-                      {
-                          menId: 807,
-                          nombre: "Ingresar Activo",
-                          url: "https://www.gerardoortiz.com/activosFijos/activosFijos/ingresaActivo.jsf",
-                          icono: "fas fa-clipboard-list"
-                      },
-                      {
-                          menId: 808,
-                          nombre: "Recepcion Entrega",
-                          url: "https://www.gerardoortiz.com/activosFijos/activosFijos/recepcionEntrega.jsf",
-                          icono: "fas fa-clipboard-list"
-                      },
-                      {
-                          menId: 809,
-                          nombre: "Depreciacion del Activo",
-                          url: "https://www.gerardoortiz.com/activosFijos/activosFijos/depreciaActivo.jsf",
-                          icono: "fas fa-clipboard-list"
-                      },
-                      {
-                          menId: 810,
-                          nombre: "Gestion Sitio",
-                          url: "https://www.gerardoortiz.com/activosFijos/activosFijos/gestionSitio.jsf",
-                          icono: "fas fa-clipboard-list"
-                      }
-                  ]
-              },
-              {
-                  menId: 288,
-                  nombre: "Regalos",
-                  url: "#",
-                  icono: "fas fa-book",
-                  hijos: [
-                      {
-                          menId: 107,
-                          nombre: "Regalos Activos",
-                          url: "https://www.gerardoortiz.com/activosFijos/activosFijos/formaActivo.jsf",
-                          icono: "fas fa-clipboard-list"
-                      },
-                  ]
-              }
-  
-          ]
-      };
-  
-  
-      const preparedData = [];
-      userData.object.forEach((parentItem) => {
-          const parentRow = {
-              id: parentItem.menId,
-              name: parentItem.nombre,
-              url: parentItem.url,
-              icon: parentItem.icono,
-              children: parentItem.hijos || [],
-          };
-  
-          preparedData.push(parentRow);
-  
-          if (parentItem.hijos) {
-              parentItem.hijos.forEach((childItem) => {
-                  const childRow = {
-                      id: childItem.menId,
-                      name: childItem.nombre,
-                      url: childItem.url,
-                      icon: childItem.icono,
-                      parent: parentItem.menId,
-                  };
-                  preparedData.push(childRow);
-              });
-          }
-      });
-      */
-    const [activeSubMenuIndex, setActiveSubMenuIndex] = useState(null);
-
-    const toggleRow = (rowData) => {
-        const isRowExpanded = expandedRows.includes(rowData.id);
-        if (isRowExpanded) {
-            setExpandedRows(expandedRows.filter(id => id !== rowData.id));
-        } else {
-            setExpandedRows([...expandedRows, rowData.id]);
-        }
-    };
-
-    const isSubMenuActive = (menId) => {
-        return activeSubMenuIndex === menId;
-    };
-
-    const onSubMenuClick = (menId) => {
-        setActiveSubMenuIndex((prevActiveIndex) => (prevActiveIndex === menId ? null : menId));
-    };
-
-    const rowExpansionTemplate = (rowData) => {
-        if (!rowData.children || rowData.children.length === 0) return null;
-
-        return (
-            <div className="p-mb-4">
-                {rowData.children.map((child, index) => (
-                    <div key={child.id} className="p-d-flex p-jc-between p-ai-center">
-                        <a href={child.url}>{child.name}</a>
-                        <i className={child.icon}></i>
-                        {child.hijos && child.hijos.length > 0 && (
-                            <Button
-                                icon={`pi ${isSubMenuActive(child.menId) ? 'pi-angle-up' : 'pi-angle-down'}`}
-                                className={`p-row-toggler p-link`}
-                                onClick={() => onSubMenuClick(child.menId)}
-                                aria-expanded={isSubMenuActive(child.menId)}
-                            />
-                        )}
-                    </div>
-                ))}
-            </div>
-        );
-    };
 
     const openNew = () => {
         setDialogVisible(true);
@@ -297,14 +105,6 @@ const Dashboard = ({ categoriaCoralData, articuloData }) => {
         setDialogVisible2(false);
         setUploadedFileName("");
     };
-    /*const leftToolbarTemplate = () => {
-        return (
-            <div className="flex flex-wrap gap-2">
-                <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} />
-                <Button label="Delete" icon="pi pi-trash" severity="danger" />
-            </div>
-        );
-    };*/
 
     const leftToolbarTemplate2 = (rowData) => {
         return (
@@ -329,8 +129,6 @@ const Dashboard = ({ categoriaCoralData, articuloData }) => {
             </div>
         );
     };
-
-    const toastRef = useRef(null);
 
     const showSuccess = () => {
         toast.current.show({ severity: 'success', summary: 'Success Message', detail: 'Operación Completada.' });
@@ -375,14 +173,7 @@ const Dashboard = ({ categoriaCoralData, articuloData }) => {
         { label: 'Nivel 6', value: 6 },
     ];
 
-    const [codigo, setCodigo] = useState("");
-    const [descripcion, setDescripcion] = useState("");
-    const [selectedCity, setSelectedCity] = useState(null);
 
-
-
-
-    const [selectedLevel, setSelectedLevel] = useState(null);
 
     const handleCityChange = (e) => {
         setSelectedCity(e.value);
@@ -391,14 +182,41 @@ const Dashboard = ({ categoriaCoralData, articuloData }) => {
 
 
     const handleFilterClick = () => {
-        console.log("Código:", codigo);
-        console.log("Descripción:", descripcion);
-        console.log("Nivel:", selectedCity);
-        localStorage.setItem('codigocap', codigo);
-        localStorage.setItem('descripcioncap', descripcion);
-        localStorage.setItem('nivelcap', selectedCity);
-        console.log("hadlllleckil")
+        
+        console.log('codigocap', codigo);
+        console.log('descripcioncap', descripcion);
+        console.log('nivelcap', selectedCity);
+        categoriasdata.PostCategoriaCoralData(codigo, descripcion, selectedCity).then((data) => {
+            console.log("datossss",data);
+            setDataCategoria(data);
+        });
     };
+
+
+
+    const CustomDataTable3 = ({ data3 }) => {
+        if (!data3) {
+            return <p>No hay datos disponibles.</p>;
+        }
+        const filteredData3 = data3.filter(item =>
+            (item[0] && item[0].toLowerCase().includes(searchQuery3.toLowerCase())) ||
+            (item[1] && item[1].toLowerCase().includes(searchQuery3.toLowerCase())) ||
+            (item[2] && item[2].toLowerCase().includes(searchQuery3.toLowerCase()))
+        );
+        return (
+            <DataTable value={filteredData3} paginator
+                rows={5}
+                rowsPerPageOptions={[5, 10, 25]}>
+                <Column field="0" header="Código" />
+                <Column field="1" header="Descripción" />
+                <Column field="2" header="Nivel" />
+                <Column field="icon" header="" body={ingresoidividual} />
+            </DataTable>
+        );
+    };
+
+
+   
 
     const filtrotabla = () => {
         return (
@@ -442,40 +260,46 @@ const Dashboard = ({ categoriaCoralData, articuloData }) => {
                 <div className="p-field p-col-12 p-md-12 p-lg-4">
                     <label htmlFor="username">Filtrar</label>
                     <span className="p-inputgroup">
-                    <Button label="Seleccionar" icon="pi pi-search" className="secondary" onClick={handleFilterClick} style={{ backgroundColor: '#e0e0e0' }}/>
+                        <Button label="Seleccionar" icon="pi pi-search" className="secondary" onClick={handleFilterClick} style={{ backgroundColor: '#e0e0e0' }} />
                     </span>
                 </div>
             </div>
         );
     };
 
-    const nuevo= () => {
+    const nuevo = () => {
 
         console.log("holaa")
 
     }
     console.log("numero", selectedLevel);
 
+    const [loading, setLoading] = useState(false);
+
+    const handleCargaDatos = () => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+            articulosdata.PostListaArticulos().then((datas) => {
+                console.log("API response data:", datas);
+                setDataArticulos(datas);
+            });
+        }, 2000);
+    };
+    const CargarDatosArticulos = () => {
+        return     <Button
+        label="Carga Datos"
+        icon={loading ? "pi pi-spin pi-spinner" : ""}
+        style={{ backgroundColor: 'silver', color: 'black', fontSize: '1rem' }}
+        onClick={handleCargaDatos}
+        disabled={loading}
+    />
+    };
+    
 
     const rightToolbarTemplate = () => {
         return <Button label="Carga Masiva" icon="pi pi-upload" className="secondary" onClick={openNew2} />;
     };
-
-    const header = (
-        <div className="flex flex-wrap gap-2 align-items-center justify-content-between" >
-            <h4 className="m-0"></h4>
-            <span className="p-input-icon-left">
-                <i className="pi pi-search" />
-                <InputText value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder="Search..." />
-            </span>
-        </div>
-    );
-
-    /*const filteredData = preparedData.filter(
-        (row) =>
-            row.name.toLowerCase().includes(searchText.toLowerCase()) ||
-            (row.url && row.url.toLowerCase().includes(searchText.toLowerCase()))
-    );*/
 
     const productDialogFooter = (
         <React.Fragment>
@@ -542,14 +366,27 @@ const Dashboard = ({ categoriaCoralData, articuloData }) => {
     return (
         <div>
             <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
-                <Toolbar className="mb-4" right={rightToolbarTemplate}></Toolbar>
+                <Toolbar className="mb-4" right={rightToolbarTemplate} left={CargarDatosArticulos}></Toolbar>
                 <div>
-                    <h1>Tabla de Artículos</h1>
-                    {articulosLocalData && articulosLocalData.data.length > 0 ? (
-                        <DataTablaar dataar={articulosLocalData.data} />
-                    ) : (
-                        'Cargando datos...'
-                    )}
+                    <div className="p-grid p-align-center">
+                        <div className="p-col-12 p-md-4">
+                            <h1>Tabla de Artículos</h1>
+                        </div>
+                        <div className="p-col-12 p-md-8">
+                            <div className="p-field p-col-12 p-md-12 p-lg-4">
+                                <label htmlFor="search">Buscar</label>
+                                <span className="p-inputgroup">
+                                    <span className="p-inputgroup-addon"><i className="pi pi-search" /></span>
+                                    <InputText
+                                        placeholder="Buscar"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <DataTablaar dataar={DataArticulos.data} />
                 </div>
             </div>
 
@@ -558,7 +395,18 @@ const Dashboard = ({ categoriaCoralData, articuloData }) => {
 
                     <Toolbar className="mb-4" right={filtrotabla}></Toolbar>
                     <div>
-                        <CustomDataTable3 data3={categoriaLocalData} />
+                    <div className="p-field p-col-12 p-md-12 p-lg-4">
+                            <label htmlFor="search">Buscar</label>
+                            <span className="p-inputgroup">
+                                <span className="p-inputgroup-addon"><i className="pi pi-search" /></span>
+                                <InputText
+                                    placeholder="Buscar"
+                                    value={searchQuery3}
+                                    onChange={(e) => setSearchQuery3(e.target.value)}
+                                />
+                            </span>
+                            <CustomDataTable3 data3={DataCategoria} />
+                        </div>
                     </div>
                 </div>
             </Dialog>
@@ -579,7 +427,19 @@ const Dashboard = ({ categoriaCoralData, articuloData }) => {
                 <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
                     <Toolbar className="mb-4" right={productDialogFooter2} left={filtrotabla} ></Toolbar>
                     <div>
-                        <CustomDataTable data2={categoriaLocalData} />
+                        <div className="p-field p-col-12 p-md-12 p-lg-4">
+                            <label htmlFor="search">Buscar</label>
+                            <span className="p-inputgroup">
+                                <span className="p-inputgroup-addon"><i className="pi pi-search" /></span>
+                                <InputText
+                                    placeholder="Buscar"
+                                    value={searchQuery2}
+                                    onChange={(e) => setSearchQuery2(e.target.value)}
+                                />
+                            </span>
+                            <CustomDataTable data2={DataCategoria} />
+                        </div>
+
                     </div>
                 </div>
             </Dialog>
