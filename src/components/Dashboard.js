@@ -10,7 +10,9 @@ import { Dropdown } from 'primereact/dropdown';
 import * as XLSX from 'xlsx';
 import { Toast } from 'primereact/toast';
 import { CategoriaCoralService } from '../service/CategoriaCoralService';
-import { ArticulosService } from '../service/ArticulosService';
+import { ArticulosService } from '../serviceIntermedia/ArticulosService';
+import { ArticulosIntermediaws } from '../service/ArticulosService';
+import { MultiSelect } from 'primereact/multiselect';
 const Dashboard = () => {
     const [isDialogVisible, setDialogVisible] = useState(false);
     const [isDialogVisible2, setDialogVisible2] = useState(false);
@@ -30,7 +32,7 @@ const Dashboard = () => {
     const categoriasdata = new CategoriaCoralService();
 
     const [DataArticulos, setDataArticulos] = useState([]);
-    const articulosdata = new ArticulosService();
+    const articulosdata = new ArticulosIntermediaws();
 
     const DataTablaar = ({ dataar }) => {
         return (
@@ -189,7 +191,7 @@ const Dashboard = () => {
 
     const handleFilterClick = () => {
         categoriasdata.PostCategoriaCoralData(codigo, descripcion, selectedCity).then((data) => {
-            console.log("API response data", data);
+
             setDataCategoria(data);
         });
     };
@@ -250,21 +252,76 @@ const Dashboard = () => {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
-            articulosdata.PostListaArticulos().then((datas) => {
-                console.log("API response data:", datas);
+            const codigoParam = "";
+            const presentacionParam = "";
+            const descripcionParam = "";
+            const proveedorParam = "";
+            const barraParam = "";
+            const soloActivosParam = true;
+            const soloPendientesParam = false;
+            const incluirBarrasParam = true;
+            const soloSinRentasParam = false;
+            const soloCompraParam = false;
+            const soloVentaRetailParam = false;
+            const soloVentaMayorParam = false;
+            const soloTransferenciaParam = false;
+            const soloSinPreciosParam = false;
+            const jerarquiaParam = "";
+            const lazyInfoParam = "";
+            articulosdata.listarArticulosListaFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, soloVentaMayorParam, soloTransferenciaParam, jerarquiaParam, lazyInfoParam).then((datas) => {
+
                 setDataArticulos(datas);
+            });
+
+            const unidadParam = "4712878627406";
+            const sociedadParam = "";
+            const centroParam = "XNCO002";
+            const almacenParam = "";
+            const numPedidoParam = "";
+            const soloActivoParam = true;
+            articulosdata.getTArticuloBarra(unidadParam, soloActivoParam).then((datas) => {
+                console.log(datas);
+
+            });
+
+            articulosdata.listarArticulosPrecioFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, soloVentaMayorParam, soloTransferenciaParam, jerarquiaParam, lazyInfoParam).then((dataf) => {
+                console.log(dataf);
+
+            });
+
+            articulosdata.listarArticulosPrecio(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, lazyInfoParam).then((dataP) => {
+                console.log(dataP);
+
+            });
+            articulosdata.obtenerArticuloCaja(centroParam).then((dataP) => {
+                console.log(dataP);
+
+            });
+
+            articulosdata.listarArticulosSolicitudPedFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, soloVentaMayorParam, soloTransferenciaParam, jerarquiaParam, centroParam, almacenParam, numPedidoParam, lazyInfoParam).then((dataS) => {
+                console.log(dataS);
+
+            });
+
+            articulosdata.listarArticulosPresentaciones(codigoParam, sociedadParam).then((dataS) => {
+                console.log(dataS);
+
             });
 
         }, 2000);
     };
     const CargarDatosArticulos = () => {
-        return <Button
+        return      <div className="card flex justify-content-center">
+        <MultiSelect value={selectedvalor} onChange={(e) => setSelectedvalor(e.value)} options={citi} optionLabel="name"
+            placeholder="Select Cities" maxSelectedLabels={3} className="w-full md:w-20rem" />
+            <Button
             label="Carga Datos"
             icon={loading ? "pi pi-spin pi-spinner" : ""}
             style={{ backgroundColor: 'silver', color: 'black', fontSize: '1rem' }}
             onClick={handleCargaDatos}
             disabled={loading}
         />
+    </div>
     };
 
 
@@ -332,6 +389,18 @@ const Dashboard = () => {
         setVisible(true);
     };
 
+    const [selectedvalor, setSelectedvalor] = useState(null);
+    const citi = [
+        { name: 'Solo Activos', value: true },
+        { name: 'Solo Pendientes', value: true  },
+        { name: 'Incluir Barras', value: true  },
+        { name: 'Solo sin Rentas', value: true  },
+        { name: 'Solo Compras', value: true  },
+        { name: 'Solo Venta Retail', value: true  },
+        { name: 'Solo Venta Mayor ', value: true  },
+        { name: 'Solo Transferencia ', value: true  },
+        { name: 'Solo sin Precios ', value: true },
+    ];
 
 
     return (

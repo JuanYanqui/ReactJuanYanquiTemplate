@@ -27,8 +27,8 @@ export class CategoriaCoralService {
         return axios
           .post(url, requestData, {
             headers: {
-              'Content-Type': 'application/json',
-            },
+              'Content-Type': 'application/json'
+            }
           })
           .then((response) => {
             const objectData = JSON.parse(response.data.object);

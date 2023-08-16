@@ -52,7 +52,7 @@ initKeycloak()
         usuarioService.PostUsuarioIngreso(usuarioUppercase)
             .then((usuarioingresado) => {
                 if (usuarioingresado != null) {
-                    usuarioService.MenuUsuarioIngreso(usuarioUppercase)
+                    usuarioService.GetMenuUsuarioIngreso(usuarioUppercase)
                         .then((userData) => {
 
                             const root = ReactDOM.createRoot(document.getElementById('root'));

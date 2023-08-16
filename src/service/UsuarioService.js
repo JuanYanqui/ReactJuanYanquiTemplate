@@ -7,7 +7,7 @@ export class UsuarioService {
     this.pathService = new PathService();
   }
 
-  MenuUsuarioIngreso(usuario) {
+  GetMenuUsuarioIngreso(usuario) {
     const url = `http://wsgo.gerardoortiz.com/ApiJavadb/menuUsuario/menuAllUser?userId=${usuario}&app=APP`;
     return axios.get(url)
       .then((res) => {

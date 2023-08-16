@@ -19,7 +19,7 @@ const AppMenu = ({ model, onMenuItemClick }) => {
     return (
       <li key={item.label || index} className={classNames({ 'active-menuitem': isActive, 'main-menuitem': isMainItem })}>
         <a onClick={() => onSubMenuClick(index)}>
-        <i className={item.icon}></i>
+          <i className={item.icon}></i>
           <span className="layout-menuitem-text">{item.label}</span>
           {item.items && <i className="pi pi-fw pi-angle-down layout-submenu-toggler"></i>}
         </a>
@@ -28,7 +28,7 @@ const AppMenu = ({ model, onMenuItemClick }) => {
             {item.items.map((subItem, subIndex) => (
               <li key={subItem.label || subIndex} className={classNames({ 'active-menuitem': subItem.active })}>
                 <a onClick={(e) => onMenuItemClick(e, subItem)}>
-                <i className={classNames('layout-menuitem-icon', subItem.icon)}></i>
+                  <i className={classNames('layout-menuitem-icon', subItem.icon)}></i>
                   <span className="layout-menuitem-text">{subItem.label}</span>
                 </a>
               </li>
