@@ -11,8 +11,6 @@ import * as XLSX from 'xlsx';
 import { Toast } from 'primereact/toast';
 import { CategoriaCoralService } from '../service/CategoriaCoralService';
 import { ArticulosService } from '../service/ArticulosService';
-
-
 const Dashboard = () => {
     const [isDialogVisible, setDialogVisible] = useState(false);
     const [isDialogVisible2, setDialogVisible2] = useState(false);
@@ -34,8 +32,6 @@ const Dashboard = () => {
     const [DataArticulos, setDataArticulos] = useState([]);
     const articulosdata = new ArticulosService();
 
-
-
     const DataTablaar = ({ dataar }) => {
         return (
             <div>
@@ -50,6 +46,7 @@ const Dashboard = () => {
             </div>
         );
     };
+
 
     const CustomDataTable = ({ data2 }) => {
         if (!data2) {
@@ -175,9 +172,6 @@ const Dashboard = () => {
     );
 
 
-
-
-
     const cities = [
         { label: 'Seleccionar', value: null },
         { label: 'Nivel 1', value: 1 },
@@ -187,9 +181,6 @@ const Dashboard = () => {
         { label: 'Nivel 5', value: 5 },
         { label: 'Nivel 6', value: 6 },
     ];
-
-
-
     const handleCityChange = (e) => {
         setSelectedCity(e.value);
         setSelectedLevel(e.value);
@@ -205,8 +196,6 @@ const Dashboard = () => {
             setDataCategoria(data);
         });
     };
-
-
 
 
     const filtrotabla = () => {
@@ -268,6 +257,7 @@ const Dashboard = () => {
                 console.log("API response data:", datas);
                 setDataArticulos(datas);
             });
+
         }, 2000);
     };
     const CargarDatosArticulos = () => {
