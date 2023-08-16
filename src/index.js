@@ -8,6 +8,7 @@ import CategoriaCoralService from './service/CategoriaCoralService';
 import ArticulosService from './service/ArticulosService';
 import { UsuarioService } from './service/UsuarioService';
 import App from './App';
+
 /*const keycloakConfig = {
     realm: "gocorp",
     url: "https://goauth.gerardoortiz.com/auth/",
@@ -47,25 +48,32 @@ initKeycloak()
         const usuario = keycloak.idTokenParsed.preferred_username;
         const usuarioUppercase = usuario.toUpperCase();
         const usuarioService = new UsuarioService();
-        usuarioService.PostUsuario(usuarioUppercase)
-            .then((usuarioingresado) => {
-                console.log("es", usuarioingresado);
-                usuarioService.MenuUsuario(usuarioUppercase)
-                    .then((userData) => {
-                        console.log("es", userData);
-                        const root = ReactDOM.createRoot(document.getElementById('root'));
-                        root.render(
 
-                            <React.StrictMode>
-                                <HashRouter>
-                                    {userData && <App userData={userData} />}
-                                </HashRouter>
-                            </React.StrictMode>
-                        );
-                    })
-                    .catch((error) => {
-                        console.error('Error fetching user data:', error);
-                    });
+        usuarioService.PostUsuarioIngreso(usuarioUppercase)
+            .then((usuarioingresado) => {
+                if (usuarioingresado != null) {
+                    usuarioService.MenuUsuarioIngreso(usuarioUppercase)
+                        .then((userData) => {
+
+                            const root = ReactDOM.createRoot(document.getElementById('root'));
+                            root.render(
+
+                                <React.StrictMode>
+                                    <HashRouter>
+                                        {userData && <App userData={userData} />}
+                                    </HashRouter>
+                                </React.StrictMode>
+                            );
+                        })
+                        .catch((error) => {
+                            console.error('Error fetching user data:', error);
+                        });
+                } else {
+                    console.error('Error fetching user data:');
+                    const keycloakConfig = JSON.parse(localStorage.getItem('keycloakConfig'));
+                    window.location.href = keycloakConfig.url + 'realms/' + keycloakConfig.realm + '/protocol/openid-connect/logout?redirect_uri=' + encodeURIComponent(window.location.origin);
+                }
+
             })
             .catch((error) => {
                 console.error('Error fetching user data:', error);

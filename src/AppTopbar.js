@@ -56,7 +56,6 @@ const AppTopbar = (props) => {
         const keycloakConfig = JSON.parse(localStorage.getItem('keycloakConfig'));
         window.location.href = keycloakConfig.url + 'realms/' + keycloakConfig.realm + '/protocol/openid-connect/logout?redirect_uri=' + encodeURIComponent(window.location.origin);
     };
-    
     const inlineMenuRef = useRef(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const toggleMenu = () => {

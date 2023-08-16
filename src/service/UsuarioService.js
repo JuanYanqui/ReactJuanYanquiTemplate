@@ -1,7 +1,5 @@
 import axios from 'axios';
 import { PathService } from './Path.Service';
-import React, { useState } from 'react';
-import App from '../App';
 
 export class UsuarioService {
 
@@ -9,7 +7,7 @@ export class UsuarioService {
     this.pathService = new PathService();
   }
 
-  MenuUsuario(usuario) {
+  MenuUsuarioIngreso(usuario) {
     const url = `http://wsgo.gerardoortiz.com/ApiJavadb/menuUsuario/menuAllUser?userId=${usuario}&app=APP`;
     return axios.get(url)
       .then((res) => {
@@ -23,7 +21,7 @@ export class UsuarioService {
   }
 
 
-  PostUsuario(usuario) {
+  PostUsuarioIngreso(usuario) {
     const url = 'http://192.168.200.24:8080/javaws/ws/usuarios/getUsuario';
     const requestData = {
       object: JSON.stringify({
@@ -45,8 +43,7 @@ export class UsuarioService {
         console.error('Error en el nuevo método', error);
         return null;
       });
-
   }
-  
+
 }
 

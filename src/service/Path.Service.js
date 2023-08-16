@@ -7,7 +7,6 @@ export class PathService {
         return axios.get(url).then((res) => res.data);
     }
 
-
 }
 
 

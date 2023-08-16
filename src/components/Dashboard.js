@@ -188,9 +188,6 @@ const Dashboard = () => {
 
 
     const handleFilterClick = () => {
-        console.log('codigocap', codigo);
-        console.log('descripcioncap', descripcion);
-        console.log('nivelcap', selectedCity);
         categoriasdata.PostCategoriaCoralData(codigo, descripcion, selectedCity).then((data) => {
             console.log("API response data", data);
             setDataCategoria(data);
