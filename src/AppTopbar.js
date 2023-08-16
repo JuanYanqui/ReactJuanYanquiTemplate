@@ -53,14 +53,10 @@ const AppTopbar = (props) => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('usernamecap');
-        localStorage.removeItem('nombrecap');
-        localStorage.removeItem('apellidocap');
-        localStorage.removeItem('emailcap');
-
         const keycloakConfig = JSON.parse(localStorage.getItem('keycloakConfig'));
         window.location.href = keycloakConfig.url + 'realms/' + keycloakConfig.realm + '/protocol/openid-connect/logout?redirect_uri=' + encodeURIComponent(window.location.origin);
     };
+    
     const inlineMenuRef = useRef(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const toggleMenu = () => {

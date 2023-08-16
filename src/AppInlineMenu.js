@@ -4,12 +4,7 @@ import { useContext, useRef ,useEffect, useState} from 'react';
 import { RTLContext } from './App';
 import { Tooltip } from 'primereact/tooltip';
 const handleLogout = () => {
-    localStorage.removeItem('usernamecap');
-   localStorage.removeItem('nombrecap');
-   localStorage.removeItem('apellidocap');
-   localStorage.removeItem('emailcap');
-
-    const keycloakConfig = JSON.parse(localStorage.getItem('keycloakConfig'));
+  const keycloakConfig = JSON.parse(localStorage.getItem('keycloakConfig'));
     window.location.href = keycloakConfig.url + 'realms/' + keycloakConfig.realm + '/protocol/openid-connect/logout?redirect_uri=' + encodeURIComponent(window.location.origin);
 };
 const AppInlineMenu = (props) => {
@@ -24,24 +19,6 @@ const AppInlineMenu = (props) => {
         },
         props.className
     );
-
-    const isSlim = () => {
-        return props.menuMode === 'slim';
-    };
-    const [usuario, setUsuario] = useState(localStorage.getItem('usernamecap'));
-
-    useEffect(() => {
-      const handleStorageUpdate = () => {
-        setUsuario(localStorage.getItem('usernamecap'));
-      };
-  
-      window.addEventListener('storageUpdated', handleStorageUpdate);
-  
-      return () => {
-        window.removeEventListener('storageUpdated', handleStorageUpdate);
-      };
-    }, []);
-
 };
 
 export default AppInlineMenu;

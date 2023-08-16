@@ -1,96 +1,52 @@
-import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { PathService } from './Path.Service';
+import React, { useState } from 'react';
 import App from '../App';
 
-const UsuarioService = () => {
+export class UsuarioService {
 
-      const [userData, setUserData] = useState(null);
-  
-      const [userData2, setUserData2] = useState(null);
-  
-      ////////RECUPERA EL USUAERIO DEL LOCAL STORAGE PARA MANDAERLE A ACTUALIZAR////
+  constructor() {
+    this.pathService = new PathService();
+  }
 
-      const [usuario, setUsuario] = useState(localStorage.getItem('usernamecap'));
-  
-      ///////////ACTUALIZA LO QUE ESTA GUARDADO EN EL LOCALSTORAGE/////////
-      useEffect(() => {
-        const handleStorageUpdate = () => {
-          setUsuario(localStorage.getItem('usernamecap'));
-        };
-    
-        window.addEventListener('storageUpdated', handleStorageUpdate);
-    
-        return () => {
-          window.removeEventListener('storageUpdated', handleStorageUpdate);
-        };
-      }, []);
-  
-      ///////////////MANDA A EJECUTAR EL METODO FECH CON EL USUARIO OBTENIDO////////
-      useEffect(() => {
-        fetchUserData(usuario);
-      }, []);
-  
-      useEffect(() => {
-        fetchUserData2(usuario);
-      }, []);
-    
+  MenuUsuario(usuario) {
+    const url = `http://wsgo.gerardoortiz.com/ApiJavadb/menuUsuario/menuAllUser?userId=${usuario}&app=APP`;
+    return axios.get(url)
+      .then((res) => {
+        const userData = res.data;
+        return userData;
+      })
+      .catch((error) => {
+        console.error('Error fetching user data:', error);
+        throw error;
+      });
+  }
 
-      ///////////PETICION GET//////////////////////
-      const fetchUserData = (usuario) => {
-        const usuarioMayusculas = usuario.toUpperCase();
-        const url = `http://wsgo.gerardoortiz.com/ApiJavadb/menuUsuario/menuAllUser?userId=${usuarioMayusculas}&app=APP`;
-    
-        const xhr = new XMLHttpRequest();
-        xhr.open("GET", url);
-    
-        xhr.onreadystatechange = () => {
-          if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-              const response = JSON.parse(xhr.responseText);
-              setUserData(response);
-            } else {
-              console.error('Error al obtener datos del usuario');
-            }
-          }
-        };
-    
-        xhr.send();
-      };
-  
 
-      //////////PETICION POST//////////////////////
-      const fetchUserData2 = (usuario) => {
-        const usuarioMayusculas2 = usuario.toUpperCase();
-        const url = 'http://192.168.200.24:8080/javaws/ws/usuarios/getUsuario';
-        const body = {
-          object: JSON.stringify({
-            usuario: usuarioMayusculas2
-          }),
-          rowCount: 0
-        };
-    
-        fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(body)
-        })
-          .then(response => response.json())
-          .then(data => {
-            setUserData2(data);
-          })
-          .catch(error => {
-            console.error('Error al obtener datos del usuario', error);
-          });
-      };
-  
-      //////MANDA EL OBJETO A LA SIGUIENTE VENTANA JS ////////////
-      return (
-        <>
-          {userData && <App userData={userData} />},
-        </>
-      );
-  
-    }
+  PostUsuario(usuario) {
+    const url = 'http://192.168.200.24:8080/javaws/ws/usuarios/getUsuario';
+    const requestData = {
+      object: JSON.stringify({
+        usuario: usuario
+      }),
+      rowCount: 0
+    };
+    return axios
+      .post(url, requestData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {
+        const objectData = JSON.parse(response.data.object);
+        return objectData;
+      })
+      .catch((error) => {
+        console.error('Error en el nuevo método', error);
+        return null;
+      });
 
-export default UsuarioService;
+  }
+  
+}
+

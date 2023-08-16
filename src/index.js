@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import AppWrapper from './AppWrapper';
 import reportWebVitals from './reportWebVitals';
-import UsuarioService from './service/UsuarioService';
 import Keycloak from 'keycloak-js';
 import CategoriaCoralService from './service/CategoriaCoralService';
 import ArticulosService from './service/ArticulosService';
+import { UsuarioService } from './service/UsuarioService';
+import App from './App';
 /*const keycloakConfig = {
     realm: "gocorp",
     url: "https://goauth.gerardoortiz.com/auth/",
@@ -43,30 +44,35 @@ const initKeycloak = () => {
 
 initKeycloak()
     .then((keycloak) => {
-        // Save user info in local storage
         const usuario = keycloak.idTokenParsed.preferred_username;
-        const firstName = keycloak.idTokenParsed.given_name;
-        const lastName = keycloak.idTokenParsed.family_name;
-        const email = keycloak.idTokenParsed.email;
+        const usuarioUppercase = usuario.toUpperCase();
+        const usuarioService = new UsuarioService();
+        usuarioService.PostUsuario(usuarioUppercase)
+            .then((usuarioingresado) => {
+                console.log("es", usuarioingresado);
+                usuarioService.MenuUsuario(usuarioUppercase)
+                    .then((userData) => {
+                        console.log("es", userData);
+                        const root = ReactDOM.createRoot(document.getElementById('root'));
+                        root.render(
 
-        localStorage.setItem('usernamecap', usuario);
-        localStorage.setItem('nombrecap', firstName);
-        localStorage.setItem('apellidocap', lastName);
-        localStorage.setItem('emailcap', email);
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(
-            <React.StrictMode>
-                <HashRouter>
-                        <UsuarioService>
-                        </UsuarioService>
-                </HashRouter>
-            </React.StrictMode>
-        );
+                            <React.StrictMode>
+                                <HashRouter>
+                                    {userData && <App userData={userData} />}
+                                </HashRouter>
+                            </React.StrictMode>
+                        );
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching user data:', error);
+                    });
+            })
+            .catch((error) => {
+                console.error('Error fetching user data:', error);
+            });
 
         reportWebVitals();
     })
     .catch((error) => {
         console.error('Error initializing Keycloak:', error);
     });
-
