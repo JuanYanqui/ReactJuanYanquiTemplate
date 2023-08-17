@@ -157,6 +157,7 @@ export class ArticulosIntermediaws {
             }
           })
           .then((response) => {
+            console.log("actualizarCostosArticuloAll");
             return null;
           })
           .catch((error) => {
@@ -563,13 +564,22 @@ export class ArticulosIntermediaws {
       });
   }
 
-  listarArticulosListaFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, soloVentaMayorParam, soloTransferenciaParam, jerarquiaParam, centroParam, lazyInfoParam) {
+  listarArticulosListaFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam,currentPage) {
     const ws_nombre = "INTERMEDIAWS_LISTAR_ARTICULOS_LISTA_FULL";
+    console.log("hola",currentPage);
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
         const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
+        const paginationInfo = {
+          count: false,
+          pagesize: 10,
+          first: currentPage,
+          sortBy: {},
+          filterBy: {}
+        };
+
         const requestData = {
           object: JSON.stringify({
             codigo: codigoParam,
@@ -584,11 +594,64 @@ export class ArticulosIntermediaws {
             soloSinPrecios: soloSinPreciosParam,
             soloCompra: soloCompraParam,
             soloVentaRetail: soloVentaRetailParam,
-            soloVentaMayor: soloVentaMayorParam,
-            soloTransferencia: soloTransferenciaParam,
             jerarquia: jerarquiaParam,
-            centro: centroParam,
-            lazyInfo: lazyInfoParam
+            lazyInfo:JSON.stringify(paginationInfo)
+          }),
+          rowCount: 0,
+        };
+        return axios
+          .post(url, requestData, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then((response) => {
+            console.log("listarArticulosListaFull", response);
+            const objectData = JSON.parse(response.data.object);
+            console.log(objectData);
+            return objectData;
+          })
+          .catch((error) => {
+            console.error('Error ArticulosIntermediaws metodo listarArticulosListaFull...!!!!', error);
+            return null;
+          });
+      })
+      .catch((error) => {
+        console.error('Error ArticulosIntermediaws metodo listarArticulosListaFull', error);
+        return null;
+      });
+  }
+
+  PaginacionlistarArticulosListaFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, lazyInfoParam) {
+    const ws_nombre = "INTERMEDIAWS_LISTAR_ARTICULOS_LISTA_FULL";
+    return this.pathService.getUrl(ws_nombre)
+      .then((data) => {
+        const nuevaWsUrl = data.object.wsUrl;
+        const nuevaSerUrl = data.object.serCodigo.serUrl;
+        const url = nuevaSerUrl + nuevaWsUrl;
+        const paginationInfo = {
+          count: true,
+          pagesize: 10,
+          first: 0*10,
+          sortBy: {},
+          filterBy: {}
+        };
+        const requestData = {
+          object: JSON.stringify({
+            codigo: codigoParam,
+            presentacion: presentacionParam,
+            descripcion: descripcionParam,
+            proveedor: proveedorParam,
+            barra: barraParam,
+            soloActivos: soloActivosParam,
+            soloPendientes: soloPendientesParam,
+            incluirBarras: incluirBarrasParam,
+            soloSinRentas: soloSinRentasParam,
+            soloSinPrecios: soloSinPreciosParam,
+            soloCompra: soloCompraParam,
+            soloVentaRetail: soloVentaRetailParam,
+            jerarquia: jerarquiaParam,
+            lazyInfo: JSON.stringify(paginationInfo)
           }),
           rowCount: 0,
         };

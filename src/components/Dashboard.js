@@ -25,6 +25,8 @@ const Dashboard = () => {
     const [searchQuery3, setSearchQuery3] = useState("");
     const [codigo, setCodigo] = useState("");
     const [descripcion, setDescripcion] = useState("");
+    const [codigoArticulo, setCodigoArticulo] = useState("");
+    const [descripcionArticulo, setDescripcionArticulo] = useState("");
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedLevel, setSelectedLevel] = useState(null);
 
@@ -34,10 +36,125 @@ const Dashboard = () => {
     const [DataArticulos, setDataArticulos] = useState([]);
     const articulosdata = new ArticulosIntermediaws();
 
+    const [totalRecords, setTotalRecords] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const [totalPages, setTotalPages] = useState(0);
+
+
+
+
+    const pageCount = totalPages;
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const selectedValues = {};
+
+            citi.forEach(item => {
+                selectedValues[item.name] = selectedvalor.includes(item.value);
+            });
+            const {
+                'Solo Activos': soloActivosParam,
+                'Solo Pendientes': soloPendientesParam,
+                'Incluir Barras': incluirBarrasParam,
+                'Solo sin Rentas': soloSinRentasParam,
+                'Solo Compras': soloCompraParam,
+                'Solo Venta Retail': soloVentaRetailParam,
+                'Solo sin Precios': soloSinPreciosParam
+            } = selectedValues;
+            const presentacionParam = "";
+            const proveedorParam = "";
+            const barraParam = "";
+            const jerarquiaParam = "";
+
+            const response1 = await articulosdata.listarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage);
+            const response = await articulosdata.PaginacionlistarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam);
+            if (response) {
+                setDataArticulos(response1);
+                console.log(response1);
+                const totalCount = response.rowCount;
+                const pageSize = 10;
+                const totalPages = Math.ceil(totalCount / pageSize);
+                console.log("Total Pages:", totalPages);
+                setTotalRecords(response.rowCount);
+                setTotalPages(totalPages);
+                console.log(response.rowCount);
+            }
+        };
+        fetchData();
+    }, [currentPage]);
+
+
+
+
+    const CustomPagination = ({ currentPage, pageCount, onPageChange }) => {
+        const visibleButtons = 5;
+        const [currentPageButtons, setCurrentPageButtons] = useState([]);
+
+        useEffect(() => {
+            const startPage = Math.max(currentPage + 1 - Math.floor(visibleButtons / 2), 1);
+            const endPage = Math.min(startPage + visibleButtons - 1, pageCount);
+            const pageButtons = [];
+
+            for (let i = startPage; i <= endPage; i++) {
+                pageButtons.push(
+                    <button
+                        key={i}
+                        className={i === currentPage + 1 ? 'custom-button selected-button' : 'custom-button'}
+                        onClick={() => onPageChange(i - 1)}
+                    >
+                        {i}
+                    </button>
+                );
+            }
+
+            setCurrentPageButtons(pageButtons);
+        }, [currentPage, pageCount, onPageChange]);
+
+        return (
+            <div className="custom-pagination">
+                <button
+                    onClick={() => onPageChange(0)}
+                    disabled={currentPage === 0}
+                    className="custom-button"
+                >
+                    {"<<"}
+                </button>
+                <button
+                    onClick={() => onPageChange(Math.max(currentPage - 1, 0))}
+                    disabled={currentPage === 0}
+                    className="custom-button"
+                >
+                    {"<"}
+                </button>
+                {currentPageButtons}
+                <button
+                    onClick={() => onPageChange(Math.min(currentPage + 1, pageCount - 1))}
+                    disabled={currentPage === pageCount - 1}
+                    className="custom-button"
+                >
+                    {">"}
+                </button>
+                <button
+                    onClick={() => onPageChange(pageCount - 1)}
+                    disabled={currentPage === pageCount - 1}
+                    className="custom-button"
+                >
+                    {">>"}
+                </button>
+            </div>
+        );
+    };
+
     const DataTablaar = ({ dataar }) => {
         return (
             <div>
-                <DataTable value={dataar} paginator rows={10} rowsPerPageOptions={[5, 10, 25]}>
+                <DataTable value={dataar}
+                >
                     <Column field="codigo" header="Código" />
                     <Column field="descripcion" header="Descripción" />
                     <Column field="precio" header="Precio" />
@@ -45,6 +162,14 @@ const Dashboard = () => {
                     <Column field="rowKey" header="Rowkey" />
                     <Column field="icon" header="" body={leftToolbarTemplate2} />
                 </DataTable>
+                <h6 className="table-title"> Paginas {totalPages}</h6>
+                <CustomPagination
+                    currentPage={currentPage}
+                    pageCount={pageCount}
+                    onPageChange={handlePageChange}
+                >
+                </CustomPagination>
+            
             </div>
         );
     };
@@ -101,7 +226,6 @@ const Dashboard = () => {
             openNew();
         }
     };
-
 
     const openNew = () => {
         setDialogVisible(true);
@@ -252,40 +376,54 @@ const Dashboard = () => {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
-            const codigoParam = "";
+            const selectedValues = {};
+
+            citi.forEach(item => {
+                selectedValues[item.name] = selectedvalor.includes(item.value);
+            });
+            const {
+                'Solo Activos': soloActivosParam,
+                'Solo Pendientes': soloPendientesParam,
+                'Incluir Barras': incluirBarrasParam,
+                'Solo sin Rentas': soloSinRentasParam,
+                'Solo Compras': soloCompraParam,
+                'Solo Venta Retail': soloVentaRetailParam,
+                'Solo sin Precios': soloSinPreciosParam
+            } = selectedValues;
             const presentacionParam = "";
-            const descripcionParam = "";
             const proveedorParam = "";
             const barraParam = "";
-            const soloActivosParam = true;
-            const soloPendientesParam = false;
-            const incluirBarrasParam = true;
-            const soloSinRentasParam = false;
-            const soloCompraParam = false;
-            const soloVentaRetailParam = false;
-            const soloVentaMayorParam = false;
-            const soloTransferenciaParam = false;
-            const soloSinPreciosParam = false;
             const jerarquiaParam = "";
-            const lazyInfoParam = "";
-            articulosdata.listarArticulosListaFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, soloVentaMayorParam, soloTransferenciaParam, jerarquiaParam, lazyInfoParam).then((datas) => {
+            articulosdata.listarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage).then((datas) => {
 
                 setDataArticulos(datas);
             });
 
+
+            articulosdata.PaginacionlistarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam).then((datas) => {
+
+                setTotalRecords(datas.rowCount);
+            });
+
             const unidadParam = "4712878627406";
             const sociedadParam = "";
-            const centroParam = "XNCO002";
+            const centroParam = null;
             const almacenParam = "";
             const numPedidoParam = "";
             const soloActivoParam = true;
-            articulosdata.getTArticuloBarra(unidadParam, soloActivoParam).then((datas) => {
-                console.log(datas);
+
+            /*articulosdata.actualizarCostosArticuloAll().then((dataA) => {
+                console.log(dataA);
 
             });
 
-            articulosdata.listarArticulosPrecioFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, soloVentaMayorParam, soloTransferenciaParam, jerarquiaParam, lazyInfoParam).then((dataf) => {
-                console.log(dataf);
+            articulosdata.getTArticuloBarra(unidadParam, soloActivoParam).then((dataS) => {
+                console.log(dataS);
+
+            });
+
+            articulosdata.listarArticulosPrecioFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, soloVentaMayorParam, soloTransferenciaParam, jerarquiaParam, lazyInfoParam).then((dataF) => {
+                console.log(dataF);
 
             });
 
@@ -306,22 +444,50 @@ const Dashboard = () => {
             articulosdata.listarArticulosPresentaciones(codigoParam, sociedadParam).then((dataS) => {
                 console.log(dataS);
 
-            });
+            });*/
 
         }, 2000);
     };
+
+
     const CargarDatosArticulos = () => {
-        return      <div className="card flex justify-content-center">
-        <MultiSelect value={selectedvalor} onChange={(e) => setSelectedvalor(e.value)} options={citi} optionLabel="name"
-            placeholder="Select Cities" maxSelectedLabels={3} className="w-full md:w-20rem" />
-            <Button
-            label="Carga Datos"
-            icon={loading ? "pi pi-spin pi-spinner" : ""}
-            style={{ backgroundColor: 'silver', color: 'black', fontSize: '1rem' }}
-            onClick={handleCargaDatos}
-            disabled={loading}
-        />
-    </div>
+        return <div className="card flex justify-content-center">
+
+            <span className="p-inputgroup">
+                <InputText
+                    placeholder="Código"
+                    value={codigoArticulo}
+                    onChange={(e) => setCodigoArticulo(e.target.value)}
+                />
+            </span>
+            <span className="p-inputgroup">
+                <InputText
+                    placeholder="Descripción"
+                    value={descripcionArticulo}
+                    onChange={(e) => setDescripcionArticulo(e.target.value)}
+                />
+            </span>
+
+            <MultiSelect
+                value={selectedvalor}
+                onChange={(e) => setSelectedvalor(e.value)}
+                options={citi}
+                optionLabel="name"
+                placeholder="Seleccione Filtro"
+                maxSelectedLabels={3}
+                className="w-full md:w-20rem"
+            />
+            <span className="p-inputgroup">
+                <Button
+                    label="Carga Datos"
+                    icon={loading ? "pi pi-spin pi-spinner" : ""}
+                    style={{ backgroundColor: 'silver', color: 'black', fontSize: '1rem' }}
+                    onClick={handleCargaDatos}
+                    disabled={loading}
+                />
+            </span>
+
+        </div>
     };
 
 
@@ -389,18 +555,39 @@ const Dashboard = () => {
         setVisible(true);
     };
 
-    const [selectedvalor, setSelectedvalor] = useState(null);
+    ;
+
+    const [selectedvalor, setSelectedvalor] = useState([]);
     const citi = [
-        { name: 'Solo Activos', value: true },
-        { name: 'Solo Pendientes', value: true  },
-        { name: 'Incluir Barras', value: true  },
-        { name: 'Solo sin Rentas', value: true  },
-        { name: 'Solo Compras', value: true  },
-        { name: 'Solo Venta Retail', value: true  },
-        { name: 'Solo Venta Mayor ', value: true  },
-        { name: 'Solo Transferencia ', value: true  },
-        { name: 'Solo sin Precios ', value: true },
+        { name: 'Solo Activos', value: 1 },
+        { name: 'Solo Pendientes', value: 2 },
+        { name: 'Incluir Barras', value: 3 },
+        { name: 'Solo sin Rentas', value: 4 },
+        { name: 'Solo Compras', value: 5 },
+        { name: 'Solo Venta Retail', value: 6 },
     ];
+
+    /*    const CargarDatos = () => {
+            const selectedValues = {};
+    
+            citi.forEach(item => {
+                selectedValues[item.name] = selectedvalor.includes(item.value);
+            });
+    
+            const {
+                'Solo Activos': soloActivosParam,
+                'Solo Pendientes': soloPendientesParam,
+                'Incluir Barras': incluirBarrasParam,
+                'Solo sin Rentas': soloSinRentasParam,
+                'Solo Compras': soloCompraParam,
+                'Solo Venta Retail': soloVentaRetailParam,
+                'Solo Venta Mayor': soloVentaMayorParam,
+                'Solo Transferencia': soloTransferenciaParam,
+                'Solo sin Precios': soloSinPreciosParam
+            } = selectedValues;
+            console.log(soloActivosParam, soloPendientesParam, incluirBarrasParam);
+    
+        };*/
 
 
     return (
@@ -414,14 +601,8 @@ const Dashboard = () => {
                         </div>
                         <div className="p-col-12 p-md-8">
                             <div className="p-field p-col-12 p-md-12 p-lg-4">
-                                <label htmlFor="search">Buscar</label>
                                 <span className="p-inputgroup">
-                                    <span className="p-inputgroup-addon"><i className="pi pi-search" /></span>
-                                    <InputText
-                                        placeholder="Buscar"
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                    />
+                             
                                 </span>
                             </div>
                         </div>
@@ -498,6 +679,8 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
 
 
 

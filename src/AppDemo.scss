@@ -5,6 +5,70 @@
 		display: none;
 	}
 }
+.table-title {
+    text-align: center;
+}
+
+.custom-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.custom-button {
+    background: transparent;
+    border: 1px solid #808080;
+    border-radius: 100%;
+    padding: 12px; /* Ajusta el tamaño del botón */
+    margin: 0 2px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #808080;
+    text-decoration: none;
+    outline: none;
+    font-size: 16px; /* Ajusta el tamaño de fuente */
+}
+
+
+/* Ajusta el tamaño de las flechas en los botones */
+.custom-button::before {
+    font-size: 18px; /* Tamaño de fuente para las flechas */
+    vertical-align: middle;
+}
+
+/* Ajusta el tamaño de los números en los botones */
+.custom-button span {
+    font-size: 18px; /* Tamaño de fuente para los números */
+    vertical-align: middle;
+}
+
+
+.custom-pagination button {
+    background: transparent;
+    border: 1px solid #c9c9c9; 
+    border-radius: 13%; 
+    padding: 8px; 
+    margin: 0 2px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+}
+
+
+.custom-button:hover {
+    background-color: transparent; 
+    color: #636262; 
+    border-color: #636262; 
+}
+
+.selected-button {
+    background-color: #808080; 
+    color: #fff; 
+}
+
+.custom-pagination button:hover {
+    background-color: #b9b8b8; 
+}
 
 .right-dropdown-menu {
     position: absolute;
