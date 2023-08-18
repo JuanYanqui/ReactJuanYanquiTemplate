@@ -564,7 +564,7 @@ export class ArticulosIntermediaws {
       });
   }
 
-  listarArticulosListaFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam,currentPage) {
+  listarArticulosListaFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam,currentPage,rowsPerPage) {
     const ws_nombre = "INTERMEDIAWS_LISTAR_ARTICULOS_LISTA_FULL";
     console.log("hola",currentPage);
     return this.pathService.getUrl(ws_nombre)
@@ -574,7 +574,7 @@ export class ArticulosIntermediaws {
         const url = nuevaSerUrl + nuevaWsUrl;
         const paginationInfo = {
           count: false,
-          pagesize: 10,
+          pagesize: rowsPerPage,
           first: currentPage,
           sortBy: {},
           filterBy: {}
@@ -623,7 +623,7 @@ export class ArticulosIntermediaws {
       });
   }
 
-  PaginacionlistarArticulosListaFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, lazyInfoParam) {
+  PaginacionlistarArticulosListaFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage) {
     const ws_nombre = "INTERMEDIAWS_LISTAR_ARTICULOS_LISTA_FULL";
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
@@ -633,7 +633,7 @@ export class ArticulosIntermediaws {
         const paginationInfo = {
           count: true,
           pagesize: 10,
-          first: 0*10,
+          first: currentPage,
           sortBy: {},
           filterBy: {}
         };

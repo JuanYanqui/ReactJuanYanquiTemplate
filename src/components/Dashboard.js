@@ -38,17 +38,8 @@ const Dashboard = () => {
 
     const [totalRecords, setTotalRecords] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
-
-    const [totalPages, setTotalPages] = useState(0);
-
-
-
-
-    const pageCount = totalPages;
-
-    const handlePageChange = (newPage) => {
-        setCurrentPage(newPage);
-    };
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [totalPages, setTotalPages] = useState(10);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -71,109 +62,56 @@ const Dashboard = () => {
             const barraParam = "";
             const jerarquiaParam = "";
 
-            const response1 = await articulosdata.listarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage);
+            const response1 = await articulosdata.listarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage, rowsPerPage);
             const response = await articulosdata.PaginacionlistarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam);
             if (response) {
                 setDataArticulos(response1);
                 console.log(response1);
+                const pageSize = rowsPerPage;
                 const totalCount = response.rowCount;
-                const pageSize = 10;
                 const totalPages = Math.ceil(totalCount / pageSize);
                 setTotalRecords(response.rowCount);
                 setTotalPages(totalPages);
-                console.log("Total Datos:",response.rowCount);
+                console.log("Total Datos:", response.rowCount);
                 console.log("Numero de datos por Pagina:", pageSize);
                 console.log("Total Paginas:", totalPages);
             }
         };
         fetchData();
-    }, [currentPage]);
+    }, [currentPage, rowsPerPage]);
 
-
-
-
-    const CustomPagination = ({ currentPage, pageCount, onPageChange }) => {
-        const visibleButtons = 5;
-        const [currentPageButtons, setCurrentPageButtons] = useState([]);
-
-        useEffect(() => {
-            const startPage = Math.max(currentPage + 1 - Math.floor(visibleButtons / 2), 1);
-            const endPage = Math.min(startPage + visibleButtons - 1, pageCount);
-            const pageButtons = [];
-
-            for (let i = startPage; i <= endPage; i++) {
-                pageButtons.push(
-                    <button
-                        key={i}
-                        className={i === currentPage + 1 ? 'custom-button selected-button' : 'custom-button'}
-                        onClick={() => onPageChange(i - 1)}
-                    >
-                        {i}
-                    </button>
-                );
-            }
-
-            setCurrentPageButtons(pageButtons);
-        }, [currentPage, pageCount, onPageChange]);
-
-        return (
-            <div className="custom-pagination">
-                <button
-                    onClick={() => onPageChange(0)}
-                    disabled={currentPage === 0}
-                    className="custom-button"
-                >
-                    {"<<"}
-                </button>
-                <button
-                    onClick={() => onPageChange(Math.max(currentPage - 1, 0))}
-                    disabled={currentPage === 0}
-                    className="custom-button"
-                >
-                    {"<"}
-                </button>
-                {currentPageButtons}
-                <button
-                    onClick={() => onPageChange(Math.min(currentPage + 1, pageCount - 1))}
-                    disabled={currentPage === pageCount - 1}
-                    className="custom-button"
-                >
-                    {">"}
-                </button>
-                <button
-                    onClick={() => onPageChange(pageCount - 1)}
-                    disabled={currentPage === pageCount - 1}
-                    className="custom-button"
-                >
-                    {">>"}
-                </button>
-            </div>
-        );
-    };
+    const onPageChange = (event) => {
+        const newPage = Math.floor(event.first / event.rows);
+        setRowsPerPage(event.rows);
+        setCurrentPage(newPage);
+      };
 
     const DataTablaar = ({ dataar }) => {
         return (
-            <div>
-                <DataTable value={dataar}
-                >
-                    <Column field="codigo" header="Código" />
-                    <Column field="descripcion" header="Descripción" />
-                    <Column field="precio" header="Precio" />
-                    <Column field="unidadPedido" header="Unidad de Pedido" />
-                    <Column field="rowKey" header="Rowkey" />
-                    <Column field="icon" header="" body={leftToolbarTemplate2} />
-                </DataTable>
-                <h6 className="table-title"> Paginas {totalPages}</h6>
-                <CustomPagination
-                    currentPage={currentPage}
-                    pageCount={pageCount}
-                    onPageChange={handlePageChange}
-                >
-                </CustomPagination>
-
-            </div>
+            <div className="rounded-table">
+            <DataTable value={dataar}
+              lazy paginator
+              totalRecords={totalRecords}
+              onPage={onPageChange}
+              rows={rowsPerPage}
+              first={currentPage * rowsPerPage} 
+              rowsPerPageOptions={[5, 10, 25]}
+              paginatorPosition="both"
+              paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
+              currentPageReportTemplate={`Página {currentPage} de {totalPages}`}
+            >
+                <Column field="codigo" header="Código" />
+                <Column field="descripcion" header="Descripción" />
+                <Column field="precio" header="Precio" />
+                <Column field="unidadPedido" header="Unidad de Pedido" />
+                <Column field="rowKey" header="Rowkey" />
+                <Column field="icon" header="" body={leftToolbarTemplate2} />
+            </DataTable>
+        </div>
         );
     };
+
+    
 
 
     const CustomDataTable = ({ data2 }) => {
@@ -186,6 +124,7 @@ const Dashboard = () => {
             (item[2] && item[2].toLowerCase().includes(searchQuery2.toLowerCase()))
         );
 
+
         return (
             <DataTable value={filteredData2} paginator
                 rows={5}
@@ -196,6 +135,7 @@ const Dashboard = () => {
                 <Column field="icon" header="" body={ingresoexel} />
             </DataTable>
         );
+        
     };
 
 
@@ -402,8 +342,14 @@ const Dashboard = () => {
 
 
             articulosdata.PaginacionlistarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam).then((datas) => {
-
+                const totalCount = datas.rowCount;
+                const pageSize = 10;
+                const totalPages = Math.ceil(totalCount / pageSize);
                 setTotalRecords(datas.rowCount);
+                setTotalPages(totalPages);
+                console.log("Total Datos:", datas.rowCount);
+                console.log("Numero de datos por Pagina:", pageSize);
+                console.log("Total Paginas:", totalPages);
             });
 
             const unidadParam = "4712878627406";
