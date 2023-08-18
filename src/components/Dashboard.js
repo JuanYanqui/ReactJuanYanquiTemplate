@@ -79,10 +79,11 @@ const Dashboard = () => {
                 const totalCount = response.rowCount;
                 const pageSize = 10;
                 const totalPages = Math.ceil(totalCount / pageSize);
-                console.log("Total Pages:", totalPages);
                 setTotalRecords(response.rowCount);
                 setTotalPages(totalPages);
-                console.log(response.rowCount);
+                console.log("Total Datos:",response.rowCount);
+                console.log("Numero de datos por Pagina:", pageSize);
+                console.log("Total Paginas:", totalPages);
             }
         };
         fetchData();
@@ -169,7 +170,7 @@ const Dashboard = () => {
                     onPageChange={handlePageChange}
                 >
                 </CustomPagination>
-            
+
             </div>
         );
     };
@@ -602,7 +603,7 @@ const Dashboard = () => {
                         <div className="p-col-12 p-md-8">
                             <div className="p-field p-col-12 p-md-12 p-lg-4">
                                 <span className="p-inputgroup">
-                             
+
                                 </span>
                             </div>
                         </div>

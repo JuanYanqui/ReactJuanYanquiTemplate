@@ -616,6 +616,7 @@ export class ArticulosIntermediaws {
             return null;
           });
       })
+      
       .catch((error) => {
         console.error('Error ArticulosIntermediaws metodo listarArticulosListaFull', error);
         return null;
