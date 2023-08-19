@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
-import AppWrapper from './AppWrapper';
 import reportWebVitals from './reportWebVitals';
 import Keycloak from 'keycloak-js';
 import CategoriaCoralService from './service/CategoriaCoralService';

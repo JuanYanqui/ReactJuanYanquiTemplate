@@ -13,6 +13,7 @@ import { CategoriaCoralService } from '../service/CategoriaCoralService';
 import { ArticulosService } from '../serviceIntermedia/ArticulosService';
 import { ArticulosIntermediaws } from '../service/ArticulosService';
 import { MultiSelect } from 'primereact/multiselect';
+import { Checkbox } from 'primereact/checkbox';
 const Dashboard = () => {
     const [isDialogVisible, setDialogVisible] = useState(false);
     const [isDialogVisible2, setDialogVisible2] = useState(false);
@@ -40,6 +41,7 @@ const Dashboard = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [totalPages, setTotalPages] = useState(10);
+    const [checked, setChecked] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -84,34 +86,34 @@ const Dashboard = () => {
         const newPage = Math.floor(event.first / event.rows);
         setRowsPerPage(event.rows);
         setCurrentPage(newPage);
-      };
+    };
 
     const DataTablaar = ({ dataar }) => {
         return (
-            <div className="rounded-table">
-            <DataTable value={dataar}
-              lazy paginator
-              totalRecords={totalRecords}
-              onPage={onPageChange}
-              rows={rowsPerPage}
-              first={currentPage * rowsPerPage} 
-              rowsPerPageOptions={[5, 10, 25]}
-              paginatorPosition="both"
-              paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
-              currentPageReportTemplate={`Página {currentPage} de {totalPages}`}
-            >
-                <Column field="codigo" header="Código" />
-                <Column field="descripcion" header="Descripción" />
-                <Column field="precio" header="Precio" />
-                <Column field="unidadPedido" header="Unidad de Pedido" />
-                <Column field="rowKey" header="Rowkey" />
-                <Column field="icon" header="" body={leftToolbarTemplate2} />
-            </DataTable>
-        </div>
+            <div>
+                <DataTable value={dataar}
+                    lazy paginator
+                    totalRecords={totalRecords}
+                    onPage={onPageChange}
+                    rows={rowsPerPage}
+                    first={currentPage * rowsPerPage}
+                    rowsPerPageOptions={[5, 10, 25]}
+                    paginatorPosition="both"
+                    paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
+                    currentPageReportTemplate={`Página {currentPage} de {totalPages}`}
+                >
+                    <Column field="codigo" header="Código" />
+                    <Column field="descripcion" header="Descripción" />
+                    <Column field="precio" header="Precio" />
+                    <Column field="unidadPedido" header="Unidad de Pedido" />
+                    <Column field="rowKey" header="Rowkey" />
+                    <Column field="icon" header="" body={leftToolbarTemplate2} />
+                </DataTable>
+            </div>
         );
     };
 
-    
+
 
 
     const CustomDataTable = ({ data2 }) => {
@@ -135,7 +137,7 @@ const Dashboard = () => {
                 <Column field="icon" header="" body={ingresoexel} />
             </DataTable>
         );
-        
+
     };
 
 
@@ -352,12 +354,12 @@ const Dashboard = () => {
                 console.log("Total Paginas:", totalPages);
             });
 
-            const unidadParam = "4712878627406";
+            /*const unidadParam = "4712878627406";
             const sociedadParam = "";
             const centroParam = null;
             const almacenParam = "";
             const numPedidoParam = "";
-            const soloActivoParam = true;
+            const soloActivoParam = true;*/
 
             /*articulosdata.actualizarCostosArticuloAll().then((dataA) => {
                 console.log(dataA);
@@ -437,6 +439,14 @@ const Dashboard = () => {
         </div>
     };
 
+    const CargarDatosArticulos2 = () => {
+        return <div className="card flex justify-content-center">
+
+
+        </div>
+    };
+
+
 
     const rightToolbarTemplate = () => {
         return <Button label="Carga Masiva" icon="pi pi-upload" className="secondary" onClick={openNew2} />;
@@ -514,111 +524,137 @@ const Dashboard = () => {
         { name: 'Solo Venta Retail', value: 6 },
     ];
 
-    /*    const CargarDatos = () => {
-            const selectedValues = {};
     
-            citi.forEach(item => {
-                selectedValues[item.name] = selectedvalor.includes(item.value);
-            });
-    
-            const {
-                'Solo Activos': soloActivosParam,
-                'Solo Pendientes': soloPendientesParam,
-                'Incluir Barras': incluirBarrasParam,
-                'Solo sin Rentas': soloSinRentasParam,
-                'Solo Compras': soloCompraParam,
-                'Solo Venta Retail': soloVentaRetailParam,
-                'Solo Venta Mayor': soloVentaMayorParam,
-                'Solo Transferencia': soloTransferenciaParam,
-                'Solo sin Precios': soloSinPreciosParam
-            } = selectedValues;
-            console.log(soloActivosParam, soloPendientesParam, incluirBarrasParam);
-    
-        };*/
-
 
     return (
-        <div>
-            <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
-                <Toolbar className="mb-4" right={rightToolbarTemplate} left={CargarDatosArticulos}></Toolbar>
-                <div>
-                    <div className="p-grid p-align-center">
-                        <div className="p-col-12 p-md-4">
-                            <h1>Tabla de Artículos</h1>
-                        </div>
-                        <div className="p-col-12 p-md-8">
-                            <div className="p-field p-col-12 p-md-12 p-lg-4">
-                                <span className="p-inputgroup">
-
+        <div >
+            <div class="layout-content">
+                <form>
+                    <div className="p-col-12">
+                        <div>
+                            <span className="Fs20 FontBold">Control Articulos</span>
+                            <hr className="ui-separator ui-state-default ui-corner-all"/>
+                            <div className="p-grid p-formgrid">
+                                <span className="p-float-label">
+                                
+                                    <input
+                                        id="input1"
+                                        type="text"
+                                        style={{ width: '120px' }}
+                                        className="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ui-state-filled"
+                                        value={codigoArticulo}
+                                        onChange={(e) => setCodigoArticulo(e.target.value)}
+                                    />
+                                     <label htmlFor="input1">Código</label>
                                 </span>
+
+                                &nbsp;
+                                &nbsp;
+
+                                <span className="p-float-label">
+                                    
+                                    <input
+                                        id="input2"
+                                        type="text"
+                                        style={{ width: '120px' }}
+                                        className="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ui-state-filled"
+                                        value={descripcionArticulo}
+                                        onChange={(e) => setDescripcionArticulo(e.target.value)}
+                                    />
+                                    <label htmlFor="input2">Descripción</label>
+                                </span>
+
+                                &nbsp;
+                                &nbsp;
+
+                                <button
+                                    id="frmListado:j_idt36"
+                                    name="frmListado:j_idt36"
+                                    className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left MarRight10 ui-button-success"
+                                    onClick={handleCargaDatos}
+                                    disabled={loading}
+                                    type="submit"
+                                    role="button"
+                                    aria-disabled="false"
+                                >
+                                    <span className="ui-button-text ui-c"><i className="ui-button-icon-left ui-icon ui-c pi pi-search" /> &nbsp;Filtrar</span>
+                                </button>
+                                <div className="p-field-checkbox">
+                                    <Checkbox onChange={e => setChecked(e.checked)} checked={checked}></Checkbox>
+                                    <label htmlFor="checkbox" className="p-checkbox-label">&nbsp; Activos</label>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <DataTablaar dataar={DataArticulos.data} />
-                </div>
+                    &nbsp;
+                    <div>
+                        <DataTablaar dataar={DataArticulos.data} />
+                    </div>
+                </form>
+
+
+
+                <Dialog visible={isDialogVisible} style={{ width: '78rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Categoria Coral" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
+                    <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
+
+                        <Toolbar className="mb-4" right={filtrotabla}></Toolbar>
+                        <div>
+                            <div className="p-field p-col-12 p-md-12 p-lg-4">
+                                <label htmlFor="search">Buscar</label>
+                                <span className="p-inputgroup">
+                                    <span className="p-inputgroup-addon"><i className="pi pi-search" /></span>
+                                    <InputText
+                                        placeholder="Buscar"
+                                        value={searchQuery3}
+                                        onChange={(e) => setSearchQuery3(e.target.value)}
+                                    />
+                                </span>
+                                <CustomDataTable3 data3={DataCategoria} />
+                            </div>
+                        </div>
+                    </div>
+                </Dialog>
+
+
+
+
+
+                <Dialog
+                    visible={isDialogVisible2}
+                    style={{ width: '78rem' }}
+                    breakpoints={{ '960px': '75vw', '641px': '90vw' }}
+                    header="Categoria Coral"
+                    modal
+                    className="p-fluid"
+                    onHide={hideDialog2}
+                >
+                    <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
+                        <Toolbar className="mb-4" right={productDialogFooter2} left={filtrotabla} ></Toolbar>
+                        <div>
+                            <div className="p-field p-col-12 p-md-12 p-lg-4">
+                                <label htmlFor="search">Buscar</label>
+                                <span className="p-inputgroup">
+                                    <span className="p-inputgroup-addon"><i className="pi pi-search" /></span>
+                                    <InputText
+                                        placeholder="Buscar"
+                                        value={searchQuery2}
+                                        onChange={(e) => setSearchQuery2(e.target.value)}
+                                    />
+                                </span>
+                                <CustomDataTable data2={DataCategoria} />
+                            </div>
+
+                        </div>
+                    </div>
+                </Dialog>
+
+                <Dialog header="Información" visible={visible} position={position} style={{ width: '50vw' }} onHide={() => setVisible(false)} footer={footerContent} draggable={false} resizable={false}>
+                    <p className="m-0">
+                        Esta seguro de insertar exel.
+                    </p>
+                </Dialog>
+                <Toast ref={toast} />
             </div>
-
-            <Dialog visible={isDialogVisible} style={{ width: '78rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Categoria Coral" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-                <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
-
-                    <Toolbar className="mb-4" right={filtrotabla}></Toolbar>
-                    <div>
-                        <div className="p-field p-col-12 p-md-12 p-lg-4">
-                            <label htmlFor="search">Buscar</label>
-                            <span className="p-inputgroup">
-                                <span className="p-inputgroup-addon"><i className="pi pi-search" /></span>
-                                <InputText
-                                    placeholder="Buscar"
-                                    value={searchQuery3}
-                                    onChange={(e) => setSearchQuery3(e.target.value)}
-                                />
-                            </span>
-                            <CustomDataTable3 data3={DataCategoria} />
-                        </div>
-                    </div>
-                </div>
-            </Dialog>
-
-
-
-
-
-            <Dialog
-                visible={isDialogVisible2}
-                style={{ width: '78rem' }}
-                breakpoints={{ '960px': '75vw', '641px': '90vw' }}
-                header="Categoria Coral"
-                modal
-                className="p-fluid"
-                onHide={hideDialog2}
-            >
-                <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
-                    <Toolbar className="mb-4" right={productDialogFooter2} left={filtrotabla} ></Toolbar>
-                    <div>
-                        <div className="p-field p-col-12 p-md-12 p-lg-4">
-                            <label htmlFor="search">Buscar</label>
-                            <span className="p-inputgroup">
-                                <span className="p-inputgroup-addon"><i className="pi pi-search" /></span>
-                                <InputText
-                                    placeholder="Buscar"
-                                    value={searchQuery2}
-                                    onChange={(e) => setSearchQuery2(e.target.value)}
-                                />
-                            </span>
-                            <CustomDataTable data2={DataCategoria} />
-                        </div>
-
-                    </div>
-                </div>
-            </Dialog>
-
-            <Dialog header="Información" visible={visible} position={position} style={{ width: '50vw' }} onHide={() => setVisible(false)} footer={footerContent} draggable={false} resizable={false}>
-                <p className="m-0">
-                    Esta seguro de insertar exel.
-                </p>
-            </Dialog>
-            <Toast ref={toast} />
-
         </div>
     );
 

@@ -7,7 +7,8 @@ import { Button } from 'primereact/button';
 import { CSSTransition } from 'react-transition-group';
 import { RTLContext } from './App';
 import { SplitButton } from 'primereact/splitbutton';
-
+import { Dropdown } from 'primereact/dropdown';
+import { Menu } from 'primereact/menu';
 const AppTopbar = (props) => {
     const isRTL = useContext(RTLContext);
     const navigate = useNavigate();
@@ -51,6 +52,8 @@ const AppTopbar = (props) => {
             [menuKey]: !prevMenuActive[menuKey]
         }));
     };
+    const [selectedOption, setSelectedOption] = useState(null);
+
 
     const handleLogout = () => {
         const keycloakConfig = JSON.parse(localStorage.getItem('keycloakConfig'));
@@ -58,9 +61,18 @@ const AppTopbar = (props) => {
     };
     const inlineMenuRef = useRef(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
+
+    const menuRef = useRef(null);
+    const menu = [
+        { label: 'Support', icon: 'pi pi-compass' },
+        { label: 'Logout', icon: 'pi pi-power-off', command: handleLogout },
+    ];
+
     return (
         <div className="layout-topbar shadow-4" style={{ backgroundColor: '#3e464c', height: '5.5rem' }}>
             <div className="layout-topbar-left" style={{ height: '5.5rem' }}>
@@ -78,36 +90,23 @@ const AppTopbar = (props) => {
 
             <div className={classNames('layout-topbar-right', { 'layout-topbar-mobile-active': props.mobileTopbarActive })}>
                 <div className="layout-topbar-actions-left"></div>
-                <div className="layout-topbar-actions-right">
-                    <ul className="layout-topbar-items">
-                        <li className="layout-topbar-item notifications">
-                            <div className="dropdown-container">
-                                <button className="dropdown-toggle" onClick={toggleMenu} style={{ background: 'transparent', border: 'none', padding: '0' }}>
-                                    <i className="pi pi-cog p-button-icon p-link" style={botonEstilo}></i>
-                                </button>
-                                {isMenuOpen && (
-                                    <ul ref={inlineMenuRef} className="layout-inline-menu-action-panel custom-dropdown-panel">
-                                        {[
-                                            { icon: 'pi-cog', label: 'Settings' },
-                                            { icon: 'pi-compass', label: 'Support' },
-                                            { icon: 'pi-power-off', label: 'Logout ', onClick: handleLogout },
+                <div className={classNames('layout-topbar-right', { 'layout-topbar-mobile-active': props.mobileTopbarActive })}>
+                    <div className="layout-topbar-actions-left"></div>
+                    <div className="layout-topbar-actions-right">
+                        <ul className="layout-topbar-items">
+                            <li className="layout-topbar-item notifications">
+                                <Button
+                                    className="custom-dropdown-button"
+                                    icon="pi pi-cog"
+                                    onClick={(event) => menuRef.current.toggle(event)}
 
-                                        ].map((item, index) => (
-                                            <li className="layout-inline-menu-action-item tooltip" data-pr-tooltip={item.label} key={index}>
-                                                <button className="flex flex-row align-items-center p-link" onClick={item.onClick}>
-                                                    <div className="menu-item-box">
-                                                        <i className={`pi ${item.icon} pi-fw`}></i>
-                                                        <span>{item.label}</span>
-                                                    </div>
-                                                </button>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </div>
-                        </li>
-                    </ul>
+                                />
+                                <Menu model={menu} popup ref={menuRef} id="popup_menu" />
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+
             </div>
         </div>
     );

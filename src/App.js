@@ -3,11 +3,11 @@ import { classNames } from 'primereact/utils';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.css';
 import AppTopbar from './AppTopbar';
-import AppBreadcrumb from './AppBreadcrumb';
+
 import AppInlineMenu from './AppInlineMenu';
 import AppFooter from './AppFooter';
 import AppMenu from './AppMenu';
-import AppConfig from './AppConfig';
+
 import AppRightMenu from './AppRightMenu';
 
 import Dashboard from './components/Dashboard';
@@ -465,7 +465,6 @@ const [isSearching, setIsSearching] = useState(false);
 
 
                 <div className="layout-main">
-                    <AppBreadcrumb routes={routes} />
 
                     <div className="layout-content" >
                         <Routes>
