@@ -335,7 +335,7 @@ const Dashboard = () => {
         const proveedorParam = "";
         const barraParam = "";
         const jerarquiaParam = "";
-        
+
         articulosdata.listarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage).then((datas) => {
             setDataArticulos(datas);
             setLoading(false);
@@ -351,9 +351,9 @@ const Dashboard = () => {
             console.log("Numero de datos por Pagina:", pageSize);
             console.log("Total Paginas:", totalPages);
         });
-      /*  articulosdata.listarArticulosPrecioFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam,jerarquiaParam).then((dataF) => {
-            console.log(dataF);
-        });*/
+        /*  articulosdata.listarArticulosPrecioFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam,jerarquiaParam).then((dataF) => {
+              console.log(dataF);
+          });*/
 
         const sociedadParam = "";
         const centroParam = null;
@@ -391,49 +391,49 @@ const Dashboard = () => {
             console.log(dataS);
 
         });*/
-        
+
     };
 
 
-    const CargarDatosArticulos = () => {
-        return <div className="card flex justify-content-center">
-
-            <span className="p-inputgroup">
-                <InputText
-                    placeholder="Código"
-                    value={codigoArticulo}
-                    onChange={(e) => setCodigoArticulo(e.target.value)}
-                />
-            </span>
-            <span className="p-inputgroup">
-                <InputText
-                    placeholder="Descripción"
-                    value={descripcionArticulo}
-                    onChange={(e) => setDescripcionArticulo(e.target.value)}
-                />
-            </span>
-
-            <MultiSelect
-                value={selectedvalor}
-                onChange={(e) => setSelectedvalor(e.value)}
-                options={citi}
-                optionLabel="name"
-                placeholder="Seleccione Filtro"
-                maxSelectedLabels={3}
-                className="w-full md:w-20rem"
-            />
-            <span className="p-inputgroup">
-                <Button
-                    label="Carga Datos"
-                    icon={loading ? "pi pi-spin pi-spinner" : ""}
-                    style={{ backgroundColor: 'silver', color: 'black', fontSize: '1rem' }}
-                    onClick={handleCargaDatos}
-                    disabled={loading}
-                />
-            </span>
-
-        </div>
-    };
+    /* const CargarDatosArticulos = () => {
+         return <div className="card flex justify-content-center">
+ 
+             <span className="p-inputgroup">
+                 <InputText
+                     placeholder="Código"
+                     value={codigoArticulo}
+                     onChange={(e) => setCodigoArticulo(e.target.value)}
+                 />
+             </span>
+             <span className="p-inputgroup">
+                 <InputText
+                     placeholder="Descripción"
+                     value={descripcionArticulo}
+                     onChange={(e) => setDescripcionArticulo(e.target.value)}
+                 />
+             </span>
+ 
+             <MultiSelect
+                 value={selectedvalor}
+                 onChange={(e) => setSelectedvalor(e.value)}
+                 options={citi}
+                 optionLabel="name"
+                 placeholder="Seleccione Filtro"
+                 maxSelectedLabels={3}
+                 className="w-full md:w-20rem"
+             />
+             <span className="p-inputgroup">
+                 <Button
+                     label="Carga Datos"
+                     icon={loading ? "pi pi-spin pi-spinner" : ""}
+                     style={{ backgroundColor: 'silver', color: 'black', fontSize: '1rem' }}
+                     onClick={handleCargaDatos}
+                     disabled={loading}
+                 />
+             </span>
+ 
+         </div>
+     };*/
 
 
     const rightToolbarTemplate = () => {
@@ -652,15 +652,14 @@ const Dashboard = () => {
                 </Dialog>
                 <Toast ref={toast} />
 
-                <div className="card text-secondary">
 
 
-                    <Dialog visible={loading} modal closable={false} showHeader={false} style={{ width: '50px', height: '53px', borderRadius: '4px', overflow: 'hidden' }}>
-                        <div className="d-flex justify-content-center align-items-center h-100" style={{ borderRadius: '4px' }}>
-                            <i className="pi pi-spin pi-spinner loading-icon" aria-hidden="true" style={{ transform: 'scale(0.5)', marginTop: '18px' }}></i>
-                        </div>
-                    </Dialog>
-                </div>
+                <Dialog visible={loading} modal closable={false} showHeader={false} style={{ width: '50px', height: '53px', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div className="d-flex justify-content-center align-items-center h-100" style={{ borderRadius: '4px' }}>
+                        <i className="pi pi-spin pi-spinner loading-icon" aria-hidden="true" style={{ transform: 'scale(0.5)', marginTop: '18px' }}></i>
+                    </div>
+                </Dialog>
+
             </div>
         </div>
 
