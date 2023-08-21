@@ -84,6 +84,7 @@ const Dashboard = () => {
 
     const onPageChange = (event) => {
         const newPage = Math.floor(event.first / event.rows);
+        setLoading(true);
         setRowsPerPage(event.rows);
         setCurrentPage(newPage);
     };
@@ -320,7 +321,7 @@ const Dashboard = () => {
         setTimeout(() => {
             setLoading(false);
             const selectedValues = {};
-
+            handleClick();
             citi.forEach(item => {
                 selectedValues[item.name] = selectedvalor.includes(item.value);
             });
@@ -395,7 +396,7 @@ const Dashboard = () => {
 
             });*/
 
-        }, 2000);
+        }, 500);
     };
 
 
@@ -438,14 +439,6 @@ const Dashboard = () => {
 
         </div>
     };
-
-    const CargarDatosArticulos2 = () => {
-        return <div className="card flex justify-content-center">
-
-
-        </div>
-    };
-
 
 
     const rightToolbarTemplate = () => {
@@ -526,44 +519,73 @@ const Dashboard = () => {
 
 
 
+    const handleInputChange = (event) => {
+        setCodigoArticulo(event.target.value);
+
+    };
+
+    const handleInputChange2 = (event) => {
+        setDescripcionArticulo(event.target.value);
+
+    };
+
+
+    const handleClick = () => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 500);
+    };
+
+
+
+    useEffect(() => {
+        if (loading) {
+            const fetchData = async () => {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                setLoading(false);
+            };
+            fetchData();
+        }
+    }, [loading, currentPage]);
+
+
+
     return (
-        <div >
+        <div class='layout-wrapper menu-layout-overlay'>
+            <div style={{ height: '15px' }}></div>
+            <div class='content-layout'>
                 <form>
                     <div className="p-col-12">
                         <div>
                             <span className="Fs20 FontBold">Control Articulos</span>
                             <hr className="ui-separator ui-state-default ui-corner-all" />
                             <div className="p-grid p-formgrid">
-                                <span className="p-float-label">
-
+                                <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                     <input
                                         id="input1"
-                                        type="text"
-                                        style={{ width: '120px' }}
-                                        className="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ui-state-filled"
+                                        className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${codigoArticulo ? 'ui-state-filled' : ''}`}
                                         value={codigoArticulo}
-                                        onChange={(e) => setCodigoArticulo(e.target.value)}
+                                        onChange={handleInputChange}
+                                        style={{ width: '100%' }}
                                     />
-                                    <label htmlFor="input1">Código</label>
+                                    <label className={codigoArticulo ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Código</label>
                                 </span>
 
                                 &nbsp;
                                 &nbsp;
 
-                                <span className="p-float-label">
-
+                                <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                     <input
                                         id="input2"
-                                        type="text"
-                                        style={{ width: '120px' }}
-                                        className="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ui-state-filled"
+                                        className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${descripcionArticulo ? 'ui-state-filled' : ''}`}
                                         value={descripcionArticulo}
-                                        onChange={(e) => setDescripcionArticulo(e.target.value)}
+                                        onChange={handleInputChange2}
+                                        style={{ width: '100%' }}
                                     />
-                                    <label htmlFor="input2">Descripción</label>
+                                    <label htmlFor="input2" className={descripcionArticulo ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Descripción</label>
                                 </span>
 
-                                &nbsp;
                                 &nbsp;
 
                                 <button
@@ -587,7 +609,7 @@ const Dashboard = () => {
                     </div>
                     &nbsp;
                     <div>
-                        <DataTablaar dataar={DataArticulos.data} />
+                        <DataTablaar dataar={DataArticulos.data} loading={loading} onPageChange={onPageChange} />
                     </div>
                 </form>
 
@@ -653,7 +675,19 @@ const Dashboard = () => {
                     </p>
                 </Dialog>
                 <Toast ref={toast} />
+
+                <div className="card text-secondary">
+
+
+                    <Dialog visible={loading} modal closable={false} showHeader={false} style={{ width: '50px', height: '53px', borderRadius: '4px', overflow: 'hidden' }}>
+                        <div className="d-flex justify-content-center align-items-center h-100" style={{ borderRadius: '4px' }}>
+                            <i className="pi pi-spin pi-spinner loading-icon" aria-hidden="true" style={{ transform: 'scale(0.5)', marginTop: '18px' }}></i>
+                        </div>
+                    </Dialog>
+                </div>
+            </div>
         </div>
+
     );
 
 

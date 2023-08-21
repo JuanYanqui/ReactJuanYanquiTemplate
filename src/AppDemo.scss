@@ -1,15 +1,91 @@
 @import './assets/flags/flags.css';
+.layout-wrapper.menu-layout-overlay .layout-main {
+    margin-left: 0px; 
+}
+.layout-wrapper .layout-main {
+    padding: 20px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+    -moz-transition: margin-left 0.2s;
+    -o-transition: margin-left 0.2s;
+    -webkit-transition: margin-left 0.2s;
+    transition: margin-left 0.2s;
+}
+.layout-wrapper .layout-main .layout-content {
+    flex: 1 1 0;
+}
+
+hr {
+    border-top: solid #bdbdbd;
+    border-width: 1px 0 0 0;
+    margin: 1rem 0;
+}
+
+
+.layout-content{
+    padding: 1rem;
+}
 .menu-container {
-    max-height:1000px; /* Establece la altura máxima del menú */
-    overflow-y: auto; /* Agrega scroll vertical si es necesario */
+    max-height:1000px; 
+    overflow-y: auto; 
   }
   
-  /* Estilos para el input de búsqueda */
-  .menu-search-input {
+
+  .ui-inputfield input:not(:focus) + label {
+    color: black;  
 
   }
   
-  /* Estilos para la lista de elementos del menú */
+  .ui-float-label {
+    position: relative;
+    display: inline-block;
+    max-width: 120px;
+}
+
+.ui-label-floated,
+.ui-inputfield:focus + label {
+    transform: translateY(-14px) scale(0.75);
+    background-color: #fff;
+    padding: 0 5px;
+    font-size: 16px;
+    color: #080808;
+    position: absolute;
+    transition: all 0.3s ease-out;
+    left: 0;
+    top: 0;
+}
+
+.ui-inputfield {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.ui-inputtext:hover {
+    border: 1px solid black;
+}
+
+.ui-inputtext:focus {
+    border: 2px solid black;
+}
+
+.ui-state-filled + label {
+    transform: translateY(-2px) scale(0.75);
+    background-color: #fff;
+    padding: 0 5px;
+    font-size: 16px;
+    color: #080808;
+    transition: all 0.3s ease-out;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+  
+
   .layout-menu {
     list-style: none;
     padding: 0;
@@ -138,6 +214,15 @@
     font-size: 2.3rem; 
     color: white; 
 }
+
+_____________________
+responsive
+.responsive-form-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+    box-sizing: border-box;
+}
 _________________
 
 ________________________________________________________
@@ -232,12 +317,6 @@ body .ui-widget {
 .MarRight10 {
     margin-right: 10px;
 }
-.ui-inputfield {
-    margin: 0;
-    outline: medium none;
-    padding: 4px;
-    font-weight: normal;
-}
 
 * {
     box-sizing: border-box;
@@ -252,12 +331,6 @@ body .ui-widget {
 * {
     box-sizing: border-box;
 }
-body .ui-widget {
-    font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
-    font-size: 1rem;
-    text-decoration: none;
-}
-
 
 body .ui-button {
     margin: 0.5em; 

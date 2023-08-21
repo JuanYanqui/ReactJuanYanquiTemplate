@@ -44,6 +44,13 @@ const AppTopbar = (props) => {
         color: "#ffffff",
         background: "#5180ce"
     };
+
+
+    const botoncel = {
+        fontSize: '50px',
+        color: "#ffffff",
+    };
+
     const [inlineMenuActive, setInlineMenuActive] = useState({});
 
     const handleInlineMenuClick = (e, menuKey) => {
@@ -83,8 +90,8 @@ const AppTopbar = (props) => {
                     <i className="pi pi-chevron-right"></i>
                 </button>
                 <button type="button" className="layout-topbar-mobile-button p-link">
-                    <i className="pi pi-cog" onClick={(event) => menuRef.current.toggle(event)} style={botonEstilo}></i>
-                    <i className="pi pi-ellipsis-v fs-large" style={botonEstilo}></i>
+                    <i className="pi pi-bars" onClick={(event) => menuRef.current.toggle(event)} style={botonEstilo}></i>
+                    <i className="pi pi-ellipsis-v fs-large" style={botoncel}></i>
                 </button>
 
 
@@ -96,7 +103,7 @@ const AppTopbar = (props) => {
                     <div className="layout-topbar-actions-left"></div>
                     <div className="layout-topbar-actions-right">
                         <ul className="layout-topbar-items">
-                            <li className="layout-topbar-item notifications">   
+                            <li className="layout-topbar-item notifications">
                                 <i className="pi pi-cog" onClick={(event) => menuRef.current.toggle(event)} style={botonEstilo}></i>
                                 <i className="pi pi-ellipsis-v fs-large" style={botonEstilo}></i>
                                 <div style={{ width: '20px' }}></div>
