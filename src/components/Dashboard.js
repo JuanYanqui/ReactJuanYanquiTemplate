@@ -524,19 +524,18 @@ const Dashboard = () => {
         { name: 'Solo Venta Retail', value: 6 },
     ];
 
-    
+
 
     return (
         <div >
-            <div class="layout-content">
                 <form>
                     <div className="p-col-12">
                         <div>
                             <span className="Fs20 FontBold">Control Articulos</span>
-                            <hr className="ui-separator ui-state-default ui-corner-all"/>
+                            <hr className="ui-separator ui-state-default ui-corner-all" />
                             <div className="p-grid p-formgrid">
                                 <span className="p-float-label">
-                                
+
                                     <input
                                         id="input1"
                                         type="text"
@@ -545,14 +544,14 @@ const Dashboard = () => {
                                         value={codigoArticulo}
                                         onChange={(e) => setCodigoArticulo(e.target.value)}
                                     />
-                                     <label htmlFor="input1">Código</label>
+                                    <label htmlFor="input1">Código</label>
                                 </span>
 
                                 &nbsp;
                                 &nbsp;
 
                                 <span className="p-float-label">
-                                    
+
                                     <input
                                         id="input2"
                                         type="text"
@@ -654,7 +653,6 @@ const Dashboard = () => {
                     </p>
                 </Dialog>
                 <Toast ref={toast} />
-            </div>
         </div>
     );
 

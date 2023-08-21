@@ -1,5 +1,20 @@
 @import './assets/flags/flags.css';
+.menu-container {
+    max-height:1000px; /* Establece la altura máxima del menú */
+    overflow-y: auto; /* Agrega scroll vertical si es necesario */
+  }
+  
+  /* Estilos para el input de búsqueda */
+  .menu-search-input {
 
+  }
+  
+  /* Estilos para la lista de elementos del menú */
+  .layout-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 .datatable-demo {
 	.p-datatable-responsive .p-datatable-tbody>tr.p-datatable-row>td:last-child .p-column-title {
 		display: none;

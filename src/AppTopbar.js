@@ -34,7 +34,7 @@ const AppTopbar = (props) => {
 
 
     const botonEstilo = {
-        fontSize: '30px',
+        fontSize: '25px',
         color: "#ffffff",
 
     };
@@ -83,24 +83,23 @@ const AppTopbar = (props) => {
                     <i className="pi pi-chevron-right"></i>
                 </button>
                 <button type="button" className="layout-topbar-mobile-button p-link">
-                    <i className="pi pi-ellipsis-v fs-large" onClick={props.onMobileTopbarButtonClick} style={botonEstilo}></i>
+                    <i className="pi pi-cog" onClick={(event) => menuRef.current.toggle(event)} style={botonEstilo}></i>
+                    <i className="pi pi-ellipsis-v fs-large" style={botonEstilo}></i>
                 </button>
+
 
             </div>
 
-            <div className={classNames('layout-topbar-right', { 'layout-topbar-mobile-active': props.mobileTopbarActive })}>
+            <div className='layout-topbar-right'>
                 <div className="layout-topbar-actions-left"></div>
-                <div className={classNames('layout-topbar-right', { 'layout-topbar-mobile-active': props.mobileTopbarActive })}>
+                <div className='layout-topbar-right'>
                     <div className="layout-topbar-actions-left"></div>
                     <div className="layout-topbar-actions-right">
                         <ul className="layout-topbar-items">
-                            <li className="layout-topbar-item notifications">
-                                <Button
-                                    className="custom-dropdown-button"
-                                    icon="pi pi-cog"
-                                    onClick={(event) => menuRef.current.toggle(event)}
-
-                                />
+                            <li className="layout-topbar-item notifications">   
+                                <i className="pi pi-cog" onClick={(event) => menuRef.current.toggle(event)} style={botonEstilo}></i>
+                                <i className="pi pi-ellipsis-v fs-large" style={botonEstilo}></i>
+                                <div style={{ width: '20px' }}></div>
                                 <Menu model={menu} popup ref={menuRef} id="popup_menu" />
                             </li>
                         </ul>

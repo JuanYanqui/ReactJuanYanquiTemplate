@@ -8,21 +8,21 @@ import ArticulosService from './service/ArticulosService';
 import { UsuarioService } from './service/UsuarioService';
 import App from './App';
 
-/*const keycloakConfig = {
+const keycloakConfig = {
     realm: "gocorp",
     url: "https://goauth.gerardoortiz.com/auth/",
     clientId: "react-test",
     port: 0,
     onLoad: 'login-required',
-};*/
+};
 
-const keycloakConfig = {
+/*const keycloakConfig = {
     realm: "prueba",
     url: "http://127.0.0.1:8080/auth/",
     clientId: "restcli",
     port: 0,
     onLoad: 'login-required',
-};
+};*/
 
 const initKeycloak = () => {
     const keycloak = new Keycloak(keycloakConfig);

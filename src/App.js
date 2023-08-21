@@ -71,20 +71,31 @@ const App = ({ userData }) => {
         if (!userData || !userData.object) {
             return [];
         }
-
-        return userData.object.map((item) => ({
-            key: item.menId,
-            label: item.nombre,
-            icon: item.icono,
-            to: item.url,
-            items: item.hijos && item.hijos.map((hijo) => ({
-                key: hijo.menId,
-                label: hijo.nombre,
-                to: hijo.url,
-                icon: hijo.icono
-
-            }))
-        }));
+    
+        const menuItems = [];
+    
+        userData.object.forEach((item) => {
+            if (item.nombre === 'Reportería' && menuItems.some(existingItem => existingItem.label === 'Reportería')) {
+                return;
+            }
+    
+            const menuItem = {
+                key: item.menId,
+                label: item.nombre,
+                icon: item.icono,
+                to: item.url,
+                items: item.hijos && item.hijos.map((hijo) => ({
+                    key: hijo.menId,
+                    label: hijo.nombre,
+                    to: hijo.url,
+                    icon: hijo.icono
+                }))
+            };
+    
+            menuItems.push(menuItem);
+        });
+    
+        return menuItems;
     };
 
     const generateRoutesFromUserData = (userData) => {
@@ -113,6 +124,7 @@ const App = ({ userData }) => {
 
 
     const menu = generateMenuFromUserData(userData);
+    console.log(menu);
     const routes = generateRoutesFromUserData(userData);
     const onMenuItemClick = (event, item) => {
         if (!item.items) {
@@ -447,18 +459,6 @@ const [isSearching, setIsSearching] = useState(false);
 
                 <div className="menu-wrapper" onClick={onMenuClick} style={{ backgroundColor: '#2b3135' }}>
                     <div className="layout-menu-container" style={{ backgroundColor: '#2b3135' }}>
-                        <div>
-                        <div style={{ height: '20px' }}></div>
-                            <i className="fas fa-search" style={botonEstilo2}></i>
-                            <input
-                                type="text"
-                                placeholder="Buscar menú..."
-                                value={searchTerm}
-                                onChange={handleSearchInputChange}
-                                className="search-input"
-                                style={{ marginLeft: 'auto', marginRight: 'auto' }} // Center the input
-                            />
-                        </div>
                         < AppMenu model={filteredMenu.length > 0 ? filteredMenu : menu} onMenuItemClick={onMenuItemClick} onRootMenuItemClick={onRootMenuItemClick} menuMode={menuMode} active={menuActive} />
                     </div>
                 </div>
@@ -472,7 +472,7 @@ const [isSearching, setIsSearching] = useState(false);
                         </Routes>
                     </div>
 
-                    <AppFooter colorMode={colorMode} />
+              
                 </div>
                 <AppRightMenu rightMenuActive={rightMenuActive} onRightMenuButtonClick={onRightMenuButtonClick} />
 

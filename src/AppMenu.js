@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 const AppMenu = ({ model, onMenuItemClick }) => {
   const [activeMenuIndex, setActiveMenuIndex] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const isSubMenuActive = (index) => {
     return activeMenuIndex === index;
@@ -12,6 +13,16 @@ const AppMenu = ({ model, onMenuItemClick }) => {
   const onSubMenuClick = (index) => {
     setActiveMenuIndex((prevActiveIndex) => (prevActiveIndex === index ? null : index));
   };
+  const handleSearchInputChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredModel = model.filter(item =>
+    item.label.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const botonEstilo2 = {
+    color: "#ffffff",
+};
 
   const renderMenuItem = (item, index, isMainItem) => {
     const isActive = isSubMenuActive(index);
@@ -39,8 +50,28 @@ const AppMenu = ({ model, onMenuItemClick }) => {
     );
   };
 
-
-  return <ul className="layout-menu">{model.map((item, index) => renderMenuItem(item, index, true))}</ul>;
+  return (
+    <div className="menu-container">
+       <div style={{ height: '20px' }}></div>
+      &nbsp;
+      &nbsp;
+       <i className="fas fa-search" style={botonEstilo2}></i>
+       &nbsp;
+    <input
+      type="text"
+      className="menu-search-input"
+      placeholder="Buscar Menu"
+      value={searchTerm}
+      onChange={handleSearchInputChange}
+    />
+    <ul className="layout-menu">
+      {filteredModel.map((item, index) =>
+        renderMenuItem(item, index, true)
+      )}
+    </ul>
+  </div>
+  );
+  
 };
 
 export default AppMenu;
