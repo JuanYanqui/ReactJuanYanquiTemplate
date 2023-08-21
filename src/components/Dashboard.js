@@ -77,6 +77,7 @@ const Dashboard = () => {
                 console.log("Total Datos:", response.rowCount);
                 console.log("Numero de datos por Pagina:", pageSize);
                 console.log("Total Paginas:", totalPages);
+                setLoading(false);
             }
         };
         fetchData();
@@ -259,7 +260,6 @@ const Dashboard = () => {
 
     const handleFilterClick = () => {
         categoriasdata.PostCategoriaCoralData(codigo, descripcion, selectedCity).then((data) => {
-
             setDataCategoria(data);
         });
     };
@@ -315,88 +315,83 @@ const Dashboard = () => {
     };
 
     const [loading, setLoading] = useState(false);
-
+    const [tiempoconsulta, setTiempoconsulta] = useState(0);
     const handleCargaDatos = () => {
         setLoading(true);
-        setTimeout(() => {
+        const selectedValues = {};
+        citi.forEach(item => {
+            selectedValues[item.name] = selectedvalor.includes(item.value);
+        });
+        const {
+            'Solo Activos': soloActivosParam,
+            'Solo Pendientes': soloPendientesParam,
+            'Incluir Barras': incluirBarrasParam,
+            'Solo sin Rentas': soloSinRentasParam,
+            'Solo Compras': soloCompraParam,
+            'Solo Venta Retail': soloVentaRetailParam,
+            'Solo sin Precios': soloSinPreciosParam
+        } = selectedValues;
+        const presentacionParam = "";
+        const proveedorParam = "";
+        const barraParam = "";
+        const jerarquiaParam = "";
+        
+        articulosdata.listarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage).then((datas) => {
+            setDataArticulos(datas);
             setLoading(false);
-            const selectedValues = {};
-            handleClick();
-            citi.forEach(item => {
-                selectedValues[item.name] = selectedvalor.includes(item.value);
-            });
-            const {
-                'Solo Activos': soloActivosParam,
-                'Solo Pendientes': soloPendientesParam,
-                'Incluir Barras': incluirBarrasParam,
-                'Solo sin Rentas': soloSinRentasParam,
-                'Solo Compras': soloCompraParam,
-                'Solo Venta Retail': soloVentaRetailParam,
-                'Solo sin Precios': soloSinPreciosParam
-            } = selectedValues;
-            const presentacionParam = "";
-            const proveedorParam = "";
-            const barraParam = "";
-            const jerarquiaParam = "";
-            articulosdata.listarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage).then((datas) => {
+        });
 
-                setDataArticulos(datas);
-            });
+        articulosdata.PaginacionlistarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam).then((datas) => {
+            const totalCount = datas.rowCount;
+            const pageSize = 10;
+            const totalPages = Math.ceil(totalCount / pageSize);
+            setTotalRecords(datas.rowCount);
+            setTotalPages(totalPages);
+            console.log("Total Datos:", datas.rowCount);
+            console.log("Numero de datos por Pagina:", pageSize);
+            console.log("Total Paginas:", totalPages);
+        });
+      /*  articulosdata.listarArticulosPrecioFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam,jerarquiaParam).then((dataF) => {
+            console.log(dataF);
+        });*/
 
+        const sociedadParam = "";
+        const centroParam = null;
+        const almacenParam = "";
+        const numPedidoParam = "";
+        const soloActivoParam = true;
 
-            articulosdata.PaginacionlistarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam).then((datas) => {
-                const totalCount = datas.rowCount;
-                const pageSize = 10;
-                const totalPages = Math.ceil(totalCount / pageSize);
-                setTotalRecords(datas.rowCount);
-                setTotalPages(totalPages);
-                console.log("Total Datos:", datas.rowCount);
-                console.log("Numero de datos por Pagina:", pageSize);
-                console.log("Total Paginas:", totalPages);
-            });
+        /*articulosdata.actualizarCostosArticuloAll().then((dataA) => {
+            console.log(dataA);
 
-            /*const unidadParam = "4712878627406";
-            const sociedadParam = "";
-            const centroParam = null;
-            const almacenParam = "";
-            const numPedidoParam = "";
-            const soloActivoParam = true;*/
+        });
 
-            /*articulosdata.actualizarCostosArticuloAll().then((dataA) => {
-                console.log(dataA);
+        articulosdata.getTArticuloBarra(unidadParam, soloActivoParam).then((dataS) => {
+            console.log(dataS);
 
-            });
+        });
 
-            articulosdata.getTArticuloBarra(unidadParam, soloActivoParam).then((dataS) => {
-                console.log(dataS);
+       
 
-            });
+        articulosdata.listarArticulosPrecio(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, lazyInfoParam).then((dataP) => {
+            console.log(dataP);
 
-            articulosdata.listarArticulosPrecioFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, soloVentaMayorParam, soloTransferenciaParam, jerarquiaParam, lazyInfoParam).then((dataF) => {
-                console.log(dataF);
+        });
+        articulosdata.obtenerArticuloCaja(centroParam).then((dataP) => {
+            console.log(dataP);
 
-            });
+        });
 
-            articulosdata.listarArticulosPrecio(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, lazyInfoParam).then((dataP) => {
-                console.log(dataP);
+        articulosdata.listarArticulosSolicitudPedFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, soloVentaMayorParam, soloTransferenciaParam, jerarquiaParam, centroParam, almacenParam, numPedidoParam, lazyInfoParam).then((dataS) => {
+            console.log(dataS);
 
-            });
-            articulosdata.obtenerArticuloCaja(centroParam).then((dataP) => {
-                console.log(dataP);
+        });
 
-            });
+        articulosdata.listarArticulosPresentaciones(codigoParam, sociedadParam).then((dataS) => {
+            console.log(dataS);
 
-            articulosdata.listarArticulosSolicitudPedFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, soloVentaMayorParam, soloTransferenciaParam, jerarquiaParam, centroParam, almacenParam, numPedidoParam, lazyInfoParam).then((dataS) => {
-                console.log(dataS);
-
-            });
-
-            articulosdata.listarArticulosPresentaciones(codigoParam, sociedadParam).then((dataS) => {
-                console.log(dataS);
-
-            });*/
-
-        }, 500);
+        });*/
+        
     };
 
 
@@ -529,25 +524,6 @@ const Dashboard = () => {
 
     };
 
-
-    const handleClick = () => {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-        }, 500);
-    };
-
-
-
-    useEffect(() => {
-        if (loading) {
-            const fetchData = async () => {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                setLoading(false);
-            };
-            fetchData();
-        }
-    }, [loading, currentPage]);
 
 
 
