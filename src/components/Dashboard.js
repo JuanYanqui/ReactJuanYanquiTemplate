@@ -24,13 +24,12 @@ const Dashboard = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [searchQuery2, setSearchQuery2] = useState("");
     const [searchQuery3, setSearchQuery3] = useState("");
-    const [codigo, setCodigo] = useState("");
-    const [descripcion, setDescripcion] = useState("");
+    const [codigoCategoria, setCodigoCategoria] = useState("");
+    const [descripcionCategoria, setDescripcionCategoria] = useState("");
     const [codigoArticulo, setCodigoArticulo] = useState("");
     const [descripcionArticulo, setDescripcionArticulo] = useState("");
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedLevel, setSelectedLevel] = useState(null);
-
     const [DataCategoria, setDataCategoria] = useState([]);
     const categoriasdata = new CategoriaCoralService();
 
@@ -42,30 +41,27 @@ const Dashboard = () => {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [totalPages, setTotalPages] = useState(10);
     const [checked, setChecked] = useState(false);
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    const handleSelectionChange = (e) => {
+        setSelectedItems(e.value);
+    };
+    console.log(selectedItems);
 
     useEffect(() => {
         const fetchData = async () => {
-            const selectedValues = {};
-
-            citi.forEach(item => {
-                selectedValues[item.name] = selectedvalor.includes(item.value);
-            });
-            const {
-                'Solo Activos': soloActivosParam,
-                'Solo Pendientes': soloPendientesParam,
-                'Incluir Barras': incluirBarrasParam,
-                'Solo sin Rentas': soloSinRentasParam,
-                'Solo Compras': soloCompraParam,
-                'Solo Venta Retail': soloVentaRetailParam,
-                'Solo sin Precios': soloSinPreciosParam
-            } = selectedValues;
+            const soloPendientesParam = false
+            const incluirBarrasParam = false
+            const soloSinRentasParam = false
+            const soloCompraParam = false
+            const soloVentaRetailParam = false
+            const soloSinPreciosParam = false
             const presentacionParam = "";
             const proveedorParam = "";
             const barraParam = "";
             const jerarquiaParam = "";
-
-            const response1 = await articulosdata.listarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage, rowsPerPage);
-            const response = await articulosdata.PaginacionlistarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam);
+            const response1 = await articulosdata.listarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, checked, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage, rowsPerPage);
+            const response = await articulosdata.PaginacionlistarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, checked, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam);
             if (response) {
                 setDataArticulos(response1);
                 console.log(response1);
@@ -94,6 +90,9 @@ const Dashboard = () => {
         return (
             <div>
                 <DataTable value={dataar}
+                    selection={selectedItems}
+                    onSelectionChange={handleSelectionChange}
+                    selectionMode="checkbox"
                     lazy paginator
                     totalRecords={totalRecords}
                     onPage={onPageChange}
@@ -104,12 +103,15 @@ const Dashboard = () => {
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
                     currentPageReportTemplate={`Página {currentPage} de {totalPages}`}
                 >
+                    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
                     <Column field="codigo" header="Código" />
                     <Column field="descripcion" header="Descripción" />
                     <Column field="precio" header="Precio" />
                     <Column field="unidadPedido" header="Unidad de Pedido" />
-                    <Column field="rowKey" header="Rowkey" />
-                    <Column field="icon" header="" body={leftToolbarTemplate2} />
+                    <Column field="texto3" header="Nivel 1" />
+                    <Column field="texto4" header="Nivel 2" />
+                    <Column field="texto5" header="Nivel 3" />
+                    <Column field="texto6" header="Nivel 4" />
                 </DataTable>
             </div>
         );
@@ -131,7 +133,7 @@ const Dashboard = () => {
 
         return (
             <DataTable value={filteredData2} paginator
-                rows={5}
+                rows={5} paginatorPosition="both"
                 rowsPerPageOptions={[5, 10, 25]}>
                 <Column field="0" header="Código" />
                 <Column field="1" header="Descripción" />
@@ -154,7 +156,7 @@ const Dashboard = () => {
         );
         return (
             <DataTable value={filteredData3} paginator
-                rows={5}
+                rows={5} paginatorPosition="both"
                 rowsPerPageOptions={[5, 10, 25]}>
                 <Column field="0" header="Código" />
                 <Column field="1" header="Descripción" />
@@ -172,7 +174,8 @@ const Dashboard = () => {
         }
     };
 
-    const openNew = () => {
+    const openNew = (position) => {
+        setPosition(position);
         setDialogVisible(true);
     };
 
@@ -200,7 +203,7 @@ const Dashboard = () => {
     const ingresoexel = () => {
         return (
             <div className="flex flex-wrap gap-2">
-                <Button label="Agregar" icon="pi pi-plus" onClick={() => show('top')} className="success" style={{ minWidth: '10rem' }} />
+                <Button label="Agregar" icon="pi pi-plus" onClick={() => show('top')} className="success" style={{ minWidth: '5rem' }} />
             </div>
         );
     };
@@ -208,7 +211,7 @@ const Dashboard = () => {
     const ingresoidividual = () => {
         return (
             <div className="flex flex-wrap gap-2">
-                <Button label="Agregar" icon="pi pi-plus" className="success" style={{ minWidth: '10rem' }} />
+                <i className="pi pi-plus" style={{ fontSize: '1rem', color: 'black' }} onClick={() => show('top')} ></i>
             </div>
         );
     };
@@ -225,9 +228,21 @@ const Dashboard = () => {
         toast.current.show({ severity: 'error', summary: 'Error', detail: 'Proceso Cancelado.', life: 3000 });
     }
 
+    const showErrorIngreso = () => {
+        toast.current.show({ severity: 'error', summary: 'Error', detail: 'No seleciono ningun articulo.', life: 3000 });
+    }
     const handleYesClick = () => {
-        setVisible(false);
-        showSuccess();
+        if(selectedItems.length === 0){
+            setVisible(false);
+            showErrorIngreso();
+       
+        }else{
+
+            setVisible(false);
+            showSuccess();
+            console.log(selectedItems);
+            setSelectedItems([])
+        }
     };
 
     const handleNoClick = () => {
@@ -259,89 +274,40 @@ const Dashboard = () => {
 
 
     const handleFilterClick = () => {
-        categoriasdata.PostCategoriaCoralData(codigo, descripcion, selectedCity).then((data) => {
+
+        setLoading(true);
+        categoriasdata.PostCategoriaCoralData(codigoCategoria, descripcionCategoria, selectedCity).then((data) => {
             setDataCategoria(data);
+            setLoading(false);
         });
     };
 
 
-    const filtrotabla = () => {
-        return (
-            <div className="flex flex-wrap gap-2">
-                <div className="p-field p-col-12 p-md-12 p-lg-4">
-                    <label htmlFor="username">Código</label>
-                    <span className="p-inputgroup">
-                        <span className="p-inputgroup-addon"></span>
-                        <InputText
-                            placeholder="Código"
-                            value={codigo}
-                            onChange={(e) => setCodigo(e.target.value)}
-                        />
-                    </span>
-                </div>
-                <div className="p-field p-col-12 p-md-12 p-lg-4">
-                    <label htmlFor="username">Descripción</label>
-                    <span className="p-inputgroup">
-                        <span className="p-inputgroup-addon"></span>
-                        <InputText
-                            placeholder="Descripción"
-                            value={descripcion}
-                            onChange={(e) => setDescripcion(e.target.value)}
-                        />
-                    </span>
-                </div>
-                <div className="p-field p-col-12 p-md-12 p-lg-4">
-                    <label htmlFor="price">Nivel</label>
-                    <span className="p-inputgroup">
-                        <span className="p-inputgroup-addon"><i className="pi pi-co" /></span>
-                        <Dropdown
-                            value={selectedCity}
-                            options={cities}
-                            onChange={handleCityChange}
-                            optionLabel="label"
-                            placeholder="Seleccionar"
-                            className="w-full md:w-20rem"
-                        />
-                    </span>
-                </div>
-                <div className="p-field p-col-12 p-md-12 p-lg-4">
-                    <label htmlFor="username">Filtrar</label>
-                    <span className="p-inputgroup">
-                        <Button label="Seleccionar" icon="pi pi-search" className="secondary" onClick={handleFilterClick} style={{ backgroundColor: '#e0e0e0' }} />
-                    </span>
-                </div>
-            </div>
-        );
-    };
+
 
     const [loading, setLoading] = useState(false);
     const [tiempoconsulta, setTiempoconsulta] = useState(0);
     const handleCargaDatos = () => {
         setLoading(true);
-        const selectedValues = {};
-        citi.forEach(item => {
-            selectedValues[item.name] = selectedvalor.includes(item.value);
-        });
-        const {
-            'Solo Activos': soloActivosParam,
-            'Solo Pendientes': soloPendientesParam,
-            'Incluir Barras': incluirBarrasParam,
-            'Solo sin Rentas': soloSinRentasParam,
-            'Solo Compras': soloCompraParam,
-            'Solo Venta Retail': soloVentaRetailParam,
-            'Solo sin Precios': soloSinPreciosParam
-        } = selectedValues;
+
+        const soloPendientesParam = false
+        const incluirBarrasParam = false
+        const soloSinRentasParam = false
+        const soloCompraParam = false
+        const soloVentaRetailParam = false
+        const soloSinPreciosParam = false
         const presentacionParam = "";
         const proveedorParam = "";
         const barraParam = "";
         const jerarquiaParam = "";
 
-        articulosdata.listarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage).then((datas) => {
+
+        articulosdata.listarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, checked, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage).then((datas) => {
             setDataArticulos(datas);
             setLoading(false);
         });
 
-        articulosdata.PaginacionlistarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam).then((datas) => {
+        articulosdata.PaginacionlistarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, checked, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam).then((datas) => {
             const totalCount = datas.rowCount;
             const pageSize = 10;
             const totalPages = Math.ceil(totalCount / pageSize);
@@ -393,47 +359,6 @@ const Dashboard = () => {
         });*/
 
     };
-
-
-    /* const CargarDatosArticulos = () => {
-         return <div className="card flex justify-content-center">
- 
-             <span className="p-inputgroup">
-                 <InputText
-                     placeholder="Código"
-                     value={codigoArticulo}
-                     onChange={(e) => setCodigoArticulo(e.target.value)}
-                 />
-             </span>
-             <span className="p-inputgroup">
-                 <InputText
-                     placeholder="Descripción"
-                     value={descripcionArticulo}
-                     onChange={(e) => setDescripcionArticulo(e.target.value)}
-                 />
-             </span>
- 
-             <MultiSelect
-                 value={selectedvalor}
-                 onChange={(e) => setSelectedvalor(e.value)}
-                 options={citi}
-                 optionLabel="name"
-                 placeholder="Seleccione Filtro"
-                 maxSelectedLabels={3}
-                 className="w-full md:w-20rem"
-             />
-             <span className="p-inputgroup">
-                 <Button
-                     label="Carga Datos"
-                     icon={loading ? "pi pi-spin pi-spinner" : ""}
-                     style={{ backgroundColor: 'silver', color: 'black', fontSize: '1rem' }}
-                     onClick={handleCargaDatos}
-                     disabled={loading}
-                 />
-             </span>
- 
-         </div>
-     };*/
 
 
     const rightToolbarTemplate = () => {
@@ -500,20 +425,6 @@ const Dashboard = () => {
         setVisible(true);
     };
 
-    ;
-
-    const [selectedvalor, setSelectedvalor] = useState([]);
-    const citi = [
-        { name: 'Solo Activos', value: 1 },
-        { name: 'Solo Pendientes', value: 2 },
-        { name: 'Incluir Barras', value: 3 },
-        { name: 'Solo sin Rentas', value: 4 },
-        { name: 'Solo Compras', value: 5 },
-        { name: 'Solo Venta Retail', value: 6 },
-    ];
-
-
-
     const handleInputChange = (event) => {
         setCodigoArticulo(event.target.value);
 
@@ -524,7 +435,22 @@ const Dashboard = () => {
 
     };
 
+    const handleInputCodCategoria = (event) => {
+        setCodigoCategoria(event.target.value);
 
+    };
+
+    const handleInputDesCategoria = (event) => {
+        setDescripcionCategoria(event.target.value);
+
+    };
+
+    /*<Dialog header="Información" visible={visible} position={position} style={{ width: '50vw' }} onHide={() => setVisible(false)} footer={footerContent} draggable={false} resizable={false}>
+    <p className="m-0">
+        Esta seguro de insertar exel.
+    </p>
+    </Dialog>
+    <Toast ref={toast} />*/
 
 
     return (
@@ -533,7 +459,7 @@ const Dashboard = () => {
             <div class='content-layout'>
                 <form>
                     <div className="p-col-12">
-                        <div>
+                        <div >
                             <span className="Fs20 FontBold">Control Articulos</span>
                             <hr className="ui-separator ui-state-default ui-corner-all" />
                             <div className="p-grid p-formgrid">
@@ -576,12 +502,27 @@ const Dashboard = () => {
                                 >
                                     <span className="ui-button-text ui-c"><i className="ui-button-icon-left ui-icon ui-c pi pi-search" /> &nbsp;Filtrar</span>
                                 </button>
+
                                 <div className="p-field-checkbox">
                                     <Checkbox onChange={e => setChecked(e.checked)} checked={checked}></Checkbox>
                                     <label htmlFor="checkbox" className="p-checkbox-label">&nbsp; Activos</label>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    &nbsp;
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '-70px' }}>
+                        <button
+                            id="botonExtra"
+                            className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left MarRight10 ui-button-secondary"
+                            disabled={loading}
+                            type="button"
+                            role="button"
+                            aria-disabled="false"
+                            onClick={() => openNew('top')} style={{ minWidth: '10rem' }}
+                        >
+                            <span className="ui-button-text ui-c"><i className="ui-button-icon-left ui-icon pi pi-plus" /> &nbsp;Agregar Categoria</span>
+                        </button>
                     </div>
                     &nbsp;
                     <div>
@@ -591,25 +532,75 @@ const Dashboard = () => {
 
 
 
-                <Dialog visible={isDialogVisible} style={{ width: '78rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Categoria Coral" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-                    <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
 
-                        <Toolbar className="mb-4" right={filtrotabla}></Toolbar>
+
+                <Dialog visible={isDialogVisible} style={{ width: '50rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} modal className="p-fluid" position={position} onHide={hideDialog}>
+                    <div className="p-col-12">
                         <div>
-                            <div className="p-field p-col-12 p-md-12 p-lg-4">
-                                <label htmlFor="search">Buscar</label>
-                                <span className="p-inputgroup">
-                                    <span className="p-inputgroup-addon"><i className="pi pi-search" /></span>
-                                    <InputText
-                                        placeholder="Buscar"
-                                        value={searchQuery3}
-                                        onChange={(e) => setSearchQuery3(e.target.value)}
+                            <span className="Fs20 FontBold">Categoria Coral</span>
+                            <hr className="ui-separator ui-state-default ui-corner-all" />
+                            <div className="p-grid p-formgrid">
+                                <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
+                                    <input
+                                        id="input1"
+                                        className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${codigoCategoria ? 'ui-state-filled' : ''}`}
+                                        value={codigoCategoria}
+                                        onChange={handleInputCodCategoria}
+                                        style={{ width: '100%' }}
                                     />
+                                    <label className={codigoCategoria ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Código</label>
                                 </span>
-                                <CustomDataTable3 data3={DataCategoria} />
+
+                                &nbsp;
+                                &nbsp;
+
+                                <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
+                                    <input
+                                        id="input2"
+                                        className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${descripcionCategoria ? 'ui-state-filled' : ''}`}
+                                        value={descripcionCategoria}
+                                        onChange={handleInputDesCategoria}
+                                        style={{ width: '100%' }}
+                                    />
+                                    <label htmlFor="input2" className={descripcionCategoria ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Descripción</label>
+                                </span>
+                                &nbsp;
+
+                                <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
+                                    <Dropdown
+                                        value={selectedCity}
+                                        options={cities}
+                                        onChange={handleCityChange}
+                                        optionLabel="label"
+                                        placeholder="Nivel"
+                                        id="input3"
+                                        className={`  ${selectedCity ? 'ui-state-filled' : ''}`}
+                                    />
+                                    <label htmlFor="input3" className={selectedCity ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Nivel</label>
+                                </span>
+
+
+                                <button
+                                    id="frmListado:j_idt36"
+                                    name="frmListado:j_idt36"
+                                    className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left MarRight10 ui-button-secondary"
+                                    onClick={handleFilterClick}
+                                    disabled={loading}
+                                    type="submit"
+                                    role="button"
+                                    aria-disabled="false"
+                                >
+                                    <span className="ui-button-text ui-c"><i className="ui-button-icon-left ui-icon ui-c pi pi-search" /> &nbsp;Filtrar</span>
+                                </button>
                             </div>
                         </div>
                     </div>
+                    <div>
+                        <div className="p-field p-col-12 p-md-12 p-lg-4">
+                            <CustomDataTable3 data3={DataCategoria} />
+                        </div>
+                    </div>
+
                 </Dialog>
 
 
@@ -626,7 +617,7 @@ const Dashboard = () => {
                     onHide={hideDialog2}
                 >
                     <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
-                        <Toolbar className="mb-4" right={productDialogFooter2} left={filtrotabla} ></Toolbar>
+
                         <div>
                             <div className="p-field p-col-12 p-md-12 p-lg-4">
                                 <label htmlFor="search">Buscar</label>
@@ -645,9 +636,11 @@ const Dashboard = () => {
                     </div>
                 </Dialog>
 
-                <Dialog header="Información" visible={visible} position={position} style={{ width: '50vw' }} onHide={() => setVisible(false)} footer={footerContent} draggable={false} resizable={false}>
+
+
+                <Dialog header="Confirmación" visible={visible} position={position} style={{ width: '50vw' }} onHide={() => setVisible(false)} footer={footerContent} draggable={false} resizable={false}>
                     <p className="m-0">
-                        Esta seguro de insertar exel.
+                        Esta seguro de agregar esta categoria.
                     </p>
                 </Dialog>
                 <Toast ref={toast} />

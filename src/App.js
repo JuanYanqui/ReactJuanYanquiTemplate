@@ -47,7 +47,6 @@ const App = ({ userData }) => {
     const copyTooltipRef = useRef();
     let currentInlineMenuKey = useRef(null);
     const location = useLocation();
-    const [activeMenuIndex, setActiveMenuIndex] = useState(null);
     PrimeReact.ripple = true;
 
     let searchClick;
