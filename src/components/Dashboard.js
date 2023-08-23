@@ -9,9 +9,8 @@ import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import * as XLSX from 'xlsx';
 import { Toast } from 'primereact/toast';
-import { CategoriaCoralService } from '../service/CategoriaCoralService';
-import { ArticulosService } from '../serviceIntermedia/ArticulosService';
-import { ArticulosIntermediaws } from '../service/ArticulosService';
+import { CategoriasCoralIntermediaws } from '../serviceIntermedia/CategoriasCoralIntermediaws';
+import { ArticulosIntermediaws } from '../serviceIntermedia/ArticulosIntermediaws';
 import { MultiSelect } from 'primereact/multiselect';
 import { Checkbox } from 'primereact/checkbox';
 const Dashboard = () => {
@@ -31,7 +30,7 @@ const Dashboard = () => {
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedLevel, setSelectedLevel] = useState(null);
     const [DataCategoria, setDataCategoria] = useState([]);
-    const categoriasdata = new CategoriaCoralService();
+    const categoriasdata = new CategoriasCoralIntermediaws();
 
     const [DataArticulos, setDataArticulos] = useState([]);
     const articulosdata = new ArticulosIntermediaws();
@@ -231,17 +230,36 @@ const Dashboard = () => {
     const showErrorIngreso = () => {
         toast.current.show({ severity: 'error', summary: 'Error', detail: 'No seleciono ningun articulo.', life: 3000 });
     }
+
     const handleYesClick = () => {
-        if(selectedItems.length === 0){
+        if (selectedItems.length === 0) {
             setVisible(false);
             showErrorIngreso();
-       
-        }else{
+        } else {
+            const categoriaAnteriorList = [];
+            const codigoList = [];
+    
+            selectedItems.forEach(item => {
+                const { texto2, codigo } = item; 
+                categoriaAnteriorList.push(texto2);
+                codigoList.push(codigo);
+            });
+    
+            const categoriaNueva = "";
+            const descripcion = "";
+            const usuCrea = "";
+            const fechaModifica = "";
+            const usuarioParam = "";
+            categoriasdata.guardarCambiosCategoria(categoriaNueva, descripcion, categoriaAnteriorList.join(', '), usuCrea, codigoList.join(', '), fechaModifica, usuarioParam)
+            .then((datas) => {
+                
+                console.log(datas)
+            });
 
             setVisible(false);
             showSuccess();
             console.log(selectedItems);
-            setSelectedItems([])
+            setSelectedItems([]);
         }
     };
 
@@ -276,7 +294,7 @@ const Dashboard = () => {
     const handleFilterClick = () => {
 
         setLoading(true);
-        categoriasdata.PostCategoriaCoralData(codigoCategoria, descripcionCategoria, selectedCity).then((data) => {
+        categoriasdata.listarCategoriasCoralVista(codigoCategoria, descripcionCategoria, selectedCity).then((data) => {
             setDataCategoria(data);
             setLoading(false);
         });

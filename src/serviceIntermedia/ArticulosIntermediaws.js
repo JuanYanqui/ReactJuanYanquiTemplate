@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PathService } from './Path.Service';
+import { PathService } from '../service/Path.Service';
 
 
 export class ArticulosIntermediaws {
