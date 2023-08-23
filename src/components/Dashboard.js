@@ -13,7 +13,7 @@ import { CategoriasCoralIntermediaws } from '../serviceIntermedia/CategoriasCora
 import { ArticulosIntermediaws } from '../serviceIntermedia/ArticulosIntermediaws';
 import { MultiSelect } from 'primereact/multiselect';
 import { Checkbox } from 'primereact/checkbox';
-const Dashboard = () => {
+const Dashboard = ({usuarioUppercase}) => {
     const [isDialogVisible, setDialogVisible] = useState(false);
     const [isDialogVisible2, setDialogVisible2] = useState(false);
     const [excelData, setExcelData] = useState([]);
@@ -41,11 +41,11 @@ const Dashboard = () => {
     const [totalPages, setTotalPages] = useState(10);
     const [checked, setChecked] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
+    const [selectedCode, setSelectedCode] = useState(null);
 
     const handleSelectionChange = (e) => {
         setSelectedItems(e.value);
     };
-    console.log(selectedItems);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -63,17 +63,21 @@ const Dashboard = () => {
             const response = await articulosdata.PaginacionlistarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, checked, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam);
             if (response) {
                 setDataArticulos(response1);
-                console.log(response1);
                 const pageSize = rowsPerPage;
                 const totalCount = response.rowCount;
                 const totalPages = Math.ceil(totalCount / pageSize);
                 setTotalRecords(response.rowCount);
                 setTotalPages(totalPages);
-                console.log("Total Datos:", response.rowCount);
-                console.log("Numero de datos por Pagina:", pageSize);
-                console.log("Total Paginas:", totalPages);
+                //console.log("Total Datos:", response.rowCount);
+                //console.log("Numero de datos por Pagina:", pageSize);
+                //console.log("Total Paginas:", totalPages);
                 setLoading(false);
             }
+            categoriasdata.listarCategoriasCoralVista(codigoCategoria, descripcionCategoria, selectedCity).then((data) => {
+               // console.log("coraldataaa", data)
+                setDataCategoria(data);
+                setLoading(false);
+            });
         };
         fetchData();
     }, [currentPage, rowsPerPage]);
@@ -123,15 +127,9 @@ const Dashboard = () => {
         if (!data2) {
             return <p>No hay datos disponibles.</p>;
         }
-        const filteredData2 = data2.filter(item =>
-            (item[0] && item[0].toLowerCase().includes(searchQuery2.toLowerCase())) ||
-            (item[1] && item[1].toLowerCase().includes(searchQuery2.toLowerCase())) ||
-            (item[2] && item[2].toLowerCase().includes(searchQuery2.toLowerCase()))
-        );
-
 
         return (
-            <DataTable value={filteredData2} paginator
+            <DataTable value={data2} paginator
                 rows={5} paginatorPosition="both"
                 rowsPerPageOptions={[5, 10, 25]}>
                 <Column field="0" header="Código" />
@@ -148,13 +146,9 @@ const Dashboard = () => {
         if (!data3) {
             return <p>No hay datos disponibles.</p>;
         }
-        const filteredData3 = data3.filter(item =>
-            (item[0] && item[0].toLowerCase().includes(searchQuery3.toLowerCase())) ||
-            (item[1] && item[1].toLowerCase().includes(searchQuery3.toLowerCase())) ||
-            (item[2] && item[2].toLowerCase().includes(searchQuery3.toLowerCase()))
-        );
+
         return (
-            <DataTable value={filteredData3} paginator
+            <DataTable value={data3} paginator
                 rows={5} paginatorPosition="both"
                 rowsPerPageOptions={[5, 10, 25]}>
                 <Column field="0" header="Código" />
@@ -164,13 +158,17 @@ const Dashboard = () => {
             </DataTable>
         );
     };
-
-
     const handleButtonClick = (codigo) => {
-        console.log('Código de la fila:', codigo);
+        //console.log('Código de la fila:', codigo);
         if (codigo != null) {
             openNew();
         }
+    };
+
+
+    const handleIconClick = (rowData) => {
+        setSelectedCode(rowData[0]);
+        setVisible(true);
     };
 
     const openNew = (position) => {
@@ -207,13 +205,14 @@ const Dashboard = () => {
         );
     };
 
-    const ingresoidividual = () => {
+    const ingresoidividual = (rowData) => {
         return (
             <div className="flex flex-wrap gap-2">
-                <i className="pi pi-plus" style={{ fontSize: '1rem', color: 'black' }} onClick={() => show('top')} ></i>
+                <i className="pi pi-plus" style={{ fontSize: '1rem', color: 'black' }} onClick={() => handleIconClick(rowData)} ></i>
             </div>
         );
     };
+
 
     const showSuccess = () => {
         toast.current.show({ severity: 'success', summary: 'Success Message', detail: 'Operación Completada.' });
@@ -231,37 +230,48 @@ const Dashboard = () => {
         toast.current.show({ severity: 'error', summary: 'Error', detail: 'No seleciono ningun articulo.', life: 3000 });
     }
 
+    const showErrorNivel = () => {
+        toast.current.show({ severity: 'warn', summary: 'Warning', detail: 'La Categoria debe pertencer a Nivel 4.', life: 3000 });
+    }
+
     const handleYesClick = () => {
         if (selectedItems.length === 0) {
             setVisible(false);
             showErrorIngreso();
         } else {
-            const categoriaAnteriorList = [];
-            const codigoList = [];
-    
-            selectedItems.forEach(item => {
-                const { texto2, codigo } = item; 
-                categoriaAnteriorList.push(texto2);
-                codigoList.push(codigo);
-            });
-    
-            const categoriaNueva = "";
-            const descripcion = "";
-            const usuCrea = "";
-            const fechaModifica = "";
-            const usuarioParam = "";
-            categoriasdata.guardarCambiosCategoria(categoriaNueva, descripcion, categoriaAnteriorList.join(', '), usuCrea, codigoList.join(', '), fechaModifica, usuarioParam)
-            .then((datas) => {
-                
-                console.log(datas)
-            });
+            if (selectedCode.length == 7) {
+                const cambiosData = selectedItems.map(item => ({
+                    categoriaNueva: selectedCode,
+                    descripcion: "Nuevo categoria ingresada",
+                    categoriaAnterior: item.texto2,
+                    usuCrea: null,
+                    codigo: item.codigo,
+                    fechaModifica: null,
+                    fechaCrea: null,
+                    fecha: null,
+                    usuModifica: null
+                }));
 
-            setVisible(false);
-            showSuccess();
-            console.log(selectedItems);
-            setSelectedItems([]);
+                const usuarioParam = usuarioUppercase;
+                categoriasdata.guardarCambiosCategoria(cambiosData, usuarioParam)
+                    .then((datas) => {
+                        //console.log(datas)
+                        setSelectedItems([]);
+                        setDialogVisible(false);
+                        console.log("cambios", cambiosData)
+                        console.log("usuarioParam", usuarioParam)
+                    });
+
+                setVisible(false);
+                showSuccess();
+                //console.log(selectedItems);
+            } else {
+                setVisible(false);
+                showErrorNivel();
+            }
         }
     };
+
 
     const handleNoClick = () => {
         setVisible(false);
@@ -410,7 +420,7 @@ const Dashboard = () => {
                     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                     setExcelData(jsonData);
                     setUploadedFileName(file.name);
-                    console.log(jsonData)
+                    //console.log(jsonData)
                 };
 
                 reader.readAsArrayBuffer(file);

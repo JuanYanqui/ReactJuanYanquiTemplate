@@ -24,7 +24,7 @@ import './App.scss';
 
 export const RTLContext = React.createContext();
 
-const App = ({ userData }) => {
+const App = ({ userData , usuarioUppercase}) => {
     const [topbarTheme, setTopbarTheme] = useState('custom');
     const [menuTheme, setMenuTheme] = useState('light');
     const [theme, setTheme] = useState('custom');
@@ -123,7 +123,6 @@ const App = ({ userData }) => {
 
 
     const menu = generateMenuFromUserData(userData);
-    console.log(menu);
     const routes = generateRoutesFromUserData(userData);
     const onMenuItemClick = (event, item) => {
         if (!item.items) {
@@ -467,7 +466,7 @@ const [isSearching, setIsSearching] = useState(false);
 
                     <div className="layout-content" >
                         <Routes>
-                            <Route path="/" element={<Dashboard colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route path="/" element={<Dashboard  usuarioUppercase = {usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                         </Routes>
                     </div>
 

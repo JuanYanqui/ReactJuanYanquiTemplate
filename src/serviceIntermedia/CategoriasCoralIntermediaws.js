@@ -81,28 +81,16 @@ export class CategoriasCoralIntermediaws {
             });
     }
 
-    guardarCambiosCategoria( categoriaNueva, descripcion, categoriaAnterior,usuCrea, codigo, fechaModifica, usuarioParam) {
+    guardarCambiosCategoria(cambios, usuarioParam) {
         const ws_nombre = "INTERMEDIAWS_CATEGCORAL_SAVE_CAMBIO";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = data.object.serCodigo.serUrl;
+                const nuevaSerUrl = "http://192.168.19.117:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
-                const articulos = {
-                    estado: false,
-                    categoriaNueva: categoriaNueva,
-                    descripcion: descripcion,
-                    categoriaAnterior: categoriaAnterior,
-                    usuCrea: usuCrea,
-                    codigo:codigo,
-                    fechaModifica: fechaModifica,
-                    fechaCrea: null,
-                    fecha: null,
-                    usuModifica: null
-                  };
                 const requestData = {
                     object: JSON.stringify({
-                        cambios: JSON.stringify(articulos),
+                        cambios: JSON.stringify(cambios),
                         usuario: usuarioParam
                     }),
                     rowCount: 0,
@@ -114,7 +102,8 @@ export class CategoriasCoralIntermediaws {
                         }
                     })
                     .then((response) => {
-                        return null;
+                        const objectData = JSON.parse(response.data.object);
+                        return objectData;
                     })
                     .catch((error) => {
                         console.error('Error CategoriasCoralIntermediaws metodo guardarCambiosCategoria...!!!!', error);

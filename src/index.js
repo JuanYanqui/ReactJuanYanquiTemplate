@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import Keycloak from 'keycloak-js';
-import { ArticulosIntermediaws } from './serviceIntermedia/ArticulosIntermediaws';
 import { UsuarioService } from './service/UsuarioService';
 import App from './App';
 
@@ -58,7 +57,7 @@ initKeycloak()
 
                                 <React.StrictMode>
                                     <HashRouter>
-                                        {userData && <App userData={userData} />}
+                                    {userData && <App usuarioUppercase={usuarioUppercase} userData={userData} />}
                                     </HashRouter>
                                 </React.StrictMode>
                             );
