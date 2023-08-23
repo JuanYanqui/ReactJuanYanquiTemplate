@@ -13,7 +13,7 @@ import { CategoriasCoralIntermediaws } from '../serviceIntermedia/CategoriasCora
 import { ArticulosIntermediaws } from '../serviceIntermedia/ArticulosIntermediaws';
 import { MultiSelect } from 'primereact/multiselect';
 import { Checkbox } from 'primereact/checkbox';
-const Dashboard = ({usuarioUppercase}) => {
+const Dashboard = ({ usuarioUppercase }) => {
     const [isDialogVisible, setDialogVisible] = useState(false);
     const [isDialogVisible2, setDialogVisible2] = useState(false);
     const [excelData, setExcelData] = useState([]);
@@ -74,7 +74,7 @@ const Dashboard = ({usuarioUppercase}) => {
                 setLoading(false);
             }
             categoriasdata.listarCategoriasCoralVista(codigoCategoria, descripcionCategoria, selectedCity).then((data) => {
-               // console.log("coraldataaa", data)
+                // console.log("coraldataaa", data)
                 setDataCategoria(data);
                 setLoading(false);
             });
@@ -158,12 +158,12 @@ const Dashboard = ({usuarioUppercase}) => {
             </DataTable>
         );
     };
-    const handleButtonClick = (codigo) => {
-        //console.log('Código de la fila:', codigo);
-        if (codigo != null) {
-            openNew();
-        }
-    };
+    /*  const handleButtonClick = (codigo) => {
+          //console.log('Código de la fila:', codigo);
+          if (codigo != null) {
+              openNew();
+          }
+      };*/
 
 
     const handleIconClick = (rowData) => {
@@ -189,13 +189,13 @@ const Dashboard = ({usuarioUppercase}) => {
         setUploadedFileName("");
     };
 
-    const leftToolbarTemplate2 = (rowData) => {
+    /*const leftToolbarTemplate2 = (rowData) => {
         return (
             <div className="flex flex-wrap gap-2">
                 <Button label="Agregar Categoria" onClick={() => handleButtonClick(rowData.codigo)} icon="pi pi-plus" style={{ backgroundColor: '#e0e0e0' }} />
             </div>
         );
-    };
+    };*/
 
     const ingresoexel = () => {
         return (
@@ -535,23 +535,26 @@ const Dashboard = ({usuarioUppercase}) => {
                                     <Checkbox onChange={e => setChecked(e.checked)} checked={checked}></Checkbox>
                                     <label htmlFor="checkbox" className="p-checkbox-label">&nbsp; Activos</label>
                                 </div>
+                                &nbsp;
+                                &nbsp;
+
+                                <button
+                                    id="botonExtra"
+                                    className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left MarRight10 ui-button-secondary"
+                                    disabled={loading}
+                                    type="button"
+                                    role="button"
+                                    aria-disabled="false"
+                                    onClick={() => openNew('top')}
+                                >
+                                    <span className="ui-button-text ui-c"><i className="ui-button-icon-left ui-icon pi pi-plus" /> &nbsp;Agregar Categoria</span>
+                                </button>
                             </div>
                         </div>
+
                     </div>
                     &nbsp;
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '-70px' }}>
-                        <button
-                            id="botonExtra"
-                            className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left MarRight10 ui-button-secondary"
-                            disabled={loading}
-                            type="button"
-                            role="button"
-                            aria-disabled="false"
-                            onClick={() => openNew('top')} style={{ minWidth: '10rem' }}
-                        >
-                            <span className="ui-button-text ui-c"><i className="ui-button-icon-left ui-icon pi pi-plus" /> &nbsp;Agregar Categoria</span>
-                        </button>
-                    </div>
+
                     &nbsp;
                     <div>
                         <DataTablaar dataar={DataArticulos.data} loading={loading} onPageChange={onPageChange} />
