@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { PathService } from '../service/Path.Service';
+import { Toast } from 'primereact/toast';
+import React from 'react';
 
 export class CategoriasCoralIntermediaws {
 
@@ -7,12 +9,13 @@ export class CategoriasCoralIntermediaws {
         this.pathService = new PathService();
     }
 
+
     listarCategoriasCoralVista(cod, des, niv) {
         const asignacion = "INTERMEDIAWS_CATEGCORAL_LIST_VISTA";
         return this.pathService.getUrl(asignacion)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = data.object.serCodigo.serUrl;
+                const nuevaSerUrl = "http://192.168.19.117:8080";
 
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
@@ -52,7 +55,7 @@ export class CategoriasCoralIntermediaws {
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = data.object.serCodigo.serUrl;
+                const nuevaSerUrl = "http://192.168.19.117:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
@@ -102,8 +105,7 @@ export class CategoriasCoralIntermediaws {
                         }
                     })
                     .then((response) => {
-                        const objectData = JSON.parse(response.data.object);
-                        return objectData;
+                        return response;
                     })
                     .catch((error) => {
                         console.error('Error CategoriasCoralIntermediaws metodo guardarCambiosCategoria...!!!!', error);
@@ -121,7 +123,7 @@ export class CategoriasCoralIntermediaws {
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = data.object.serCodigo.serUrl;
+                const nuevaSerUrl = "http://192.168.19.117:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
@@ -154,13 +156,20 @@ export class CategoriasCoralIntermediaws {
     }
 
 
-    loadCategoriaCambio(codArticuloParam, nombreArticuloParam, estadosParam, fechaInicioParam, fechaFinParam, usuarioParam, lazyParam) {
+    loadCategoriaCambio(codArticuloParam, nombreArticuloParam, estadosParam, fechaInicioParam, fechaFinParam, usuarioParam, currentPage, rowsPerPage) {
         const ws_nombre = "INTERMEDIAWS_CATEGCORAL_LOAD_CAMBIOS";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = data.object.serCodigo.serUrl;
+                const nuevaSerUrl = "http://192.168.19.117:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
+                const paginationInfo = {
+                    count: false,
+                    pagesize: rowsPerPage,
+                    first: currentPage,
+                    sortBy: {},
+                    filterBy: {}
+                };
                 const requestData = {
                     object: JSON.stringify({
                         codArticulo: codArticuloParam,
@@ -169,7 +178,54 @@ export class CategoriasCoralIntermediaws {
                         fechaInicio: fechaInicioParam,
                         fechaFin: fechaFinParam,
                         usuario: usuarioParam,
-                        lazy: lazyParam
+                        lazy: JSON.stringify(paginationInfo)
+                    }),
+                    rowCount: 0,
+                };
+                return axios
+                    .post(url, requestData, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then((response) => {
+                        const objectData = JSON.parse(response.data.object);
+                        return objectData;
+                    })
+                    .catch((error) => {
+                        console.error('Error CategoriasCoralIntermediaws metodo loadCategoriaCambio...!!!!', error);
+                        return null;
+                    });
+            })
+            .catch((error) => {
+                console.error('Error CategoriasCoralIntermediaws metodo loadCategoriaCambio', error);
+                return null;
+            });
+    }
+
+    PaginacionloadCategoriaCambio(codArticuloParam, nombreArticuloParam, estadosParam, fechaInicioParam, fechaFinParam, usuarioParam, currentPage, rowsPerPage) {
+        const ws_nombre = "INTERMEDIAWS_CATEGCORAL_LOAD_CAMBIOS";
+        return this.pathService.getUrl(ws_nombre)
+            .then((data) => {
+                const nuevaWsUrl = data.object.wsUrl;
+                const nuevaSerUrl = "http://192.168.19.117:8080";
+                const url = nuevaSerUrl + nuevaWsUrl;
+                const paginationInfo = {
+                    count: true,
+                    pagesize: rowsPerPage,
+                    first: currentPage,
+                    sortBy: {},
+                    filterBy: {}
+                };
+                const requestData = {
+                    object: JSON.stringify({
+                        codArticulo: codArticuloParam,
+                        nombreArticulo: nombreArticuloParam,
+                        estados: estadosParam,
+                        fechaInicio: fechaInicioParam,
+                        fechaFin: fechaFinParam,
+                        usuario: usuarioParam,
+                        lazy: JSON.stringify(paginationInfo)
                     }),
                     rowCount: 0,
                 };
@@ -199,7 +255,7 @@ export class CategoriasCoralIntermediaws {
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = data.object.serCodigo.serUrl;
+                const nuevaSerUrl = "http://192.168.19.117:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
@@ -228,18 +284,18 @@ export class CategoriasCoralIntermediaws {
             });
     }
 
-    updateEstadoCambioCategoria(cmbIdParam, nuevoEstadoParam, observacionesParam, usuarioParam) {
+    updateEstadoCambioCategoria(cmbIdParam, nuevoEstadoParam, usuarioParam) {
         const ws_nombre = "INTERMEDIAWS_CATEGCORAL_UPDATE_ESTADO_CAMBIO";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = data.object.serCodigo.serUrl;
+                const nuevaSerUrl = "http://192.168.19.117:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
                         cmbId: cmbIdParam,
                         nuevoEstado: nuevoEstadoParam,
-                        observaciones: observacionesParam,
+                        observaciones: "",
                         usuario: usuarioParam
                     }),
                     rowCount: 0,
@@ -251,7 +307,8 @@ export class CategoriasCoralIntermediaws {
                         }
                     })
                     .then((response) => {
-                        return null;
+                        return response;
+
                     })
                     .catch((error) => {
                         console.error('Error CategoriasCoralIntermediaws metodo updateEstadoCambioCategoria...!!!!', error);

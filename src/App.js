@@ -21,6 +21,7 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 import './App.scss';
+import AprobarArticulos from './components/AprobarArticulos';
 
 export const RTLContext = React.createContext();
 
@@ -467,6 +468,7 @@ const [isSearching, setIsSearching] = useState(false);
                     <div className="layout-content" >
                         <Routes>
                             <Route path="/" element={<Dashboard  usuarioUppercase = {usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route path="/AprobarArticulos" element={<AprobarArticulos usuarioUppercase = {usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                         </Routes>
                     </div>
 

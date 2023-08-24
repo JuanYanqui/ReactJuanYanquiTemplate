@@ -4,14 +4,12 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
-import { Toolbar } from 'primereact/toolbar';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import * as XLSX from 'xlsx';
 import { Toast } from 'primereact/toast';
 import { CategoriasCoralIntermediaws } from '../serviceIntermedia/CategoriasCoralIntermediaws';
 import { ArticulosIntermediaws } from '../serviceIntermedia/ArticulosIntermediaws';
-import { MultiSelect } from 'primereact/multiselect';
 import { Checkbox } from 'primereact/checkbox';
 const Dashboard = ({ usuarioUppercase }) => {
     const [isDialogVisible, setDialogVisible] = useState(false);
@@ -29,6 +27,7 @@ const Dashboard = ({ usuarioUppercase }) => {
     const [descripcionArticulo, setDescripcionArticulo] = useState("");
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedLevel, setSelectedLevel] = useState(null);
+
     const [DataCategoria, setDataCategoria] = useState([]);
     const categoriasdata = new CategoriasCoralIntermediaws();
 
@@ -42,6 +41,8 @@ const Dashboard = ({ usuarioUppercase }) => {
     const [checked, setChecked] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
     const [selectedCode, setSelectedCode] = useState(null);
+    const [error, setError] = useState(null);
+    const [dialogVisibleError, setDialogVisibleError] = useState(false);
 
     const handleSelectionChange = (e) => {
         setSelectedItems(e.value);
@@ -62,6 +63,7 @@ const Dashboard = ({ usuarioUppercase }) => {
             const response1 = await articulosdata.listarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, checked, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage, rowsPerPage);
             const response = await articulosdata.PaginacionlistarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, checked, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam);
             if (response) {
+                console.log(response1);
                 setDataArticulos(response1);
                 const pageSize = rowsPerPage;
                 const totalCount = response.rowCount;
@@ -111,6 +113,7 @@ const Dashboard = ({ usuarioUppercase }) => {
                     <Column field="descripcion" header="Descripción" />
                     <Column field="precio" header="Precio" />
                     <Column field="unidadPedido" header="Unidad de Pedido" />
+                    <Column field="texto2" header="PRUEBA" />
                     <Column field="texto3" header="Nivel 1" />
                     <Column field="texto4" header="Nivel 2" />
                     <Column field="texto5" header="Nivel 3" />
@@ -178,6 +181,7 @@ const Dashboard = ({ usuarioUppercase }) => {
 
     const hideDialog = () => {
         setDialogVisible(false);
+        setSelectedItems([]);
     };
 
     const openNew2 = () => {
@@ -243,7 +247,7 @@ const Dashboard = ({ usuarioUppercase }) => {
                 const cambiosData = selectedItems.map(item => ({
                     categoriaNueva: selectedCode,
                     descripcion: "Nuevo categoria ingresada",
-                    categoriaAnterior: item.texto2,
+                    categoriaAnterior: item.texto2 !== undefined ? item.texto2 : 9090909,
                     usuCrea: null,
                     codigo: item.codigo,
                     fechaModifica: null,
@@ -254,16 +258,29 @@ const Dashboard = ({ usuarioUppercase }) => {
 
                 const usuarioParam = usuarioUppercase;
                 categoriasdata.guardarCambiosCategoria(cambiosData, usuarioParam)
-                    .then((datas) => {
-                        //console.log(datas)
-                        setSelectedItems([]);
-                        setDialogVisible(false);
-                        console.log("cambios", cambiosData)
-                        console.log("usuarioParam", usuarioParam)
+                    .then((response) => {
+                        if (response.data.status === 0) {
+                            console.log(response.data.message);
+                            setError(response.data.message);
+                            setPosition('top');
+                            setDialogVisibleError(true);
+                            return response.data.message;
+                        } else {
+
+                            console.log(response.data.status);
+                            const objectData = JSON.parse(response.data.object);
+                            setSelectedItems([]);
+                            setDialogVisible(false);
+                            console.log("cambios", cambiosData)
+                            console.log("usuarioParam", usuarioParam)
+                            console.log(objectData);
+                            setVisible(false);
+                            showSuccess();
+                            return objectData;
+
+                        }
                     });
 
-                setVisible(false);
-                showSuccess();
                 //console.log(selectedItems);
             } else {
                 setVisible(false);
@@ -535,12 +552,10 @@ const Dashboard = ({ usuarioUppercase }) => {
                                     <Checkbox onChange={e => setChecked(e.checked)} checked={checked}></Checkbox>
                                     <label htmlFor="checkbox" className="p-checkbox-label">&nbsp; Activos</label>
                                 </div>
-                                &nbsp;
-                                &nbsp;
 
                                 <button
                                     id="botonExtra"
-                                    className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left MarRight10 ui-button-secondary"
+                                    className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left p-mr-2 align-right"
                                     disabled={loading}
                                     type="button"
                                     role="button"
@@ -549,6 +564,7 @@ const Dashboard = ({ usuarioUppercase }) => {
                                 >
                                     <span className="ui-button-text ui-c"><i className="ui-button-icon-left ui-icon pi pi-plus" /> &nbsp;Agregar Categoria</span>
                                 </button>
+                                &nbsp;
                             </div>
                         </div>
 
@@ -614,7 +630,7 @@ const Dashboard = ({ usuarioUppercase }) => {
                                 <button
                                     id="frmListado:j_idt36"
                                     name="frmListado:j_idt36"
-                                    className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left MarRight10 ui-button-secondary"
+                                    className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left p-mr-2"
                                     onClick={handleFilterClick}
                                     disabled={loading}
                                     type="submit"
@@ -669,7 +685,7 @@ const Dashboard = ({ usuarioUppercase }) => {
 
 
 
-                <Dialog header="Confirmación" visible={visible} position={position} style={{ width: '50vw' }} onHide={() => setVisible(false)} footer={footerContent} draggable={false} resizable={false}>
+                <Dialog header="Confirmación" visible={visible} position={position} style={{ width: '30vw' }} onHide={() => setVisible(false)} footer={footerContent} draggable={false} resizable={false}>
                     <p className="m-0">
                         Esta seguro de agregar esta categoria.
                     </p>
@@ -682,6 +698,12 @@ const Dashboard = ({ usuarioUppercase }) => {
                     <div className="d-flex justify-content-center align-items-center h-100" style={{ borderRadius: '4px' }}>
                         <i className="pi pi-spin pi-spinner loading-icon" aria-hidden="true" style={{ transform: 'scale(0.5)', marginTop: '18px' }}></i>
                     </div>
+                </Dialog>
+
+                <Dialog header="Error" visible={dialogVisibleError} position={position}  style={{ width: '40vw' }} onHide={() => setDialogVisibleError(false)}>
+                    <p className="m-0">
+                       {error}
+                    </p>
                 </Dialog>
 
             </div>
