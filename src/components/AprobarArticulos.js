@@ -22,17 +22,11 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
     const [currentPage, setCurrentPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [totalPages, setTotalPages] = useState(10);
-    const [selectedItems, setSelectedItems] = useState([]);
     const [selectedCode, setSelectedCode] = useState(null);
     const [estadoSelecionado, setestadoSelecionado] = useState(null);
     const [error, setError] = useState(null);
     const [dialogVisibleError, setDialogVisibleError] = useState(false);
     const [checkedValue, setCheckedValue] = useState(0);
-
-    console.log(selectedCode);
-    const handleSelectionChange = (e) => {
-        setSelectedItems(e.value);
-    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -110,9 +104,6 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
         return (
             <div>
                 <DataTable value={dataar}
-                    selection={selectedItems}
-                    onSelectionChange={handleSelectionChange}
-                    selectionMode="checkbox"
                     lazy paginator
                     totalRecords={totalRecords}
                     onPage={onPageChange}

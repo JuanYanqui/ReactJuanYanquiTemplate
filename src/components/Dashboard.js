@@ -13,14 +13,9 @@ import { ArticulosIntermediaws } from '../serviceIntermedia/ArticulosIntermediaw
 import { Checkbox } from 'primereact/checkbox';
 const Dashboard = ({ usuarioUppercase }) => {
     const [isDialogVisible, setDialogVisible] = useState(false);
-    const [isDialogVisible2, setDialogVisible2] = useState(false);
-    const [excelData, setExcelData] = useState([]);
     const [visible, setVisible] = useState(false);
     const [position, setPosition] = useState('center');
     const toast = useRef(null);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [searchQuery2, setSearchQuery2] = useState("");
-    const [searchQuery3, setSearchQuery3] = useState("");
     const [codigoCategoria, setCodigoCategoria] = useState("");
     const [descripcionCategoria, setDescripcionCategoria] = useState("");
     const [codigoArticulo, setCodigoArticulo] = useState("");
@@ -123,28 +118,6 @@ const Dashboard = ({ usuarioUppercase }) => {
         );
     };
 
-
-
-
-    const CustomDataTable = ({ data2 }) => {
-        if (!data2) {
-            return <p>No hay datos disponibles.</p>;
-        }
-
-        return (
-            <DataTable value={data2} paginator
-                rows={5} paginatorPosition="both"
-                rowsPerPageOptions={[5, 10, 25]}>
-                <Column field="0" header="Código" />
-                <Column field="1" header="Descripción" />
-                <Column field="2" header="Nivel" />
-                <Column field="icon" header="" body={ingresoexel} />
-            </DataTable>
-        );
-
-    };
-
-
     const CustomDataTable3 = ({ data3 }) => {
         if (!data3) {
             return <p>No hay datos disponibles.</p>;
@@ -161,13 +134,6 @@ const Dashboard = ({ usuarioUppercase }) => {
             </DataTable>
         );
     };
-    /*  const handleButtonClick = (codigo) => {
-          //console.log('Código de la fila:', codigo);
-          if (codigo != null) {
-              openNew();
-          }
-      };*/
-
 
     const handleIconClick = (rowData) => {
         setSelectedCode(rowData[0]);
@@ -184,30 +150,6 @@ const Dashboard = ({ usuarioUppercase }) => {
         setSelectedItems([]);
     };
 
-    const openNew2 = () => {
-        setDialogVisible2(true);
-    };
-
-    const hideDialog2 = () => {
-        setDialogVisible2(false);
-        setUploadedFileName("");
-    };
-
-    /*const leftToolbarTemplate2 = (rowData) => {
-        return (
-            <div className="flex flex-wrap gap-2">
-                <Button label="Agregar Categoria" onClick={() => handleButtonClick(rowData.codigo)} icon="pi pi-plus" style={{ backgroundColor: '#e0e0e0' }} />
-            </div>
-        );
-    };*/
-
-    const ingresoexel = () => {
-        return (
-            <div className="flex flex-wrap gap-2">
-                <Button label="Agregar" icon="pi pi-plus" onClick={() => show('top')} className="success" style={{ minWidth: '5rem' }} />
-            </div>
-        );
-    };
 
     const ingresoidividual = (rowData) => {
         return (
@@ -221,10 +163,6 @@ const Dashboard = ({ usuarioUppercase }) => {
     const showSuccess = () => {
         toast.current.show({ severity: 'success', summary: 'Success Message', detail: 'Operación Completada.' });
     };
-
-    const showError = () => {
-        toast.current.show({ severity: 'error', summary: 'Error', detail: 'Formato Invalido.', life: 3000 });
-    }
 
     const showErrorcancel = () => {
         toast.current.show({ severity: 'error', summary: 'Error', detail: 'Proceso Cancelado.', life: 3000 });
@@ -328,10 +266,7 @@ const Dashboard = ({ usuarioUppercase }) => {
     };
 
 
-
-
     const [loading, setLoading] = useState(false);
-    const [tiempoconsulta, setTiempoconsulta] = useState(0);
     const handleCargaDatos = () => {
         setLoading(true);
 
@@ -345,8 +280,6 @@ const Dashboard = ({ usuarioUppercase }) => {
         const proveedorParam = "";
         const barraParam = "";
         const jerarquiaParam = "";
-
-
         articulosdata.listarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, checked, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage).then((datas) => {
             setDataArticulos(datas);
             setLoading(false);
@@ -362,113 +295,8 @@ const Dashboard = ({ usuarioUppercase }) => {
             console.log("Numero de datos por Pagina:", pageSize);
             console.log("Total Paginas:", totalPages);
         });
-        /*  articulosdata.listarArticulosPrecioFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam,jerarquiaParam).then((dataF) => {
-              console.log(dataF);
-          });*/
-
-        const sociedadParam = "";
-        const centroParam = null;
-        const almacenParam = "";
-        const numPedidoParam = "";
-        const soloActivoParam = true;
-
-        /*articulosdata.actualizarCostosArticuloAll().then((dataA) => {
-            console.log(dataA);
-
-        });
-
-        articulosdata.getTArticuloBarra(unidadParam, soloActivoParam).then((dataS) => {
-            console.log(dataS);
-
-        });
-
-       
-
-        articulosdata.listarArticulosPrecio(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, lazyInfoParam).then((dataP) => {
-            console.log(dataP);
-
-        });
-        articulosdata.obtenerArticuloCaja(centroParam).then((dataP) => {
-            console.log(dataP);
-
-        });
-
-        articulosdata.listarArticulosSolicitudPedFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, soloVentaMayorParam, soloTransferenciaParam, jerarquiaParam, centroParam, almacenParam, numPedidoParam, lazyInfoParam).then((dataS) => {
-            console.log(dataS);
-
-        });
-
-        articulosdata.listarArticulosPresentaciones(codigoParam, sociedadParam).then((dataS) => {
-            console.log(dataS);
-
-        });*/
-
     };
 
-
-    const rightToolbarTemplate = () => {
-        return <Button label="Carga Masiva" icon="pi pi-upload" className="secondary" onClick={openNew2} />;
-    };
-
-    const productDialogFooter = (
-        <React.Fragment>
-            <Button label="Cancel" icon="pi pi-times" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" />
-        </React.Fragment>
-    );
-
-    const [uploadedFileName, setUploadedFileName] = useState('');
-
-    const handleFileUpload = (event) => {
-        const file = event.target.files[0];
-
-        if (file) {
-            const validExtensions = ['xls', 'xlsx'];
-            const fileExtension = file.name.split('.').pop().toLowerCase();
-
-            if (validExtensions.includes(fileExtension)) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const sheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[sheetName];
-
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-                    setExcelData(jsonData);
-                    setUploadedFileName(file.name);
-                    //console.log(jsonData)
-                };
-
-                reader.readAsArrayBuffer(file);
-            } else {
-                showError();
-                setUploadedFileName("");
-            }
-        } else {
-            showError();
-            setUploadedFileName("");
-        }
-    };
-
-    const productDialogFooter2 = (
-        <div className="p-d-flex p-ai-center" style={{ alignItems: 'center' }}>
-            <label htmlFor="idarchivo" style={{ cursor: 'pointer' }}>
-                <img src="../assets/layout/images/sobresalir.png" alt="Excel Icon" style={{ width: '25px', height: '25px' }} />
-            </label>
-            <input
-                id="idarchivo"
-                type="file"
-                onChange={handleFileUpload}
-                style={{ display: 'none' }}
-            />
-            <span className="p-ml-2">{uploadedFileName}</span>
-        </div>
-    );
-    const show = (position) => {
-        setPosition(position);
-        setVisible(true);
-    };
 
     const handleInputChange = (event) => {
         setCodigoArticulo(event.target.value);
@@ -489,13 +317,6 @@ const Dashboard = ({ usuarioUppercase }) => {
         setDescripcionCategoria(event.target.value);
 
     };
-
-    /*<Dialog header="Información" visible={visible} position={position} style={{ width: '50vw' }} onHide={() => setVisible(false)} footer={footerContent} draggable={false} resizable={false}>
-    <p className="m-0">
-        Esta seguro de insertar exel.
-    </p>
-    </Dialog>
-    <Toast ref={toast} />*/
 
 
     return (
@@ -649,40 +470,6 @@ const Dashboard = ({ usuarioUppercase }) => {
                     </div>
 
                 </Dialog>
-
-
-
-
-
-                <Dialog
-                    visible={isDialogVisible2}
-                    style={{ width: '78rem' }}
-                    breakpoints={{ '960px': '75vw', '641px': '90vw' }}
-                    header="Categoria Coral"
-                    modal
-                    className="p-fluid"
-                    onHide={hideDialog2}
-                >
-                    <div className="card" style={{ backgroundColor: '#e0e0e0' }}>
-
-                        <div>
-                            <div className="p-field p-col-12 p-md-12 p-lg-4">
-                                <label htmlFor="search">Buscar</label>
-                                <span className="p-inputgroup">
-                                    <span className="p-inputgroup-addon"><i className="pi pi-search" /></span>
-                                    <InputText
-                                        placeholder="Buscar"
-                                        value={searchQuery2}
-                                        onChange={(e) => setSearchQuery2(e.target.value)}
-                                    />
-                                </span>
-                                <CustomDataTable data2={DataCategoria} />
-                            </div>
-
-                        </div>
-                    </div>
-                </Dialog>
-
 
 
                 <Dialog header="Confirmación" visible={visible} position={position} style={{ width: '30vw' }} onHide={() => setVisible(false)} footer={footerContent} draggable={false} resizable={false}>
