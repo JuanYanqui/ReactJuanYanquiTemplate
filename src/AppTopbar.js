@@ -13,11 +13,6 @@ const AppTopbar = (props) => {
     const isRTL = useContext(RTLContext);
     const navigate = useNavigate();
 
-    const topbarRef1 = useRef(null);
-    const topbarRef2 = useRef(null);
-    const topbarRef3 = useRef(null);
-    const topbarRef4 = useRef(null);
-
 
     const searchPanel = useRef(null);
 

@@ -3,15 +3,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
-import * as XLSX from 'xlsx';
 import { Toast } from 'primereact/toast';
 import { CategoriasCoralIntermediaws } from '../serviceIntermedia/CategoriasCoralIntermediaws';
 import { ArticulosIntermediaws } from '../serviceIntermedia/ArticulosIntermediaws';
 import { Checkbox } from 'primereact/checkbox';
-const Dashboard = ({ usuarioUppercase }) => {
+const ControlArticulos = ({ usuarioUppercase }) => {
     const [isDialogVisible, setDialogVisible] = useState(false);
     const [visible, setVisible] = useState(false);
     const [position, setPosition] = useState('center');
@@ -501,7 +499,7 @@ const Dashboard = ({ usuarioUppercase }) => {
 
 };
 
-export default Dashboard;
+export default ControlArticulos;
 
 
 

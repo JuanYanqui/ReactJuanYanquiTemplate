@@ -3,10 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
 import { Dialog } from 'primereact/dialog';
-import { Dropdown } from 'primereact/dropdown';
-import * as XLSX from 'xlsx';
 import { Toast } from 'primereact/toast';
 import { CategoriasCoralIntermediaws } from '../serviceIntermedia/CategoriasCoralIntermediaws';
 import { Checkbox } from 'primereact/checkbox';
@@ -129,8 +126,6 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
             </div>
         );
     };
-
-
 
 
     const handleIconClick = (cmbId, estado) => {
