@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { PathService } from '../service/Path.Service';
-import { Toast } from 'primereact/toast';
-import React from 'react';
+
 
 export class CategoriasCoralIntermediaws {
 

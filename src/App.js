@@ -10,7 +10,6 @@ import AppMenu from './AppMenu';
 
 import AppRightMenu from './AppRightMenu';
 
-import ControlArticulos from './components/ControlArticulos';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -22,10 +21,11 @@ import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 import './App.scss';
 import AprobarArticulos from './components/AprobarArticulos';
+import ControlArticulos from './components/ControlArticulos';
 
 export const RTLContext = React.createContext();
 
-const App = ({ userData, usuarioUppercase }) => {
+const App = ({ userData , usuarioUppercase}) => {
     const [topbarTheme, setTopbarTheme] = useState('custom');
     const [menuTheme, setMenuTheme] = useState('light');
     const [theme, setTheme] = useState('custom');
@@ -71,14 +71,14 @@ const App = ({ userData, usuarioUppercase }) => {
         if (!userData || !userData.object) {
             return [];
         }
-
+    
         const menuItems = [];
-
+    
         userData.object.forEach((item) => {
             if (item.nombre === 'Reportería' && menuItems.some(existingItem => existingItem.label === 'Reportería')) {
                 return;
             }
-
+    
             const menuItem = {
                 key: item.menId,
                 label: item.nombre,
@@ -91,10 +91,10 @@ const App = ({ userData, usuarioUppercase }) => {
                     icon: hijo.icono
                 }))
             };
-
+    
             menuItems.push(menuItem);
         });
-
+    
         return menuItems;
     };
 
@@ -403,7 +403,7 @@ const App = ({ userData, usuarioUppercase }) => {
     });
 
     const [searchTerm, setSearchTerm] = useState('');
-    const [isSearching, setIsSearching] = useState(false);
+const [isSearching, setIsSearching] = useState(false);
 
 
 
@@ -416,7 +416,7 @@ const App = ({ userData, usuarioUppercase }) => {
                 const subItems = item.items.filter(subItem =>
                     subItem.label.toLowerCase().includes(searchTerm.toLowerCase())
                 );
-
+    
                 if (subItems.length > 0) {
                     accumulator.push({
                         ...item,
@@ -424,13 +424,13 @@ const App = ({ userData, usuarioUppercase }) => {
                     });
                 }
             }
-
+    
             return accumulator;
         }, []);
-
+    
         setFilteredMenu(filteredItems);
     };
-
+    
 
     const handleSearchInputChange = (event) => {
         setSearchTerm(event.target.value);
@@ -439,21 +439,6 @@ const App = ({ userData, usuarioUppercase }) => {
     const botonEstilo2 = {
         color: "#ffffff",
     };
-
-
-    const PrivateRouteWrapper = ({ children }) => {
-        const isAuthenticated = usuarioUppercase === 'ETAPIA';
-
-        if (isAuthenticated) {
-            return <React.Fragment>{children}</React.Fragment>;
-        } else {
-            window.location.replace("https://www.gerardoortiz.com/conta/access-denied.jsf");
-            return null;
-        }
-    };
-
-
-
     return (
         <RTLContext.Provider value={isRTL}>
             <div className={layoutContainerClassName} onClick={onDocumentClick}>
@@ -482,39 +467,12 @@ const App = ({ userData, usuarioUppercase }) => {
 
                     <div className="layout-content" >
                         <Routes>
-                            <Route
-                                path="/ControlArticulos"
-                                element={
-                                    <PrivateRouteWrapper>
-                                        <ControlArticulos
-                                            usuarioUppercase={usuarioUppercase}
-                                            colorMode={colorMode}
-                                            isNewThemeLoaded={newThemeLoaded}
-                                            onNewThemeChange={(e) => setNewThemeLoaded(e)}
-                                            location={location}
-                                        />
-                                    </PrivateRouteWrapper>
-                                }
-                            />
-
-                            <Route
-                                path="/AprobarArticulos"
-                                element={
-                                    <PrivateRouteWrapper>
-                                        <AprobarArticulos
-                                            usuarioUppercase={usuarioUppercase}
-                                            colorMode={colorMode}
-                                            isNewThemeLoaded={newThemeLoaded}
-                                            onNewThemeChange={(e) => setNewThemeLoaded(e)}
-                                            location={location}
-                                        />
-                                    </PrivateRouteWrapper>
-                                }
-                            />
+                            <Route path="/ControlArticulos" element={<ControlArticulos  usuarioUppercase = {usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route path="/AprobarArticulos" element={<AprobarArticulos usuarioUppercase = {usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                         </Routes>
                     </div>
 
-
+              
                 </div>
                 <AppRightMenu rightMenuActive={rightMenuActive} onRightMenuButtonClick={onRightMenuButtonClick} />
 
@@ -524,4 +482,3 @@ const App = ({ userData, usuarioUppercase }) => {
 };
 
 export default App;
-
