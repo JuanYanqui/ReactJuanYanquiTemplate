@@ -1,31 +1,22 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { classNames } from 'primereact/utils';
-import { MegaMenu } from 'primereact/megamenu';
 import { useNavigate } from 'react-router-dom';
-import { InputText } from 'primereact/inputtext';
-import { Button } from 'primereact/button';
-import { CSSTransition } from 'react-transition-group';
 import { RTLContext } from './App';
-import { SplitButton } from 'primereact/splitbutton';
-import { Dropdown } from 'primereact/dropdown';
 import { Menu } from 'primereact/menu';
 const AppTopbar = (props) => {
     const isRTL = useContext(RTLContext);
     const navigate = useNavigate();
 
 
-    const searchPanel = useRef(null);
+    const keycloakConfig = {
+        realm: "gocorp",
+        url: "https://goauth.gerardoortiz.com/auth/",
+        clientId: "react-test",
+        port: 0,
+        onLoad: 'login-required',
+    };
 
     useEffect(() => {
     }, [props.searchActive]);
-
-    const onInputKeydown = (event) => {
-        const key = event.which;
-
-        if (key === 27 || key === 9 || key === 13) {
-            props.onSearch(false);
-        }
-    };
 
 
     const botonEstilo = {
@@ -46,39 +37,21 @@ const AppTopbar = (props) => {
         color: "#ffffff",
     };
 
-    const [inlineMenuActive, setInlineMenuActive] = useState({});
-
-    const handleInlineMenuClick = (e, menuKey) => {
-        setInlineMenuActive((prevMenuActive) => ({
-            ...prevMenuActive,
-            [menuKey]: !prevMenuActive[menuKey]
-        }));
-    };
-    const [selectedOption, setSelectedOption] = useState(null);
-
-
     const handleLogout = () => {
-        const keycloakConfig = JSON.parse(localStorage.getItem('keycloakConfig'));
         window.location.href = keycloakConfig.url + 'realms/' + keycloakConfig.realm + '/protocol/openid-connect/logout?redirect_uri=' + encodeURIComponent(window.location.origin);
-    };
-    const inlineMenuRef = useRef(null);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
     };
 
     const menuRef = useRef(null);
     const menu = [
-        { label: 'Support', icon: 'pi pi-compass' },
-        { label: 'Logout', icon: 'pi pi-power-off', command: handleLogout },
+        {label: props.usuarioUppercase ,icon: 'fa fa-user'},
+        { label: 'Support', icon: 'fa fa-compass' },
+        { label: 'Logout', icon: 'fa fa-power-off', command: handleLogout },
     ];
 
     return (
         <div className="layout-topbar shadow-4" style={{ backgroundColor: '#3e464c', height: '5.5rem' }}>
             <div className="layout-topbar-left" style={{ height: '5.5rem' }}>
-                <button type="button" style={{ cursor: 'pointer', background: '#2b3135', height: '5.5rem' }} className="layout-topbar-logo p-link" onClick={() => navigate('/AprobarArticulos')}>
+                <button type="button" style={{ cursor: 'pointer', background: '#2b3135', height: '5.5rem' }} className="layout-topbar-logo p-link" onClick={() => navigate('/')}>
                     <img id="app-logo" src="assets/layout/images/web_logo_header.png" alt="ultima-layout" style={{ height: '2rem' }} />
                 </button>
                 <button type="button" className="layout-menu-button shadow-6 p-link" onClick={props.onMenuButtonClick} style={botonEstilo2}>
@@ -88,8 +61,6 @@ const AppTopbar = (props) => {
                     <i className="pi pi-bars" onClick={(event) => menuRef.current.toggle(event)} style={botonEstilo}></i>
                     <i className="pi pi-ellipsis-v fs-large" style={botoncel}></i>
                 </button>
-
-
             </div>
 
             <div className='layout-topbar-right'>
@@ -102,7 +73,7 @@ const AppTopbar = (props) => {
                                 <i className="pi pi-cog" onClick={(event) => menuRef.current.toggle(event)} style={botonEstilo}></i>
                                 <i className="pi pi-ellipsis-v fs-large" style={botonEstilo}></i>
                                 <div style={{ width: '20px' }}></div>
-                                <Menu model={menu} popup ref={menuRef} id="popup_menu" />
+                                <Menu model={menu} popup ref={menuRef} id="popup_menu" style={{borderRadius: '0%'}}/>
                             </li>
                         </ul>
                     </div>

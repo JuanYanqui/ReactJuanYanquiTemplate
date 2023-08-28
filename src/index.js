@@ -14,6 +14,7 @@ const keycloakConfig = {
     onLoad: 'login-required',
 };
 
+
 /*const keycloakConfig = {
     realm: "prueba",
     url: "http://127.0.0.1:8080/auth/",
@@ -22,13 +23,14 @@ const keycloakConfig = {
     onLoad: 'login-required',
 };*/
 
+
+
 const initKeycloak = () => {
     const keycloak = new Keycloak(keycloakConfig);
     return new Promise((resolve, reject) => {
         keycloak.init({ onLoad: 'login-required' })
             .then((authenticated) => {
                 if (authenticated) {
-                    localStorage.setItem('keycloakConfig', JSON.stringify(keycloakConfig));
                     resolve(keycloak);
                 } else {
                     reject(new Error('User not authenticated'));
@@ -45,7 +47,7 @@ initKeycloak()
         const usuario = keycloak.idTokenParsed.preferred_username;
         const usuarioUppercase = usuario.toUpperCase();
         const usuarioService = new UsuarioService();
-
+        console.log("datos del keycloak",keycloak);
         usuarioService.PostUsuarioIngreso(usuarioUppercase)
             .then((usuarioingresado) => {
                 if (usuarioingresado != null) {

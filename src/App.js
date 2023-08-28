@@ -3,29 +3,24 @@ import { classNames } from 'primereact/utils';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.css';
 import AppTopbar from './AppTopbar';
-
 import AppInlineMenu from './AppInlineMenu';
-import AppFooter from './AppFooter';
 import AppMenu from './AppMenu';
-
 import AppRightMenu from './AppRightMenu';
-
 import { useNavigate } from 'react-router-dom';
-
-
 import PrimeReact from 'primereact/api';
 import { Tooltip } from 'primereact/tooltip';
-
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 import './App.scss';
 import AprobarArticulos from './components/AprobarArticulos';
 import ControlArticulos from './components/ControlArticulos';
+import { UsuarioService } from './service/UsuarioService';
+import NotFound from './pages/NotFound';
 
 export const RTLContext = React.createContext();
 
-const App = ({ userData , usuarioUppercase}) => {
+const App = ({ userData, usuarioUppercase }) => {
     const [topbarTheme, setTopbarTheme] = useState('custom');
     const [menuTheme, setMenuTheme] = useState('light');
     const [theme, setTheme] = useState('custom');
@@ -54,6 +49,8 @@ const App = ({ userData , usuarioUppercase}) => {
     let topbarItemClick;
     let menuClick;
     let inlineMenuClick;
+    
+    const usuarioservice = new UsuarioService();
 
     const navigate = useNavigate();
     const redirectToExternalUrl = (url) => {
@@ -71,14 +68,19 @@ const App = ({ userData , usuarioUppercase}) => {
         if (!userData || !userData.object) {
             return [];
         }
-    
+
         const menuItems = [];
-    
+
         userData.object.forEach((item) => {
             if (item.nombre === 'Reportería' && menuItems.some(existingItem => existingItem.label === 'Reportería')) {
                 return;
             }
-    
+
+
+            if (item.nombre === 'Cambio Categoria Articulo' && menuItems.some(existingItem => existingItem.label === 'Cambio Categoria Articulo')) {
+                return;
+            }
+
             const menuItem = {
                 key: item.menId,
                 label: item.nombre,
@@ -91,10 +93,10 @@ const App = ({ userData , usuarioUppercase}) => {
                     icon: hijo.icono
                 }))
             };
-    
+
             menuItems.push(menuItem);
         });
-    
+
         return menuItems;
     };
 
@@ -134,10 +136,27 @@ const App = ({ userData , usuarioUppercase}) => {
             event.preventDefault();
         }
 
+
         if (item.to) {
             const url = item.to;
             console.log('URL:', url);
-            redirectToExternalUrl(url);
+            if (url == '/AprobarArticulos' || url == '/ControlArticulos') {
+                usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((data) => {
+                    data.object.forEach((item) => {
+                        const existingUrls = userData.object.map(item => item.url);
+                        const existingUrlsHijos = userData.object.map(hijos => hijos.url);
+                        if (!existingUrls.includes('/ControlArticulos')||!existingUrlsHijos.includes('/ControlArticulos')||!existingUrls.includes('/AprobarArticulos')||!existingUrlsHijos.includes('/AprobarArticulos')) {
+                            navigate("/NotFound");
+                        } else {
+                            redirectToExternalUrl(url); 
+                        }
+                        
+                    });
+                });
+            } else {
+                redirectToExternalUrl(url);
+            }
+
         }
     };
 
@@ -158,14 +177,6 @@ const App = ({ userData , usuarioUppercase}) => {
     useEffect(() => {
         onColorModeChange(colorMode);
     }, []);
-    const onMenuThemeChange = (theme) => {
-        setMenuTheme(theme);
-    };
-
-    const onTopbarThemeChange = (theme) => {
-        setTopbarTheme(theme);
-    };
-
     useEffect(() => {
         const appLogoLink = document.getElementById('app-logo');
 
@@ -175,13 +186,6 @@ const App = ({ userData , usuarioUppercase}) => {
             appLogoLink.src = 'assets/layout/images/web_logo_header.png';
         }
     }, [topbarTheme]);
-
-    const onThemeChange = (theme) => {
-        setTheme(theme);
-        const themeLink = document.getElementById('theme-css');
-        const themeHref = 'assets/theme/' + theme + '/theme-' + colorMode + '.css';
-        replaceLink(themeLink, themeHref);
-    };
 
     const onColorModeChange = (mode) => {
         setColorMode(mode);
@@ -248,26 +252,6 @@ const App = ({ userData , usuarioUppercase}) => {
     };
 
 
-    const onInputStyleChange = (inputStyle) => {
-        setInputStyle(inputStyle);
-    };
-
-    const onRipple = (e) => {
-        PrimeReact.ripple = e.value;
-        setRipple(e.value);
-    };
-
-    const onInlineMenuPositionChange = (mode) => {
-        setInlineMenuPosition(mode);
-    };
-
-    const onMenuModeChange = (mode) => {
-        setMenuMode(mode);
-    };
-
-    const onRTLChange = () => {
-        setRTL((prevState) => !prevState);
-    };
 
     const onMenuClick = (event) => {
         menuClick = true;
@@ -403,7 +387,7 @@ const App = ({ userData , usuarioUppercase}) => {
     });
 
     const [searchTerm, setSearchTerm] = useState('');
-const [isSearching, setIsSearching] = useState(false);
+    const [isSearching, setIsSearching] = useState(false);
 
 
 
@@ -416,7 +400,7 @@ const [isSearching, setIsSearching] = useState(false);
                 const subItems = item.items.filter(subItem =>
                     subItem.label.toLowerCase().includes(searchTerm.toLowerCase())
                 );
-    
+
                 if (subItems.length > 0) {
                     accumulator.push({
                         ...item,
@@ -424,13 +408,13 @@ const [isSearching, setIsSearching] = useState(false);
                     });
                 }
             }
-    
+
             return accumulator;
         }, []);
-    
+
         setFilteredMenu(filteredItems);
     };
-    
+
 
     const handleSearchInputChange = (event) => {
         setSearchTerm(event.target.value);
@@ -439,6 +423,38 @@ const [isSearching, setIsSearching] = useState(false);
     const botonEstilo2 = {
         color: "#ffffff",
     };
+
+    useEffect(() => {
+        const newMenuItem = {
+            menId: 999,
+            nombre: "Cambio Categoria Articulo",
+            descripcion: "Descripción del nuevo menú",
+            url: "#",
+            icono: "fa fa-plus",
+            hijos: [
+                {
+                    menId: 1000,
+                    nombre: "Control de Artículos",
+                    descripcion: "Descripción del submenu 1",
+                    url: "/ControlArticulos",
+                    icono: "fa fa-pencil"
+                },
+                {
+                    menId: 1001,
+                    nombre: "Aprobar Artículos",
+                    descripcion: "Descripción del submenu 2",
+                    url: "/AprobarArticulos",
+                    icono: "fa fa-check"
+                }
+            ]
+        };
+        userData.object.push(newMenuItem);
+
+    }, []);
+
+
+
+
     return (
         <RTLContext.Provider value={isRTL}>
             <div className={layoutContainerClassName} onClick={onDocumentClick}>
@@ -454,6 +470,7 @@ const [isSearching, setIsSearching] = useState(false);
                     mobileTopbarActive={mobileTopbarActive}
                     searchActive={searchActive}
                     onSearch={onSearch}
+                    usuarioUppercase={usuarioUppercase} 
                 />
 
                 <div className="menu-wrapper" onClick={onMenuClick} style={{ backgroundColor: '#2b3135' }}>
@@ -467,12 +484,13 @@ const [isSearching, setIsSearching] = useState(false);
 
                     <div className="layout-content" >
                         <Routes>
-                            <Route path="/ControlArticulos" element={<ControlArticulos  usuarioUppercase = {usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
-                            <Route path="/AprobarArticulos" element={<AprobarArticulos usuarioUppercase = {usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route path="/ControlArticulos" element={<ControlArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route path="/AprobarArticulos" element={<AprobarArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route path="/NotFound" element={<NotFound colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                         </Routes>
                     </div>
 
-              
+
                 </div>
                 <AppRightMenu rightMenuActive={rightMenuActive} onRightMenuButtonClick={onRightMenuButtonClick} />
 

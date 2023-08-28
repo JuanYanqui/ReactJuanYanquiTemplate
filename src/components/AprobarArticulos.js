@@ -190,40 +190,14 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
         toast.current.show({ severity: 'success', summary: 'Success Message', detail: 'Cambio Completado.' });
     };
 
-    const showError = () => {
-        toast.current.show({ severity: 'error', summary: 'Error', detail: 'Formato Invalido.', life: 3000 });
-    }
-
     const showErrorcancel = () => {
         toast.current.show({ severity: 'error', summary: 'Error', detail: 'Proceso Cancelado.', life: 3000 });
     }
 
-    const showErrorIngreso = () => {
-        toast.current.show({ severity: 'error', summary: 'Error', detail: 'No seleciono ningun articulo.', life: 3000 });
-    }
-
-    const showErrorNivel = () => {
-        toast.current.show({ severity: 'warn', summary: 'Warning', detail: 'La Categoria debe pertencer a Nivel 4.', life: 3000 });
-    }
 
 
     const [loading, setLoading] = useState(false);
 
-    /*const handleCargaDatos = () => {
-        console.log("entro")
-        const nombrearticulo = "";
-        const estados = 1;
-        const fechaInicio = null;
-        const fechaFin = null;
-        const usuario = "";
-        console.log(codigoArticulo);
-        console.log(descripcionArticulo);
-        categoriasdata.loadCategoriaCambio(nombrearticulo, descripcionArticulo, estados, fechaInicio, fechaFin, usuario, currentPage, rowsPerPage).then((data) => {
-            console.log("coraldataaa", data)
-            setDataCategoria(data);
-            setLoading(false);
-        });
-    };*/
 
     const cargaDatos = () => {
         console.log("entro")
