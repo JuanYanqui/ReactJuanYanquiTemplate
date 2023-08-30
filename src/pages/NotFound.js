@@ -22,7 +22,6 @@ const NotFound = () => {
                         <img src="assets/layout/images/pages/404.png" alt="" />
                     </div>
                     <div className="pages-detail pb-6">Requested resource is not available.</div>
-                    <Button type="button" onClick={goDashboard} label="GO BACK TO DASHBOARD" className="p-button-text"></Button>
                 </div>
             </div>
         </div>

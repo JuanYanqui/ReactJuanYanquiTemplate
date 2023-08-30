@@ -49,7 +49,7 @@ const App = ({ userData, usuarioUppercase }) => {
     let topbarItemClick;
     let menuClick;
     let inlineMenuClick;
-    
+
     const usuarioservice = new UsuarioService();
 
     const navigate = useNavigate();
@@ -95,6 +95,7 @@ const App = ({ userData, usuarioUppercase }) => {
             };
 
             menuItems.push(menuItem);
+
         });
 
         return menuItems;
@@ -144,15 +145,22 @@ const App = ({ userData, usuarioUppercase }) => {
                 usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((data) => {
                     data.object.forEach((item) => {
                         const existingUrls = userData.object.map(item => item.url);
-                        const existingUrlsHijos = userData.object.map(hijos => hijos.url);
-                        if (!existingUrls.includes('/ControlArticulos')||!existingUrlsHijos.includes('/ControlArticulos')||!existingUrls.includes('/AprobarArticulos')||!existingUrlsHijos.includes('/AprobarArticulos')) {
+                        const existingUrlsHijos = userData.object.flatMap(item => {
+                            if (item.hijos && Array.isArray(item.hijos)) {
+                                return item.hijos.map(hijo => hijo.url);
+                            }
+                            return [];
+                        });
+
+                        if (!existingUrls.includes('/ControlArticulos') || !existingUrlsHijos.includes('/ControlArticulos') || !existingUrls.includes('/AprobarArticulos') || !existingUrlsHijos.includes('/AprobarArticulos')) {
                             navigate("/NotFound");
                         } else {
-                            redirectToExternalUrl(url); 
+                            redirectToExternalUrl(url);
                         }
-                        
+
                     });
                 });
+
             } else {
                 redirectToExternalUrl(url);
             }
@@ -416,15 +424,50 @@ const App = ({ userData, usuarioUppercase }) => {
     };
 
 
-    const handleSearchInputChange = (event) => {
-        setSearchTerm(event.target.value);
-        filterMenuItems();
-    };
-    const botonEstilo2 = {
-        color: "#ffffff",
-    };
 
     useEffect(() => {
+        const verificarYRedirigir = async () => {
+            const path = window.location.hash;
+            const cleanPath = path.replace(/#/g, ''); 
+            console.log(cleanPath);
+           /* usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
+                        const datanueva = datas
+                        datanueva.object.forEach((item) => {
+                            const existingUrls = datanueva.object.map(item => item.url);
+                            const existingUrlsHijos = datanueva.object.flatMap(item => {
+                                if (item.hijos && Array.isArray(item.hijos)) {
+                                    return item.hijos.map(hijo => hijo.url);
+                                }
+                                return [];
+                            });
+            
+                            console.log(existingUrls);
+                            console.log(existingUrlsHijos);
+            
+                            const controlArticulosExists = existingUrls.includes(cleanPath) || existingUrlsHijos.includes(cleanPath);
+                            const aprobarArticulosExists = existingUrls.includes(cleanPath) || existingUrlsHijos.includes(cleanPath);
+            
+                            if (controlArticulosExists && aprobarArticulosExists) {
+            
+                            } else if (controlArticulosExists) {
+                                navigate('/ControlArticulos');
+                            } else if (aprobarArticulosExists) {
+                                navigate('/AprobarArticulos');
+                            } else {
+                                navigate("/NotFound");
+                            }
+            
+            
+                        });
+                    });*/
+        };
+
+        verificarYRedirigir();
+        menuextra();
+    }, [navigate, userData.object, usuarioUppercase]);
+
+
+    const menuextra = () => {
         const newMenuItem = {
             menId: 999,
             nombre: "Cambio Categoria Articulo",
@@ -450,8 +493,7 @@ const App = ({ userData, usuarioUppercase }) => {
         };
         userData.object.push(newMenuItem);
 
-    }, []);
-
+    }
 
 
 
@@ -470,7 +512,7 @@ const App = ({ userData, usuarioUppercase }) => {
                     mobileTopbarActive={mobileTopbarActive}
                     searchActive={searchActive}
                     onSearch={onSearch}
-                    usuarioUppercase={usuarioUppercase} 
+                    usuarioUppercase={usuarioUppercase}
                 />
 
                 <div className="menu-wrapper" onClick={onMenuClick} style={{ backgroundColor: '#2b3135' }}>
@@ -484,7 +526,7 @@ const App = ({ userData, usuarioUppercase }) => {
 
                     <div className="layout-content" >
                         <Routes>
-                            <Route path="/ControlArticulos" element={<ControlArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route baseHash="menu" path="/ControlArticulos" element={<ControlArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                             <Route path="/AprobarArticulos" element={<AprobarArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                             <Route path="/NotFound" element={<NotFound colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                         </Routes>
