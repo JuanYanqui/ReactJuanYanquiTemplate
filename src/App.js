@@ -141,29 +141,26 @@ const App = ({ userData, usuarioUppercase }) => {
         if (item.to) {
             const url = item.to;
             console.log('URL:', url);
-            if (url == '/AprobarArticulos' || url == '/ControlArticulos') {
-                usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((data) => {
-                    data.object.forEach((item) => {
-                        const existingUrls = userData.object.map(item => item.url);
-                        const existingUrlsHijos = userData.object.flatMap(item => {
+
+                usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datan) => {
+                    datan.object.forEach((item) => {
+                        const existingUrls = datan.object.map(item => item.url);
+                        const existingUrlsHijos = datan.object.flatMap(item => {
                             if (item.hijos && Array.isArray(item.hijos)) {
                                 return item.hijos.map(hijo => hijo.url);
                             }
                             return [];
                         });
 
-                        if (!existingUrls.includes('/ControlArticulos') || !existingUrlsHijos.includes('/ControlArticulos') || !existingUrls.includes('/AprobarArticulos') || !existingUrlsHijos.includes('/AprobarArticulos')) {
-                            navigate("/NotFound");
-                        } else {
+                        if (existingUrls.includes(url) || existingUrlsHijos.includes(url)) {
                             redirectToExternalUrl(url);
+                        } else {
+                 
+                            navigate("/NotFound");
                         }
 
                     });
                 });
-
-            } else {
-                redirectToExternalUrl(url);
-            }
 
         }
     };
@@ -428,38 +425,35 @@ const App = ({ userData, usuarioUppercase }) => {
     useEffect(() => {
         const verificarYRedirigir = async () => {
             const path = window.location.hash;
-            const cleanPath = path.replace(/#/g, ''); 
+            const cleanPath = path.replace(/#/g, '');
             console.log(cleanPath);
-           /* usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
-                        const datanueva = datas
-                        datanueva.object.forEach((item) => {
-                            const existingUrls = datanueva.object.map(item => item.url);
-                            const existingUrlsHijos = datanueva.object.flatMap(item => {
-                                if (item.hijos && Array.isArray(item.hijos)) {
-                                    return item.hijos.map(hijo => hijo.url);
-                                }
-                                return [];
-                            });
-            
-                            console.log(existingUrls);
-                            console.log(existingUrlsHijos);
-            
-                            const controlArticulosExists = existingUrls.includes(cleanPath) || existingUrlsHijos.includes(cleanPath);
-                            const aprobarArticulosExists = existingUrls.includes(cleanPath) || existingUrlsHijos.includes(cleanPath);
-            
-                            if (controlArticulosExists && aprobarArticulosExists) {
-            
-                            } else if (controlArticulosExists) {
-                                navigate('/ControlArticulos');
-                            } else if (aprobarArticulosExists) {
-                                navigate('/AprobarArticulos');
-                            } else {
-                                navigate("/NotFound");
-                            }
-            
-            
-                        });
-                    });*/
+           /*usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
+                const datanueva = datas
+                datanueva.object.forEach((item) => {
+                    const existingUrls = datanueva.object.map(item => item.url);
+                    const existingUrlsHijos = datanueva.object.flatMap(item => {
+                        if (item.hijos && Array.isArray(item.hijos)) {
+                            return item.hijos.map(hijo => hijo.url);
+                        }
+                        return [];
+                    });
+
+                    const controlArticulosExists = existingUrls.includes(cleanPath) || existingUrlsHijos.includes(cleanPath);
+                    const aprobarArticulosExists = existingUrls.includes(cleanPath) || existingUrlsHijos.includes(cleanPath);
+
+                    if (controlArticulosExists && aprobarArticulosExists) {
+
+                    } else if (controlArticulosExists) {
+                        navigate(cleanPath);
+                    } else if (aprobarArticulosExists) {
+                        navigate(cleanPath);
+                    } else {
+                        navigate("/NotFound");
+                    }
+
+
+                });
+            });*/
         };
 
         verificarYRedirigir();
@@ -488,6 +482,13 @@ const App = ({ userData, usuarioUppercase }) => {
                     descripcion: "Descripción del submenu 2",
                     url: "/AprobarArticulos",
                     icono: "fa fa-check"
+                },
+                {
+                    menId:1002,
+                    nombre:"Aprobado",
+                    descripcion: "Descri",
+                    url:"/apro",
+                    icono: "fa fa-check"
                 }
             ]
         };
@@ -501,7 +502,6 @@ const App = ({ userData, usuarioUppercase }) => {
         <RTLContext.Provider value={isRTL}>
             <div className={layoutContainerClassName} onClick={onDocumentClick}>
                 <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
-
                 <AppTopbar
                     horizontal={isHorizontal()}
                     activeTopbarItem={activeTopbarItem}
@@ -526,7 +526,7 @@ const App = ({ userData, usuarioUppercase }) => {
 
                     <div className="layout-content" >
                         <Routes>
-                            <Route baseHash="menu" path="/ControlArticulos" element={<ControlArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route path="/ControlArticulos" element={<ControlArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                             <Route path="/AprobarArticulos" element={<AprobarArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                             <Route path="/NotFound" element={<NotFound colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                         </Routes>

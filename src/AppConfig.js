@@ -87,7 +87,7 @@ const AppConfig = (props) => {
 
     useEffect(() => {
         applyScale();
-    }, [scale]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [scale]); 
 
     return (
         <>

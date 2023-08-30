@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { HashRouter, BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import Keycloak from 'keycloak-js';
 import { UsuarioService } from './service/UsuarioService';
@@ -47,20 +47,21 @@ initKeycloak()
         const usuario = keycloak.idTokenParsed.preferred_username;
         const usuarioUppercase = usuario.toUpperCase();
         const usuarioService = new UsuarioService();
-        console.log("datos del keycloak", keycloak);
+        //console.log("datos del keycloak",keycloak);
         usuarioService.PostUsuarioIngreso(usuarioUppercase)
             .then((usuarioingresado) => {
                 if (usuarioingresado != null) {
-                    console.log(usuarioingresado);
+                    //console.log(usuarioingresado);
                     usuarioService.GetMenuUsuarioIngreso(usuarioUppercase)
                         .then((userData) => {
-                            console.log(userData);
+                            //console.log(userData);
                             const root = ReactDOM.createRoot(document.getElementById('root'));
                             root.render(
+
                                 <React.StrictMode>
-                                    <BrowserRouter>
-                                        {userData && <App usuarioUppercase={usuarioUppercase} userData={userData} />}
-                                    </BrowserRouter>
+                                    <HashRouter>
+                                    {userData && <App usuarioUppercase={usuarioUppercase} userData={userData}/>}
+                                    </HashRouter>
                                 </React.StrictMode>
                             );
                         })
@@ -71,6 +72,7 @@ initKeycloak()
                     console.error('Error fetching user data:');
                     window.location.href = keycloakConfig.url + 'realms/' + keycloakConfig.realm + '/protocol/openid-connect/logout?redirect_uri=' + encodeURIComponent(window.location.origin);
                 }
+
             })
             .catch((error) => {
                 console.error('Error fetching user data:', error);

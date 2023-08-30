@@ -1,13 +1,6 @@
 import React from 'react';
-import { Button } from 'primereact/button';
-import { useNavigate } from 'react-router-dom';
 
 const NotFound = () => {
-    const navigate = useNavigate();
-
-    const goDashboard = () => {
-        navigate('/');
-    };
 
     return (
         <div className="pages-body notfound-page flex flex-column">

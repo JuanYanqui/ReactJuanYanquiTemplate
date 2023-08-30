@@ -31,7 +31,7 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
             const fechaFin = null;
             const usuario = "";
             categoriasdata.loadCategoriaCambio(codigoArticulo, descripcionArticulo, checkedValue, fechaInicio, fechaFin, usuario, currentPage, rowsPerPage).then((data) => {
-                console.log("coraldataaa", data)
+                //console.log("coraldataaa", data)
                 setDataCategoria(data);
                 setLoading(false);
             });
@@ -43,9 +43,9 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
                 const totalPages = Math.ceil(totalCount / pageSize);
                 setTotalRecords(response.rowCount);
                 setTotalPages(totalPages);
-                console.log("Total Datos:", response.rowCount);
-                console.log("Numero de datos por Pagina:", pageSize);
-                console.log("Total Paginas:", totalPages);
+                //console.log("Total Datos:", response.rowCount);
+                //console.log("Numero de datos por Pagina:", pageSize);
+                //console.log("Total Paginas:", totalPages);
                 setLoading(false);
             }
         };
@@ -205,7 +205,7 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
         const fechaFin = null;
         const usuario = "";
         categoriasdata.loadCategoriaCambio(codigoArticulo, descripcionArticulo, checkedValue, fechaInicio, fechaFin, usuario, currentPage, rowsPerPage).then((data) => {
-            console.log("coraldataaa", data)
+            //console.log("coraldataaa", data)
             setDataCategoria(data);
             setLoading(false);
         });
@@ -221,7 +221,7 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
 
     };
 
-    console.log(checkedValue);
+    //console.log(checkedValue);
     const handleCheckboxChange = (value) => {
         if (checkedValue === value) {
             setCheckedValue(null);
@@ -232,9 +232,9 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
 
 
     return (
-        <div class='layout-wrapper menu-layout-overlay'>
+        <div className='layout-wrapper menu-layout-overlay'>
             <div style={{ height: '15px' }}></div>
-            <div class='content-layout'>
+            <div className='content-layout'>
                 <form>
                     <div className="p-col-12">
                         <div >

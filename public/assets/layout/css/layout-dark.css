@@ -3766,7 +3766,7 @@ body .p-overlay-badge .p-badge {
   background: #D81B60;
 }
 .pages-body.notfound-page {
-  background: url("../images/pages/404-bg.jpg");
+  background: #f7f7f7;
   background-size: cover;
 }
 .pages-body.notfound-page .pages-panel .pages-header {

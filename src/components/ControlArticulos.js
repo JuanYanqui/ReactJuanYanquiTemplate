@@ -56,7 +56,6 @@ const ControlArticulos = ({ usuarioUppercase }) => {
             const response1 = await articulosdata.listarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, checked, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage, rowsPerPage);
             const response = await articulosdata.PaginacionlistarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, checked, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam);
             if (response) {
-                console.log(response1);
                 setDataArticulos(response1);
                 const pageSize = rowsPerPage;
                 const totalCount = response.rowCount;
@@ -106,7 +105,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                     <Column field="descripcion" header="Descripción" />
                     <Column field="precio" header="Precio" />
                     <Column field="unidadPedido" header="Unidad de Pedido" />
-                    <Column field="texto2" header="PRUEBA" />
+                    <Column field="texto2" header="Categoria Anterior" />
                     <Column field="texto3" header="Nivel 1" />
                     <Column field="texto4" header="Nivel 2" />
                     <Column field="texto5" header="Nivel 3" />
@@ -196,7 +195,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                 categoriasdata.guardarCambiosCategoria(cambiosData, usuarioParam)
                     .then((response) => {
                         if (response.data.status === 0) {
-                            console.log(response.data.message);
+                            //console.log(response.data.message);
                             setError(response.data.message);
                             setPosition('top');
                             setDialogVisibleError(true);
@@ -207,9 +206,9 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                             const objectData = JSON.parse(response.data.object);
                             setSelectedItems([]);
                             setDialogVisible(false);
-                            console.log("cambios", cambiosData)
-                            console.log("usuarioParam", usuarioParam)
-                            console.log(objectData);
+                            //console.log("cambios", cambiosData)
+                            //console.log("usuarioParam", usuarioParam)
+                            //console.log(objectData);
                             setVisible(false);
                             showSuccess();
                             return objectData;
@@ -289,9 +288,9 @@ const ControlArticulos = ({ usuarioUppercase }) => {
             const totalPages = Math.ceil(totalCount / pageSize);
             setTotalRecords(datas.rowCount);
             setTotalPages(totalPages);
-            console.log("Total Datos:", datas.rowCount);
-            console.log("Numero de datos por Pagina:", pageSize);
-            console.log("Total Paginas:", totalPages);
+            //console.log("Total Datos:", datas.rowCount);
+            //console.log("Numero de datos por Pagina:", pageSize);
+            //console.log("Total Paginas:", totalPages);
         });
     };
 
@@ -318,9 +317,9 @@ const ControlArticulos = ({ usuarioUppercase }) => {
 
 
     return (
-        <div class='layout-wrapper menu-layout-overlay'>
+        <div className='layout-wrapper menu-layout-overlay'>
             <div style={{ height: '15px' }}></div>
-            <div class='content-layout'>
+            <div className='content-layout'>
                 <form>
                     <div className="p-col-12">
                         <div >
