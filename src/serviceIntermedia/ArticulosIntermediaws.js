@@ -157,7 +157,7 @@ export class ArticulosIntermediaws {
             }
           })
           .then((response) => {
-            //console.log("actualizarCostosArticuloAll");
+            ////console.log("actualizarCostosArticuloAll");
             return null;
           })
           .catch((error) => {
@@ -334,7 +334,7 @@ export class ArticulosIntermediaws {
             }
           })
           .then((response) => {
-            //console.log("getTArticuloBarra",response);
+            ////console.log("getTArticuloBarra",response);
             const objectData = JSON.parse(response.data.object);
             return objectData;
           })
@@ -370,7 +370,7 @@ export class ArticulosIntermediaws {
             }
           })
           .then((response) => {
-            //console.log(response);
+            ////console.log(response);
             const objectData = JSON.parse(response.data.object);
             return objectData;
           })
@@ -407,7 +407,7 @@ export class ArticulosIntermediaws {
             }
           })
           .then((response) => {
-            //console.log(response);
+            ////console.log(response);
             const objectData = JSON.parse(response.data.object);
             return objectData;
           })
@@ -566,7 +566,7 @@ export class ArticulosIntermediaws {
 
   listarArticulosListaFull(codigoParam, presentacionParam, descripcionParam, proveedorParam, barraParam, soloActivosParam, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam,currentPage,rowsPerPage) {
     const ws_nombre = "INTERMEDIAWS_LISTAR_ARTICULOS_LISTA_FULL";
-    //console.log("hola",currentPage);
+    ////console.log("hola",currentPage);
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
@@ -606,9 +606,9 @@ export class ArticulosIntermediaws {
             }
           })
           .then((response) => {
-           // console.log("listarArticulosListaFull", response);
+           // //console.log("listarArticulosListaFull", response);
             const objectData = JSON.parse(response.data.object);
-           //console.log(objectData);
+           ////console.log(objectData);
             return objectData;
           })
           .catch((error) => {
@@ -663,9 +663,9 @@ export class ArticulosIntermediaws {
             }
           })
           .then((response) => {
-            //console.log("listarArticulosListaFull", response);
+            ////console.log("listarArticulosListaFull", response);
             const objectData = JSON.parse(response.data.object);
-            //console.log(objectData);
+            ////console.log(objectData);
             return objectData;
           })
           .catch((error) => {
@@ -709,7 +709,7 @@ export class ArticulosIntermediaws {
             }
           })
           .then((response) => {
-            //console.log("listarArticulosPrecio", response);
+            ////console.log("listarArticulosPrecio", response);
             const objectData = JSON.parse(response.data.object);
             return objectData;
           })
@@ -759,7 +759,7 @@ export class ArticulosIntermediaws {
             }
           })
           .then((response) => {
-            //console.log("listarArticulosPrecioFull",response);
+            ////console.log("listarArticulosPrecioFull",response);
             const objectData = JSON.parse(response.data.object);
             return objectData;
           })
@@ -848,7 +848,7 @@ export class ArticulosIntermediaws {
             }
           })
           .then((response) => {
-            //console.log("listarArticulosSolicitudPedFull", response);
+            ////console.log("listarArticulosSolicitudPedFull", response);
             const objectData = JSON.parse(response.data.object);
             return objectData;
           })
@@ -918,7 +918,7 @@ export class ArticulosIntermediaws {
             }
           })
           .then((response) => {
-            //console.log(response);
+            ////console.log(response);
             const objectData = JSON.parse(response.data.object);
             return objectData;
           })
@@ -1076,7 +1076,7 @@ export class ArticulosIntermediaws {
             }
           })
           .then((response) => {
-            //console.log("obtenerArticuloCaja",response);
+            ////console.log("obtenerArticuloCaja",response);
             const objectData = JSON.parse(response.data.object);
             return objectData;
           })

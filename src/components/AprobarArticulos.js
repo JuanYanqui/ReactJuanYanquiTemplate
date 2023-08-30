@@ -31,7 +31,7 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
             const fechaFin = null;
             const usuario = "";
             categoriasdata.loadCategoriaCambio(codigoArticulo, descripcionArticulo, checkedValue, fechaInicio, fechaFin, usuario, currentPage, rowsPerPage).then((data) => {
-                //console.log("coraldataaa", data)
+                ////console.log("coraldataaa", data)
                 setDataCategoria(data);
                 setLoading(false);
             });
@@ -43,9 +43,9 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
                 const totalPages = Math.ceil(totalCount / pageSize);
                 setTotalRecords(response.rowCount);
                 setTotalPages(totalPages);
-                //console.log("Total Datos:", response.rowCount);
-                //console.log("Numero de datos por Pagina:", pageSize);
-                //console.log("Total Paginas:", totalPages);
+                ////console.log("Total Datos:", response.rowCount);
+                ////console.log("Numero de datos por Pagina:", pageSize);
+                ////console.log("Total Paginas:", totalPages);
                 setLoading(false);
             }
         };
@@ -97,7 +97,8 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
             return "";
         };
 
-
+        const startRecord = currentPage * rowsPerPage + 1;
+        const endRecord = Math.min((currentPage + 1) * rowsPerPage, totalRecords);
         return (
             <div>
                 <DataTable value={dataar}
@@ -109,7 +110,7 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
                     rowsPerPageOptions={[5, 10, 25]}
                     paginatorPosition="both"
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
-                    currentPageReportTemplate={`Página {currentPage} de {totalPages}`}
+                    currentPageReportTemplate={`Registros ${startRecord} - ${endRecord} de {totalRecords}`}
                 >
                     <Column field="cmbId" header="CMBID" />
                     <Column field="codigo" header="Código" />
@@ -149,22 +150,22 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
         const cmbIdParam = selectedCode;
         const nuevoEstadoParam = estadoSelecionado;
         const usuarioParam = usuarioUppercase;
-        console.log("cmdi", cmbIdParam);
-        console.log("nuevo estado", nuevoEstadoParam);
-        console.log("usuario", usuarioParam);
+        //console.log("cmdi", cmbIdParam);
+        //console.log("nuevo estado", nuevoEstadoParam);
+        //console.log("usuario", usuarioParam);
         categoriasdata.updateEstadoCambioCategoria(cmbIdParam, nuevoEstadoParam, usuarioParam).then((response) => {
             if (response.data.status === 0) {
-                console.log(response.data.message);
+                //console.log(response.data.message);
                 setError(response.data.message);
                 setPosition('top');
                 setDialogVisibleError(true);
                 return response.data.message;
             } else {
 
-                console.log("status", response.data.status);
+                //console.log("status", response.data.status);
                 const objectData = JSON.parse(response.data.object);
                 setVisible(false);
-                console.log(response);
+                //console.log(response);
                 showSuccess();
                 cargaDatos();
 
@@ -200,12 +201,12 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
 
 
     const cargaDatos = () => {
-        console.log("entro")
+        //console.log("entro")
         const fechaInicio = null;
         const fechaFin = null;
         const usuario = "";
         categoriasdata.loadCategoriaCambio(codigoArticulo, descripcionArticulo, checkedValue, fechaInicio, fechaFin, usuario, currentPage, rowsPerPage).then((data) => {
-            //console.log("coraldataaa", data)
+            ////console.log("coraldataaa", data)
             setDataCategoria(data);
             setLoading(false);
         });
@@ -221,7 +222,7 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
 
     };
 
-    //console.log(checkedValue);
+    ////console.log(checkedValue);
     const handleCheckboxChange = (value) => {
         if (checkedValue === value) {
             setCheckedValue(null);

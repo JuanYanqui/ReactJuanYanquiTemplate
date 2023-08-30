@@ -62,13 +62,13 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                 const totalPages = Math.ceil(totalCount / pageSize);
                 setTotalRecords(response.rowCount);
                 setTotalPages(totalPages);
-                //console.log("Total Datos:", response.rowCount);
-                //console.log("Numero de datos por Pagina:", pageSize);
-                //console.log("Total Paginas:", totalPages);
+                ////console.log("Total Datos:", response.rowCount);
+                ////console.log("Numero de datos por Pagina:", pageSize);
+                ////console.log("Total Paginas:", totalPages);
                 setLoading(false);
             }
             categoriasdata.listarCategoriasCoralVista(codigoCategoria, descripcionCategoria, selectedCity).then((data) => {
-                // console.log("coraldataaa", data)
+                // //console.log("coraldataaa", data)
                 setDataCategoria(data);
                 setLoading(false);
             });
@@ -82,7 +82,8 @@ const ControlArticulos = ({ usuarioUppercase }) => {
         setRowsPerPage(event.rows);
         setCurrentPage(newPage);
     };
-
+    const startRecord = currentPage * rowsPerPage + 1;
+    const endRecord = Math.min((currentPage + 1) * rowsPerPage, totalRecords);
     const DataTablaar = ({ dataar }) => {
         return (
             <div>
@@ -98,7 +99,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                     rowsPerPageOptions={[5, 10, 25]}
                     paginatorPosition="both"
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
-                    currentPageReportTemplate={`Página {currentPage} de {totalPages}`}
+                    currentPageReportTemplate={`Registros ${startRecord} - ${endRecord} de {totalRecords}`}
                 >
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
                     <Column field="codigo" header="Código" />
@@ -195,20 +196,20 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                 categoriasdata.guardarCambiosCategoria(cambiosData, usuarioParam)
                     .then((response) => {
                         if (response.data.status === 0) {
-                            //console.log(response.data.message);
+                            ////console.log(response.data.message);
                             setError(response.data.message);
                             setPosition('top');
                             setDialogVisibleError(true);
                             return response.data.message;
                         } else {
 
-                            console.log(response.data.status);
+                            //console.log(response.data.status);
                             const objectData = JSON.parse(response.data.object);
                             setSelectedItems([]);
                             setDialogVisible(false);
-                            //console.log("cambios", cambiosData)
-                            //console.log("usuarioParam", usuarioParam)
-                            //console.log(objectData);
+                            ////console.log("cambios", cambiosData)
+                            ////console.log("usuarioParam", usuarioParam)
+                            ////console.log(objectData);
                             setVisible(false);
                             showSuccess();
                             return objectData;
@@ -216,7 +217,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                         }
                     });
 
-                //console.log(selectedItems);
+                ////console.log(selectedItems);
             } else {
                 setVisible(false);
                 showErrorNivel();
@@ -288,9 +289,9 @@ const ControlArticulos = ({ usuarioUppercase }) => {
             const totalPages = Math.ceil(totalCount / pageSize);
             setTotalRecords(datas.rowCount);
             setTotalPages(totalPages);
-            //console.log("Total Datos:", datas.rowCount);
-            //console.log("Numero de datos por Pagina:", pageSize);
-            //console.log("Total Paginas:", totalPages);
+            ////console.log("Total Datos:", datas.rowCount);
+            ////console.log("Numero de datos por Pagina:", pageSize);
+            ////console.log("Total Paginas:", totalPages);
         });
     };
 

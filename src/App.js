@@ -56,10 +56,10 @@ const App = ({ userData, usuarioUppercase }) => {
     const redirectToExternalUrl = (url) => {
         if (url) {
             if (url.startsWith('http://') || url.startsWith('https://')) {
-                console.log('External URL:', url);
+                //console.log('External URL:', url);
                 window.location.replace(url);
             } else {
-                console.log('Internal URL:', url);
+                //console.log('Internal URL:', url);
                 navigate(url);
             }
         }
@@ -131,7 +131,7 @@ const App = ({ userData, usuarioUppercase }) => {
     const onMenuItemClick = (event, item) => {
         if (!item.items) {
 
-            console.log('Clicked menu item:', item.to);
+            //console.log('Clicked menu item:', item.to);
             hideOverlayMenu();
         } else {
             event.preventDefault();
@@ -140,7 +140,7 @@ const App = ({ userData, usuarioUppercase }) => {
 
         if (item.to) {
             const url = item.to;
-            console.log('URL:', url);
+            //console.log('URL:', url);
 
                 usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datan) => {
                     datan.object.forEach((item) => {
@@ -426,8 +426,8 @@ const App = ({ userData, usuarioUppercase }) => {
         const verificarYRedirigir = async () => {
             const path = window.location.hash;
             const cleanPath = path.replace(/#/g, '');
-            console.log(cleanPath);
-           /*usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
+            //console.log(cleanPath);
+           usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
                 const datanueva = datas
                 datanueva.object.forEach((item) => {
                     const existingUrls = datanueva.object.map(item => item.url);
@@ -453,7 +453,7 @@ const App = ({ userData, usuarioUppercase }) => {
 
 
                 });
-            });*/
+            });
         };
 
         verificarYRedirigir();
@@ -481,13 +481,6 @@ const App = ({ userData, usuarioUppercase }) => {
                     nombre: "Aprobar Artículos",
                     descripcion: "Descripción del submenu 2",
                     url: "/AprobarArticulos",
-                    icono: "fa fa-check"
-                },
-                {
-                    menId:1002,
-                    nombre:"Aprobado",
-                    descripcion: "Descri",
-                    url:"/apro",
                     icono: "fa fa-check"
                 }
             ]

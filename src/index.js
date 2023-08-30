@@ -47,14 +47,14 @@ initKeycloak()
         const usuario = keycloak.idTokenParsed.preferred_username;
         const usuarioUppercase = usuario.toUpperCase();
         const usuarioService = new UsuarioService();
-        //console.log("datos del keycloak",keycloak);
+        ////console.log("datos del keycloak",keycloak);
         usuarioService.PostUsuarioIngreso(usuarioUppercase)
             .then((usuarioingresado) => {
                 if (usuarioingresado != null) {
-                    //console.log(usuarioingresado);
+                    ////console.log(usuarioingresado);
                     usuarioService.GetMenuUsuarioIngreso(usuarioUppercase)
                         .then((userData) => {
-                            //console.log(userData);
+                            ////console.log(userData);
                             const root = ReactDOM.createRoot(document.getElementById('root'));
                             root.render(
 
