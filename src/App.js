@@ -142,25 +142,25 @@ const App = ({ userData, usuarioUppercase }) => {
             const url = item.to;
             //console.log('URL:', url);
 
-                usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datan) => {
-                    datan.object.forEach((item) => {
-                        const existingUrls = datan.object.map(item => item.url);
-                        const existingUrlsHijos = datan.object.flatMap(item => {
-                            if (item.hijos && Array.isArray(item.hijos)) {
-                                return item.hijos.map(hijo => hijo.url);
-                            }
-                            return [];
-                        });
-
-                        if (existingUrls.includes(url) || existingUrlsHijos.includes(url)) {
-                            redirectToExternalUrl(url);
-                        } else {
-                 
-                            navigate("/NotFound");
+            usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datan) => {
+                datan.object.forEach((item) => {
+                    const existingUrls = datan.object.map(item => item.url);
+                    const existingUrlsHijos = datan.object.flatMap(item => {
+                        if (item.hijos && Array.isArray(item.hijos)) {
+                            return item.hijos.map(hijo => hijo.url);
                         }
-
+                        return [];
                     });
+
+                    if (existingUrls.includes(url) || existingUrlsHijos.includes(url)) {
+                        redirectToExternalUrl(url);
+                    } else {
+
+                        navigate("/rsap/NotFound");
+                    }
+
                 });
+            });
 
         }
     };
@@ -186,9 +186,9 @@ const App = ({ userData, usuarioUppercase }) => {
         const appLogoLink = document.getElementById('app-logo');
 
         if (topbarTheme === 'white' || topbarTheme === 'yellow' || topbarTheme === 'amber' || topbarTheme === 'orange' || topbarTheme === 'lime') {
-            appLogoLink.src = 'assets/layout/images/web_logo_header.png';
+            appLogoLink.src = '../assets/layout/images/web_logo_header.png';
         } else {
-            appLogoLink.src = 'assets/layout/images/web_logo_header.png';
+            appLogoLink.src = '../assets/layout/images/web_logo_header.png';
         }
     }, [topbarTheme]);
 
@@ -213,7 +213,7 @@ const App = ({ userData, usuarioUppercase }) => {
         }
 
         const layoutLink = document.getElementById('layout-css');
-        const layoutHref = 'assets/layout/css/layout-' + mode + '.css';
+        const layoutHref = '../assets/layout/css/layout-' + mode + '.css';
         replaceLink(layoutLink, layoutHref);
 
         const themeLink = document.getElementById('theme-css');
@@ -419,41 +419,48 @@ const App = ({ userData, usuarioUppercase }) => {
 
         setFilteredMenu(filteredItems);
     };
-
+    const [capturedPart, setcapturedPart] = useState();
 
 
     useEffect(() => {
         const verificarYRedirigir = async () => {
-            const path = window.location.hash;
-            const cleanPath = path.replace(/#/g, '');
-            //console.log(cleanPath);
-           usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
-                const datanueva = datas
-                datanueva.object.forEach((item) => {
-                    const existingUrls = datanueva.object.map(item => item.url);
-                    const existingUrlsHijos = datanueva.object.flatMap(item => {
-                        if (item.hijos && Array.isArray(item.hijos)) {
-                            return item.hijos.map(hijo => hijo.url);
-                        }
-                        return [];
-                    });
-
-                    const controlArticulosExists = existingUrls.includes(cleanPath) || existingUrlsHijos.includes(cleanPath);
-                    const aprobarArticulosExists = existingUrls.includes(cleanPath) || existingUrlsHijos.includes(cleanPath);
-
-                    if (controlArticulosExists && aprobarArticulosExists) {
-
-                    } else if (controlArticulosExists) {
-                        navigate(cleanPath);
-                    } else if (aprobarArticulosExists) {
-                        navigate(cleanPath);
-                    } else {
-                        navigate("/NotFound");
-                    }
-
-
-                });
-            });
+            const url = window.location.href;
+            const matchResult = url.match(/\/rsap\/(.+)/);
+            
+            if (matchResult) {
+                const valor = '/' + matchResult[1];
+                setcapturedPart(valor);
+                //console.log(capturedPart);
+            } else {
+                //console.log("La URL no coincide con el patrón esperado.");
+            }
+            usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
+                 const datanueva = datas
+                 datanueva.object.forEach((item) => {
+                     const existingUrls = datanueva.object.map(item => item.url);
+                     const existingUrlsHijos = datanueva.object.flatMap(item => {
+                         if (item.hijos && Array.isArray(item.hijos)) {
+                             return item.hijos.map(hijo => hijo.url);
+                         }
+                         return [];
+                     });
+ 
+                     const controlArticulosExists = existingUrls.includes(capturedPart) || existingUrlsHijos.includes(capturedPart);
+                     const aprobarArticulosExists = existingUrls.includes(capturedPart) || existingUrlsHijos.includes(capturedPart);
+ 
+                     if (controlArticulosExists && aprobarArticulosExists) {
+ 
+                     } else if (controlArticulosExists) {
+                         navigate('/rsap'+capturedPart);
+                     } else if (aprobarArticulosExists) {
+                         navigate('/rsap'+capturedPart);
+                     } else {
+                         navigate("/rsap/NotFound");
+                     }
+ 
+ 
+                 });
+             });
         };
 
         verificarYRedirigir();

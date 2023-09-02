@@ -9,6 +9,7 @@ import { Toast } from 'primereact/toast';
 import { CategoriasCoralIntermediaws } from '../serviceIntermedia/CategoriasCoralIntermediaws';
 import { ArticulosIntermediaws } from '../serviceIntermedia/ArticulosIntermediaws';
 import { Checkbox } from 'primereact/checkbox';
+import "../assets/theme/indigo/theme-light.css";
 const ControlArticulos = ({ usuarioUppercase }) => {
     const [isDialogVisible, setDialogVisible] = useState(false);
     const [visible, setVisible] = useState(false);

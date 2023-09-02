@@ -7,6 +7,7 @@ import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
 import { CategoriasCoralIntermediaws } from '../serviceIntermedia/CategoriasCoralIntermediaws';
 import { Checkbox } from 'primereact/checkbox';
+import "../assets/theme/indigo/theme-light.css";
 const AprobarArticulos = ({ usuarioUppercase }) => {
     const [visible, setVisible] = useState(false);
     const [position, setPosition] = useState('center');

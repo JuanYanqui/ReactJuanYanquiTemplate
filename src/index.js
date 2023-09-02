@@ -1,10 +1,11 @@
+
+import AppWrapper from './AppWrapper';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import Keycloak from 'keycloak-js';
 import { UsuarioService } from './service/UsuarioService';
-import App from './App';
 
 const keycloakConfig = {
     realm: "gocorp",
@@ -57,11 +58,10 @@ initKeycloak()
                             ////console.log(userData);
                             const root = ReactDOM.createRoot(document.getElementById('root'));
                             root.render(
-
-                                <React.StrictMode>
-                                    <HashRouter>
-                                    {userData && <App usuarioUppercase={usuarioUppercase} userData={userData}/>}
-                                    </HashRouter>
+                                <React.StrictMode basename='/rsap'>
+                                    <BrowserRouter>
+                                        <AppWrapper usuarioUppercase={usuarioUppercase} userData={userData}/>
+                                    </BrowserRouter>
                                 </React.StrictMode>
                             );
                         })
