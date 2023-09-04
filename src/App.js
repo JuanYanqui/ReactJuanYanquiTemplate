@@ -142,25 +142,25 @@ const App = ({ userData, usuarioUppercase }) => {
             const url = item.to;
             //console.log('URL:', url);
 
-            usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datan) => {
-                datan.object.forEach((item) => {
-                    const existingUrls = datan.object.map(item => item.url);
-                    const existingUrlsHijos = datan.object.flatMap(item => {
-                        if (item.hijos && Array.isArray(item.hijos)) {
-                            return item.hijos.map(hijo => hijo.url);
+                usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datan) => {
+                    datan.object.forEach((item) => {
+                        const existingUrls = datan.object.map(item => item.url);
+                        const existingUrlsHijos = datan.object.flatMap(item => {
+                            if (item.hijos && Array.isArray(item.hijos)) {
+                                return item.hijos.map(hijo => hijo.url);
+                            }
+                            return [];
+                        });
+
+                        if (existingUrls.includes('/rsap/'+url) || existingUrlsHijos.includes('/rsap/'+url)) {
+                            redirectToExternalUrl('/rsap/'+url);
+                        } else {
+                 
+                            navigate("/rsap/NotFound");
                         }
-                        return [];
+
                     });
-
-                    if (existingUrls.includes(url) || existingUrlsHijos.includes(url)) {
-                        redirectToExternalUrl(url);
-                    } else {
-
-                        navigate("/rsap/NotFound");
-                    }
-
                 });
-            });
 
         }
     };
@@ -186,9 +186,9 @@ const App = ({ userData, usuarioUppercase }) => {
         const appLogoLink = document.getElementById('app-logo');
 
         if (topbarTheme === 'white' || topbarTheme === 'yellow' || topbarTheme === 'amber' || topbarTheme === 'orange' || topbarTheme === 'lime') {
-            appLogoLink.src = '../assets/layout/images/web_logo_header.png';
+            appLogoLink.src = 'assets/layout/images/web_logo_header.png';
         } else {
-            appLogoLink.src = '../assets/layout/images/web_logo_header.png';
+            appLogoLink.src = 'assets/layout/images/web_logo_header.png';
         }
     }, [topbarTheme]);
 
@@ -213,7 +213,7 @@ const App = ({ userData, usuarioUppercase }) => {
         }
 
         const layoutLink = document.getElementById('layout-css');
-        const layoutHref = '../assets/layout/css/layout-' + mode + '.css';
+        const layoutHref = 'assets/layout/css/layout-' + mode + '.css';
         replaceLink(layoutLink, layoutHref);
 
         const themeLink = document.getElementById('theme-css');
@@ -419,9 +419,9 @@ const App = ({ userData, usuarioUppercase }) => {
 
         setFilteredMenu(filteredItems);
     };
+
+
     const [capturedPart, setcapturedPart] = useState();
-
-
     useEffect(() => {
         const verificarYRedirigir = async () => {
             const url = window.location.href;
@@ -466,6 +466,7 @@ const App = ({ userData, usuarioUppercase }) => {
         verificarYRedirigir();
         menuextra();
     }, [navigate, userData.object, usuarioUppercase]);
+
 
 
     const menuextra = () => {

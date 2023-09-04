@@ -1,17 +1,17 @@
-
-import AppWrapper from './AppWrapper';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, HashRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import Keycloak from 'keycloak-js';
 import { UsuarioService } from './service/UsuarioService';
+import App from './App';
+import AppWrapper from './AppWrapper';
 
 const keycloakConfig = {
     realm: "gocorp",
     url: "https://goauth.gerardoortiz.com/auth/",
     clientId: "react-test",
-    port: 0,
+    redirectUri: "https://gerardoortiz.com/rsap/", 
     onLoad: 'login-required',
 };
 
@@ -51,16 +51,16 @@ initKeycloak()
         ////console.log("datos del keycloak",keycloak);
         usuarioService.PostUsuarioIngreso(usuarioUppercase)
             .then((usuarioingresado) => {
-                if (usuarioingresado != null) {
                     ////console.log(usuarioingresado);
                     usuarioService.GetMenuUsuarioIngreso(usuarioUppercase)
                         .then((userData) => {
-                            ////console.log(userData);
+                            console.log(usuarioingresado);
                             const root = ReactDOM.createRoot(document.getElementById('root'));
                             root.render(
-                                <React.StrictMode basename='/rsap'>
+
+                                <React.StrictMode>
                                     <BrowserRouter>
-                                        <AppWrapper usuarioUppercase={usuarioUppercase} userData={userData}/>
+                                    <AppWrapper  usuarioUppercase={usuarioUppercase} userData={userData}/>
                                     </BrowserRouter>
                                 </React.StrictMode>
                             );
@@ -68,11 +68,7 @@ initKeycloak()
                         .catch((error) => {
                             console.error('Error fetching user data:', error);
                         });
-                } else {
-                    console.error('Error fetching user data:');
-                    window.location.href = keycloakConfig.url + 'realms/' + keycloakConfig.realm + '/protocol/openid-connect/logout?redirect_uri=' + encodeURIComponent(window.location.origin);
-                }
-
+                
             })
             .catch((error) => {
                 console.error('Error fetching user data:', error);

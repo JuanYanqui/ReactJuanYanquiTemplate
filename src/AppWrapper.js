@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation ,Navigate} from 'react-router-dom';
 import App from './App';
-import AprobarArticulos from './components/AprobarArticulos';
 import ControlArticulos from './components/ControlArticulos';
+import AprobarArticulos from './components/AprobarArticulos';
 import NotFound from './pages/NotFound';
-const AppWrapper = ({userData,usuarioUppercase}) => {
+
+const AppWrapper = ({userData, usuarioUppercase}) => {
     let location = useLocation();
 
     useEffect(() => {
@@ -13,13 +14,13 @@ const AppWrapper = ({userData,usuarioUppercase}) => {
 
     return (
         <Routes>
-        <Route path="/rsap/*" element={<App usuarioUppercase={usuarioUppercase} userData={userData}/>}>
-        <Route path='AprobarArticulos' element={<AprobarArticulos />} />
-        <Route path='ControlArticulos' element={<ControlArticulos />} />
-        <Route path='NotFound' element={<NotFound />} />
-        </Route>
-        
-    </Routes>
+            <Route path="/" element={<Navigate to="/rsap/" />} />
+            <Route path="/rsap/*" element={<App  usuarioUppercase={usuarioUppercase} userData={userData}/>} >
+            <Route path="ControlArticulos" element={<ControlArticulos />} />
+            <Route path="AprobarArticulos" element={<AprobarArticulos />} />
+            <Route path="NotFound" element={<NotFound />} />
+            </Route>
+        </Routes>
     );
 };
 

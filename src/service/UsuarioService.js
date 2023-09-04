@@ -8,7 +8,7 @@ export class UsuarioService {
   }
 
   GetMenuUsuarioIngreso(usuario) {
-    const url = `http://wsgo.gerardoortiz.com/ApiJavadb/menuUsuario/menuAllUser?userId=${usuario}&app=APP`;
+    const url = `https://wsgo.gerardoortiz.com/ApiJavadb/menuUsuario/menuAllUser?userId=${usuario}&app=APP`;
     return axios.get(url)
       .then((res) => {
         const userData = res.data;
