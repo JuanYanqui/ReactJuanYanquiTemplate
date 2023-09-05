@@ -14,7 +14,7 @@ export class CategoriasCoralIntermediaws {
         return this.pathService.getUrl(asignacion)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "https://192.168.19.117:8080";
+                const nuevaSerUrl = "http://192.168.19.117:8080";
 
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
@@ -54,7 +54,7 @@ export class CategoriasCoralIntermediaws {
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "https://192.168.19.117:8080";
+                const nuevaSerUrl = "http://192.168.19.117:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
@@ -88,7 +88,7 @@ export class CategoriasCoralIntermediaws {
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "https://192.168.19.117:8080";
+                const nuevaSerUrl = "http://192.168.19.117:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
@@ -122,7 +122,7 @@ export class CategoriasCoralIntermediaws {
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "https://192.168.19.117:8080";
+                const nuevaSerUrl = "http://192.168.19.117:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
@@ -160,7 +160,7 @@ export class CategoriasCoralIntermediaws {
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "https://192.168.19.117:8080";
+                const nuevaSerUrl = "http://192.168.19.117:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const paginationInfo = {
                     count: false,
@@ -207,7 +207,7 @@ export class CategoriasCoralIntermediaws {
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "https://192.168.19.117:8080";
+                const nuevaSerUrl = "http://192.168.19.117:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const paginationInfo = {
                     count: true,
@@ -254,7 +254,7 @@ export class CategoriasCoralIntermediaws {
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "https://192.168.19.117:8080";
+                const nuevaSerUrl = "http://192.168.19.117:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
@@ -288,7 +288,7 @@ export class CategoriasCoralIntermediaws {
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "https://192.168.19.117:8080";
+                const nuevaSerUrl = "http://192.168.19.117:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({

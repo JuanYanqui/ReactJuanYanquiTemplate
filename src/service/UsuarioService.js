@@ -22,7 +22,7 @@ export class UsuarioService {
 
 
   PostUsuarioIngreso(usuario) {
-    const url = 'http://192.168.200.24:8080/javaws/ws/usuarios/getUsuario';
+    const url = 'https://wsback.gerardoortiz.com:8443/javaws/ws/usuarios/getUsuario';
     const requestData = {
       object: JSON.stringify({
         usuario: usuario

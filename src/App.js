@@ -56,14 +56,16 @@ const App = ({ userData, usuarioUppercase }) => {
     const redirectToExternalUrl = (url) => {
         if (url) {
             if (url.startsWith('http://') || url.startsWith('https://')) {
-                //console.log('External URL:', url);
-                window.location.replace(url);
+                // Abre la URL en una nueva ventana
+                window.open(url, '_blank');
             } else {
                 //console.log('Internal URL:', url);
                 navigate(url);
             }
         }
     };
+
+    
     const generateMenuFromUserData = (userData) => {
         if (!userData || !userData.object) {
             return [];
@@ -140,10 +142,12 @@ const App = ({ userData, usuarioUppercase }) => {
 
         if (item.to) {
             const url = item.to;
-            //console.log('URL:', url);
-
+            console.log('URL:', url);
+            const url2 = url.trim(); 
+            if (url2.includes("/rsap")) {
                 usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datan) => {
                     datan.object.forEach((item) => {
+                        const currentUrl = url;
                         const existingUrls = datan.object.map(item => item.url);
                         const existingUrlsHijos = datan.object.flatMap(item => {
                             if (item.hijos && Array.isArray(item.hijos)) {
@@ -152,18 +156,24 @@ const App = ({ userData, usuarioUppercase }) => {
                             return [];
                         });
 
-                        if (existingUrls.includes('/rsap/'+url) || existingUrlsHijos.includes('/rsap/'+url)) {
-                            redirectToExternalUrl('/rsap/'+url);
+
+                        if (existingUrls.some(url => url.includes(currentUrl)) || existingUrlsHijos.some(url => url.includes(currentUrl))) {
+                            redirectToExternalUrl(url);
                         } else {
-                 
+
                             navigate("/rsap/NotFound");
                         }
 
                     });
                 });
+            } else {
+                redirectToExternalUrl(url);
+            }
+
 
         }
     };
+
 
 
     useEffect(() => {
@@ -425,42 +435,39 @@ const App = ({ userData, usuarioUppercase }) => {
     useEffect(() => {
         const verificarYRedirigir = async () => {
             const url = window.location.href;
-            const matchResult = url.match(/\/rsap\/(.+)/);
+            const parts = url.split('/');
+            const lastPart = parts.pop();
+            const valorurl= '/'+lastPart;
+            //console.log(valorurl);
             
-            if (matchResult) {
-                const valor = '/' + matchResult[1];
-                setcapturedPart(valor);
-                //console.log(capturedPart);
-            } else {
-                //console.log("La URL no coincide con el patrón esperado.");
-            }
             usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
-                 const datanueva = datas
-                 datanueva.object.forEach((item) => {
-                     const existingUrls = datanueva.object.map(item => item.url);
-                     const existingUrlsHijos = datanueva.object.flatMap(item => {
-                         if (item.hijos && Array.isArray(item.hijos)) {
-                             return item.hijos.map(hijo => hijo.url);
-                         }
-                         return [];
-                     });
- 
-                     const controlArticulosExists = existingUrls.includes(capturedPart) || existingUrlsHijos.includes(capturedPart);
-                     const aprobarArticulosExists = existingUrls.includes(capturedPart) || existingUrlsHijos.includes(capturedPart);
- 
-                     if (controlArticulosExists && aprobarArticulosExists) {
- 
-                     } else if (controlArticulosExists) {
-                         navigate('/rsap'+capturedPart);
-                     } else if (aprobarArticulosExists) {
-                         navigate('/rsap'+capturedPart);
-                     } else {
-                         navigate("/rsap/NotFound");
-                     }
- 
- 
-                 });
-             });
+                const datanueva = datas
+                datanueva.object.forEach((item) => {
+                    const existingUrls = datanueva.object.map(item => item.url);
+                    const existingUrlsHijos = datanueva.object.flatMap(item => {
+                        if (item.hijos && Array.isArray(item.hijos)) {
+                            return item.hijos.map(hijo => hijo.url);
+                        }
+                        return [];
+                    });
+         
+
+                    const controlArticulosExists = existingUrls.some(url => url.includes(valorurl)) || existingUrlsHijos.some(url => url.includes(valorurl));
+                    const aprobarArticulosExists = existingUrls.some(url => url.includes(valorurl)) || existingUrlsHijos.some(url => url.includes(valorurl));
+
+                    if (controlArticulosExists && aprobarArticulosExists) {
+
+                    } else if (controlArticulosExists) {
+                        navigate('/rsap' + valorurl);
+                    } else if (aprobarArticulosExists) {
+                        navigate('/rsap' + valorurl);
+                    } else {
+                        navigate("/rsap/NotFound");
+                    }
+
+
+                });
+            });
         };
 
         verificarYRedirigir();
@@ -481,14 +488,14 @@ const App = ({ userData, usuarioUppercase }) => {
                     menId: 1000,
                     nombre: "Control de Artículos",
                     descripcion: "Descripción del submenu 1",
-                    url: "/ControlArticulos",
+                    url: "https://gerardoortiz.com/rsap/ControlArticulos",
                     icono: "fa fa-pencil"
                 },
                 {
                     menId: 1001,
                     nombre: "Aprobar Artículos",
                     descripcion: "Descripción del submenu 2",
-                    url: "/AprobarArticulos",
+                    url: "https://gerardoortiz.com/rsap/AprobarArticulos",
                     icono: "fa fa-check"
                 }
             ]
