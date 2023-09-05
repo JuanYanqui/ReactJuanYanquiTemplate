@@ -17,6 +17,7 @@ import AprobarArticulos from './components/AprobarArticulos';
 import ControlArticulos from './components/ControlArticulos';
 import { UsuarioService } from './service/UsuarioService';
 import NotFound from './pages/NotFound';
+import EstadosCuenta from './components/EstadosCuenta';
 
 export const RTLContext = React.createContext();
 
@@ -65,7 +66,7 @@ const App = ({ userData, usuarioUppercase }) => {
         }
     };
 
-    
+
     const generateMenuFromUserData = (userData) => {
         if (!userData || !userData.object) {
             return [];
@@ -142,8 +143,8 @@ const App = ({ userData, usuarioUppercase }) => {
 
         if (item.to) {
             const url = item.to;
-            console.log('URL:', url);
-            const url2 = url.trim(); 
+            //console.log('URL:', url);
+            const url2 = url.trim();
             if (url2.includes("/rsap")) {
                 usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datan) => {
                     datan.object.forEach((item) => {
@@ -155,9 +156,7 @@ const App = ({ userData, usuarioUppercase }) => {
                             }
                             return [];
                         });
-
-
-                        if (existingUrls.some(url => url.includes(currentUrl)) || existingUrlsHijos.some(url => url.includes(currentUrl))) {
+                        if (existingUrls.includes(url) || existingUrlsHijos.includes(url)) {
                             redirectToExternalUrl(url);
                         } else {
 
@@ -431,18 +430,19 @@ const App = ({ userData, usuarioUppercase }) => {
     };
 
 
-    const [capturedPart, setcapturedPart] = useState();
+
     useEffect(() => {
         const verificarYRedirigir = async () => {
             const url = window.location.href;
-            const parts = url.split('/');
-            const lastPart = parts.pop();
-            const valorurl= '/'+lastPart;
+            //const parts = url.split('/');
+            //const lastPart = parts.pop();
+            //const valorurl = '/' + lastPart;
             //console.log(valorurl);
-            
             usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
+                //console.log("entro");
                 const datanueva = datas
-                datanueva.object.forEach((item) => {
+                //console.log(datanueva);
+                /*datanueva.object.forEach((item) => {
                     const existingUrls = datanueva.object.map(item => item.url);
                     const existingUrlsHijos = datanueva.object.flatMap(item => {
                         if (item.hijos && Array.isArray(item.hijos)) {
@@ -450,33 +450,32 @@ const App = ({ userData, usuarioUppercase }) => {
                         }
                         return [];
                     });
-         
 
-                    const controlArticulosExists = existingUrls.some(url => url.includes(valorurl)) || existingUrlsHijos.some(url => url.includes(valorurl));
-                    const aprobarArticulosExists = existingUrls.some(url => url.includes(valorurl)) || existingUrlsHijos.some(url => url.includes(valorurl));
+                    const controlArticulosExists = existingUrls.includes(url) || existingUrlsHijos.includes(url);
+                    const aprobarArticulosExists = existingUrls.includes(url) || existingUrlsHijos.includes(url);
 
-                    if (controlArticulosExists && aprobarArticulosExists) {
 
+                    if (controlArticulosExists && aprobarArticulosExists){
+                        //console.log("entrooo");
                     } else if (controlArticulosExists) {
-                        navigate('/rsap' + valorurl);
+                        navigate(url);
                     } else if (aprobarArticulosExists) {
-                        navigate('/rsap' + valorurl);
+                        navigate(url);
                     } else {
                         navigate("/rsap/NotFound");
+                        return;
                     }
-
-
-                });
+                });*/
             });
         };
 
         verificarYRedirigir();
-        menuextra();
+        //menuextra();
     }, [navigate, userData.object, usuarioUppercase]);
 
 
 
-    const menuextra = () => {
+    /*const menuextra = () => {
         const newMenuItem = {
             menId: 999,
             nombre: "Cambio Categoria Articulo",
@@ -488,21 +487,21 @@ const App = ({ userData, usuarioUppercase }) => {
                     menId: 1000,
                     nombre: "Control de Artículos",
                     descripcion: "Descripción del submenu 1",
-                    url: "https://gerardoortiz.com/rsap/ControlArticulos",
+                    url: "http://localhost:3000/rsap/ControlArticulos",
                     icono: "fa fa-pencil"
                 },
                 {
                     menId: 1001,
                     nombre: "Aprobar Artículos",
                     descripcion: "Descripción del submenu 2",
-                    url: "https://gerardoortiz.com/rsap/AprobarArticulos",
+                    url: "http://localhost:3000/rsap/AprobarArticulos",
                     icono: "fa fa-check"
                 }
             ]
         };
         userData.object.push(newMenuItem);
 
-    }
+    }*/
 
 
 
@@ -536,6 +535,7 @@ const App = ({ userData, usuarioUppercase }) => {
                         <Routes>
                             <Route path="/ControlArticulos" element={<ControlArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                             <Route path="/AprobarArticulos" element={<AprobarArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route path="/EstadosCuenta" element={<EstadosCuenta colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                             <Route path="/NotFound" element={<NotFound colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                         </Routes>
                     </div>

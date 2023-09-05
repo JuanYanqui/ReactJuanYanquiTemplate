@@ -4,6 +4,7 @@ import App from './App';
 import ControlArticulos from './components/ControlArticulos';
 import AprobarArticulos from './components/AprobarArticulos';
 import NotFound from './pages/NotFound';
+import EstadosCuenta from './components/EstadosCuenta';
 
 const AppWrapper = ({userData, usuarioUppercase}) => {
     let location = useLocation();
@@ -18,6 +19,7 @@ const AppWrapper = ({userData, usuarioUppercase}) => {
             <Route path="/rsap/*" element={<App  usuarioUppercase={usuarioUppercase} userData={userData}/>} >
             <Route path="ControlArticulos" element={<ControlArticulos />} />
             <Route path="AprobarArticulos" element={<AprobarArticulos />} />
+            <Route path="EstadosCuenta" element={<EstadosCuenta />} />
             <Route path="NotFound" element={<NotFound />} />
             </Route>
         </Routes>

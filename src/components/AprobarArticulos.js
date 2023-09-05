@@ -203,6 +203,7 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
 
     const cargaDatos = () => {
         //console.log("entro")
+        setLoading(true);
         const fechaInicio = null;
         const fechaFin = null;
         const usuario = "";
@@ -271,12 +272,11 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
                                 &nbsp;
 
                                 <button
-                                    id="frmListado:j_idt36"
-                                    name="frmListado:j_idt36"
+                                    id="FiltratAprobacion"
                                     className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left MarRight10 ui-button-success"
                                     onClick={cargaDatos}
                                     disabled={loading}
-                                    type="submit"
+                                    type="button"
                                     role="button"
                                     aria-disabled="false"
                                 >

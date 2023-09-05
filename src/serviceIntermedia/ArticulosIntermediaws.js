@@ -571,6 +571,7 @@ export class ArticulosIntermediaws {
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
         const nuevaSerUrl = "http://192.168.19.117:8080";
+        //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const paginationInfo = {
           count: false,
@@ -618,8 +619,8 @@ export class ArticulosIntermediaws {
       })
       
       .catch((error) => {
-        console.error('Error ArticulosIntermediaws metodo listarArticulosListaFull', error);
-        return null;
+        //console.error('Error ArticulosIntermediaws metodo listarArticulosListaFull', error);
+        //return null;
       });
   }
 
@@ -629,6 +630,7 @@ export class ArticulosIntermediaws {
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
         const nuevaSerUrl = "http://192.168.19.117:8080";
+        //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const paginationInfo = {
           count: true,
@@ -668,14 +670,10 @@ export class ArticulosIntermediaws {
             ////console.log(objectData);
             return objectData;
           })
-          .catch((error) => {
-            console.error('Error ArticulosIntermediaws metodo listarArticulosListaFull...!!!!', error);
-            return null;
-          });
       })
       .catch((error) => {
-        console.error('Error ArticulosIntermediaws metodo listarArticulosListaFull', error);
-        return null;
+        //console.error('Error ArticulosIntermediaws metodo listarArticulosListaFull', error);
+        //return null;
       });
   }
 
@@ -715,12 +713,12 @@ export class ArticulosIntermediaws {
           })
           .catch((error) => {
             console.error('Error ArticulosIntermediaws metodo listarArticulosPrecio...!!!!', error);
-            return null;
+            
           });
       })
       .catch((error) => {
         console.error('Error ArticulosIntermediaws metodo listarArticulosPrecio', error);
-        return null;
+        
       });
   }
 

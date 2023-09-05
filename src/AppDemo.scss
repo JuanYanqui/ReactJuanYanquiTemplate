@@ -234,7 +234,7 @@ _____________________ responsive .responsive-form-container {
     box-sizing: border-box;
 }
 
-_________________ ________________________________________________________ .layout-wrapper.menu-layout-overlay .layout-main {
+_________________________________________________________________________ .layout-wrapper.menu-layout-overlay .layout-main {
     margin-left: 0px;
 }
 
@@ -249,8 +249,9 @@ _________________ ________________________________________________________ .layo
     -webkit-transition: margin-left 0.2s;
     transition: margin-left 0.2s;
 }
-
-_________________________________ body .ui-button.ui-button-text-icon-left .ui-button-text {
+________________________________________________
+///Botones Aprobar y Control
+body .ui-button.ui-button-text-icon-left .ui-button-text {
     padding: 0.643rem 2.5rem 0.643rem 1.5rem;
 }
 
@@ -299,6 +300,48 @@ body .ui-button {
     cursor: pointer;
     text-align: center;
     overflow: visible;
+}
+
+
+///Botones EstadoAprobacion
+body .ui-buttonleft.ui-button-text-icon-right .ui-button-textright {
+padding: 0.643rem 1rem 0.643rem 1rem;
+}
+
+.ui-button-text-icon-right .ui-button-textright {
+    padding: 0.65em 1em 0.65em 1em;
+}
+.ui-buttonleft {
+    display: inline-block;
+    position: relative;
+    padding: 0;
+    margin-left: 0.1em;
+    text-decoration: none !important;
+    cursor: pointer;
+    text-align: center;
+    overflow: visible;
+}
+
+body .ui-buttonleft {
+    background: #3e464c;
+    color: #ffffff;
+    border: 0 none;
+    margin: 0;
+    outline: 0 none;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    float: right; /* Alinea el botón a la derecha */
+    margin-right: 10px; /* Agrega un margen derecho para separar del contenido */
+}
+body .ui-buttonleft ,
+body .ui-buttonleft.ui-linkbutton {
+    font-weight: 500;
+    min-width: 4rem;
+}
+
+.ui-buttonleft  .ui-button-textright {
+    display: block;
+    line-height: normal;
 }
 
 
