@@ -16,7 +16,6 @@ const EstadosCuenta = () => {
     const [bp, setBp] = useState("");
     const [nombreCuenta, setNombreCuenta] = useState("");
     const [cedulaCuenta, setcedulaCuenta] = useState("");
-    const [correoIngresado, setcorreoIngresado] = useState("");
     const [DataCategoria, setDataCategoria] = useState([]);
     const categoriasdata = new CategoriasCoralIntermediaws();
 
@@ -31,7 +30,6 @@ const EstadosCuenta = () => {
     const [estadoSelecionado, setestadoSelecionado] = useState(null);
     const [error, setError] = useState(null);
     const [dialogVisibleError, setDialogVisibleError] = useState(false);
-    const [checkedValue, setCheckedValue] = useState(0);
     const [selectedItems, setSelectedItems] = useState([]);
 
     const handleSelectionChange = (e) => {
@@ -48,8 +46,6 @@ const EstadosCuenta = () => {
         fetchData();
     }, []);*/
 
-
-
     const onPageChange = (event) => {
         const newPage = Math.floor(event.first / event.rows);
         setLoading(true);
@@ -58,7 +54,13 @@ const EstadosCuenta = () => {
     };
 
     const DataTablaar = ({ dataar }) => {
-
+        const generarpdf = (rowData) => {
+            return (
+                <div className="flex flex-wrap gap-2">
+                    <i className="pi pi-file-pdf" style={{ fontSize: '1rem' }} onClick={() => handleIconClick(rowData.cmbId)} ></i>
+                </div>
+            );
+        };
         const startRecord = currentPage * rowsPerPage + 1;
         return (
             <div>
@@ -85,13 +87,14 @@ const EstadosCuenta = () => {
                     <Column field="categoriaNueva" style={{ width: '8%' }} header="Compras" />
                     <Column field="categoriaAnterior" style={{ width: '9%' }} header="Pagos" />
                     <Column field="fecha" style={{ width: '10%' }} header="Cobros" />
+                    <Column field="icon" header="" body={generarpdf} />
                 </DataTable>
             </div>
         );
     };
 
 
-    const handleIconClick = (cmbId, estado) => {
+    const handleIconClick = (cmbId) => {
         setSelectedCode(cmbId);
         setestadoSelecionado(4);
         setVisible(true);
@@ -160,10 +163,13 @@ const EstadosCuenta = () => {
         toast.current.show({ severity: 'success', summary: 'Success Message', detail: 'Cambio Completado.' });
     };
 
+    const showWarn = ()=>{
+        toast.current.show({severity:'warn', summary:'Warn Message', detail:'Que paso'})
+    }
+
     const showErrorcancel = () => {
         toast.current.show({ severity: 'error', summary: 'Error', detail: 'Proceso Cancelado.', life: 3000 });
     }
-
 
 
     const [loading, setLoading] = useState(false);
@@ -258,7 +264,7 @@ const EstadosCuenta = () => {
                             <div className="p-grid p-formgrid">
                                 <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                     <input
-                                        id="input1"
+                                        id="inputbp"
                                         className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${bp ? 'ui-state-filled' : ''}`}
                                         value={bp}
                                         onChange={handleInputChange}
@@ -272,13 +278,13 @@ const EstadosCuenta = () => {
 
                                 <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                     <input
-                                        id="input2"
+                                        id="inputnombrecuenta"
                                         className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${nombreCuenta ? 'ui-state-filled' : ''}`}
                                         value={nombreCuenta}
                                         onChange={handleInputChange2}
                                         style={{ width: '100%' }}
                                     />
-                                    <label htmlFor="input2" className={nombreCuenta ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Nombre</label>
+                                    <label htmlFor="inputnombrecuenta" className={nombreCuenta ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Nombre</label>
                                 </span>
 
                                 &nbsp;
@@ -286,13 +292,13 @@ const EstadosCuenta = () => {
 
                                 <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                     <input
-                                        id="input2"
+                                        id="inputcedulacuenta"
                                         className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${cedulaCuenta ? 'ui-state-filled' : ''}`}
                                         value={cedulaCuenta}
                                         onChange={handleInputChange3}
                                         style={{ width: '100%' }}
                                     />
-                                    <label htmlFor="input2" className={cedulaCuenta ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Cedula</label>
+                                    <label htmlFor="inputcedulacuenta" className={cedulaCuenta ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Cedula</label>
                                 </span>
 
 

@@ -11,10 +11,9 @@ const keycloakConfig = {
     realm: "gocorp",
     url: "https://goauth.gerardoortiz.com/auth/",
     clientId: "react-test",
-    redirectUri: "https://gerardoortiz.com/rsap/", 
+    redirectUri: "https://gerardoortiz.com/rsap/",
     onLoad: 'login-required',
 };
-
 
 /*const keycloakConfig = {
     realm: "prueba",
@@ -23,8 +22,6 @@ const keycloakConfig = {
     port: 0,
     onLoad: 'login-required',
 };*/
-
-
 
 const initKeycloak = () => {
     const keycloak = new Keycloak(keycloakConfig);
@@ -61,7 +58,7 @@ initKeycloak()
 
                                 <React.StrictMode>
                                     <BrowserRouter>
-                                    <AppWrapper  usuarioUppercase={usuarioUppercase} userData={userData}/>
+                                        <AppWrapper usuarioUppercase={usuarioUppercase} userData={userData} />
                                     </BrowserRouter>
                                 </React.StrictMode>
                             );

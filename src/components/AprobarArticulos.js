@@ -246,7 +246,7 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
                             <div className="p-grid p-formgrid">
                                 <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                     <input
-                                        id="input1"
+                                        id="inputcodarticulo"
                                         className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${codigoArticulo ? 'ui-state-filled' : ''}`}
                                         value={codigoArticulo}
                                         onChange={handleInputChange}
@@ -260,13 +260,13 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
 
                                 <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                     <input
-                                        id="input2"
+                                        id="inputdesarticulo"
                                         className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${descripcionArticulo ? 'ui-state-filled' : ''}`}
                                         value={descripcionArticulo}
                                         onChange={handleInputChange2}
                                         style={{ width: '100%' }}
                                     />
-                                    <label htmlFor="input2" className={descripcionArticulo ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Descripción</label>
+                                    <label htmlFor="inputdesarticulo" className={descripcionArticulo ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Descripción</label>
                                 </span>
 
                                 &nbsp;

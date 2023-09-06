@@ -619,8 +619,8 @@ export class ArticulosIntermediaws {
       })
       
       .catch((error) => {
-        //console.error('Error ArticulosIntermediaws metodo listarArticulosListaFull', error);
-        //return null;
+        console.error('Error ArticulosIntermediaws metodo listarArticulosListaFull', error);
+        return null;
       });
   }
 
@@ -672,8 +672,8 @@ export class ArticulosIntermediaws {
           })
       })
       .catch((error) => {
-        //console.error('Error ArticulosIntermediaws metodo listarArticulosListaFull', error);
-        //return null;
+        console.error('Error ArticulosIntermediaws metodo listarArticulosListaFull', error);
+        return null;
       });
   }
 

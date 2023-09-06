@@ -330,7 +330,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                             <div className="p-grid p-formgrid">
                                 <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                     <input
-                                        id="input1"
+                                        id="inputcodigo"
                                         className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${codigoArticulo ? 'ui-state-filled' : ''}`}
                                         value={codigoArticulo}
                                         onChange={handleInputChange}
@@ -344,24 +344,23 @@ const ControlArticulos = ({ usuarioUppercase }) => {
 
                                 <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                     <input
-                                        id="input2"
+                                        id="inputdescripcion"
                                         className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${descripcionArticulo ? 'ui-state-filled' : ''}`}
                                         value={descripcionArticulo}
                                         onChange={handleInputChange2}
                                         style={{ width: '100%' }}
                                     />
-                                    <label htmlFor="input2" className={descripcionArticulo ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Descripción</label>
+                                    <label className={descripcionArticulo ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Descripción</label>
                                 </span>
 
                                 &nbsp;
 
                                 <button
-                                    id="frmListado:j_idt36"
-                                    name="frmListado:j_idt36"
+                                    id="FiltrarControl"
                                     className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left MarRight10 ui-button-success"
                                     onClick={handleCargaDatos}
                                     disabled={loading}
-                                    type="submit"
+                                    type="button"
                                     role="button"
                                     aria-disabled="false"
                                 >
@@ -374,7 +373,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                                 </div>
 
                                 <button
-                                    id="botonExtra"
+                                    id="AgregarCategoria"
                                     className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left p-mr-2 align-right"
                                     disabled={loading}
                                     type="button"
@@ -409,7 +408,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                             <div className="p-grid p-formgrid">
                                 <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                     <input
-                                        id="input1"
+                                        id="inputcodcategoria"
                                         className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${codigoCategoria ? 'ui-state-filled' : ''}`}
                                         value={codigoCategoria}
                                         onChange={handleInputCodCategoria}
@@ -423,13 +422,13 @@ const ControlArticulos = ({ usuarioUppercase }) => {
 
                                 <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                     <input
-                                        id="input2"
+                                        id="inputdescategoria"
                                         className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${descripcionCategoria ? 'ui-state-filled' : ''}`}
                                         value={descripcionCategoria}
                                         onChange={handleInputDesCategoria}
                                         style={{ width: '100%' }}
                                     />
-                                    <label htmlFor="input2" className={descripcionCategoria ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Descripción</label>
+                                    <label className={descripcionCategoria ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Descripción</label>
                                 </span>
                                 &nbsp;
 
@@ -440,20 +439,19 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                                         onChange={handleCityChange}
                                         optionLabel="label"
                                         placeholder="Nivel"
-                                        id="input3"
+                                        id="nivelcat"
                                         className={`  ${selectedCity ? 'ui-state-filled' : ''}`}
                                     />
-                                    <label htmlFor="input3" className={selectedCity ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Nivel</label>
+                                    <label htmlFor="nivelcat" className={selectedCity ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Nivel</label>
                                 </span>
 
 
                                 <button
-                                    id="frmListado:j_idt36"
-                                    name="frmListado:j_idt36"
+                                    id="FiltrarCategoria"
                                     className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left p-mr-2"
                                     onClick={handleFilterClick}
                                     disabled={loading}
-                                    type="submit"
+                                    type="button"
                                     role="button"
                                     aria-disabled="false"
                                 >

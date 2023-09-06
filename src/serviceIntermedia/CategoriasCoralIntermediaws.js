@@ -37,12 +37,12 @@ export class CategoriasCoralIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        //console.error('Error en el nuevo método', error);
+                        console.error('Error en el nuevo método', error);
                         return null;
                     });
             })
             .catch((error) => {
-                //console.error('Error al obtener datos para el nuevo método', error);
+                console.error('Error al obtener datos para el nuevo método', error);
                 return null;
             });
     }
@@ -107,13 +107,13 @@ export class CategoriasCoralIntermediaws {
                         return response;
                     })
                     .catch((error) => {
-                        //console.error('Error CategoriasCoralIntermediaws metodo guardarCambiosCategoria...!!!!', error);
-                        //return null;
+                        console.error('Error CategoriasCoralIntermediaws metodo guardarCambiosCategoria...!!!!', error);
+                        return null;
                     });
             })
             .catch((error) => {
-                //console.error('Error CategoriasCoralIntermediaws metodo guardarCambiosCategoria', error);
-                //return null;
+                console.error('Error CategoriasCoralIntermediaws metodo guardarCambiosCategoria', error);
+                return null;
             });
     }
 
@@ -144,13 +144,13 @@ export class CategoriasCoralIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        //console.error('Error CategoriasCoralIntermediaws metodo listarCategoriaCambio...!!!!', error);
-                        //return null;
+                        console.error('Error CategoriasCoralIntermediaws metodo listarCategoriaCambio...!!!!', error);
+                        return null;
                     });
             })
             .catch((error) => {
-                //console.error('Error CategoriasCoralIntermediaws metodo listarCategoriaCambio', error);
-                //return null;
+                console.error('Error CategoriasCoralIntermediaws metodo listarCategoriaCambio', error);
+                return null;
             });
     }
 
@@ -192,13 +192,13 @@ export class CategoriasCoralIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        //console.error('Error CategoriasCoralIntermediaws metodo loadCategoriaCambio...!!!!', error);
-                        //return null;
+                        console.error('Error CategoriasCoralIntermediaws metodo loadCategoriaCambio...!!!!', error);
+                        return null;
                     });
             })
             .catch((error) => {
-                //console.error('Error CategoriasCoralIntermediaws metodo loadCategoriaCambio', error);
-                //return null;
+                console.error('Error CategoriasCoralIntermediaws metodo loadCategoriaCambio', error);
+                return null;
             });
     }
 
