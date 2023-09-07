@@ -32,7 +32,7 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
             const fechaFin = null;
             const usuario = "";
             categoriasdata.loadCategoriaCambio(codigoArticulo, descripcionArticulo, checkedValue, fechaInicio, fechaFin, usuario, currentPage, rowsPerPage).then((data) => {
-                ////console.log("coraldataaa", data)
+                //console.log("coraldataaa", data)
                 setDataCategoria(data);
                 setLoading(false);
             });
@@ -44,9 +44,9 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
                 const totalPages = Math.ceil(totalCount / pageSize);
                 setTotalRecords(response.rowCount);
                 setTotalPages(totalPages);
-                ////console.log("Total Datos:", response.rowCount);
-                ////console.log("Numero de datos por Pagina:", pageSize);
-                ////console.log("Total Paginas:", totalPages);
+                //console.log("Total Datos:", response.rowCount);
+                //console.log("Numero de datos por Pagina:", pageSize);
+                //console.log("Total Paginas:", totalPages);
                 setLoading(false);
             }
         };

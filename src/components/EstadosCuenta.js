@@ -5,9 +5,10 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
+import { Checkbox } from 'primereact/checkbox';
 import { CategoriasCoralIntermediaws } from '../serviceIntermedia/CategoriasCoralIntermediaws';
 import "../assets/theme/indigo/theme-light.css";
-import { EstadoCuentaIntermediaws } from '../serviceIntermedia/EstadoCuentaIntermediaws';
+import { EstadosCuentaIntermediaws } from '../serviceIntermedia/EstadoCuentaIntermediaws';
 const EstadosCuenta = () => {
     const [visible, setVisible] = useState(false);
     const [visibleEnviarCuenta, setvisibleEnviarCuenta] = useState(false);
@@ -16,35 +17,41 @@ const EstadosCuenta = () => {
     const [bp, setBp] = useState("");
     const [nombreCuenta, setNombreCuenta] = useState("");
     const [cedulaCuenta, setcedulaCuenta] = useState("");
-    const [DataCategoria, setDataCategoria] = useState([]);
-    const categoriasdata = new CategoriasCoralIntermediaws();
-
-    const estadocuentadata = new EstadoCuentaIntermediaws();
+    const [checked, setChecked] = useState(false);
+    const estadocuentadata = new EstadosCuentaIntermediaws();
     const [DataEstadoCuenta, setDataEstadoCuenta] = useState("");
 
     const [totalRecords, setTotalRecords] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [totalPages, setTotalPages] = useState(10);
-    const [selectedCode, setSelectedCode] = useState(null);
+    const [selectedbp, setSelectedbp] = useState(null);
+    const [selectedsociedad, setSelectedsociedad] = useState(null);
     const [estadoSelecionado, setestadoSelecionado] = useState(null);
     const [error, setError] = useState(null);
-    const [dialogVisibleError, setDialogVisibleError] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
-
+    const [dialogVisibleError, setDialogVisibleError] = useState(false);
     const handleSelectionChange = (e) => {
         setSelectedItems(e.value);
     };
-    /*useEffect(() => {
+    useEffect(() => {
         const fetchData = async () => {
-            estadocuentadata.loadCategoriaCambio(bp, nombreCuenta, cedulaCuenta).then((data) => {
-
-                setDataEstadoCuenta(data);
-                setLoading(false);
-            });
+            try {
+                estadocuentadata.listarEf25Fi(bp, nombreCuenta, cedulaCuenta, checked).then((data) => {
+       
+                    setDataEstadoCuenta(data);
+                    setLoading(false);
+                });
+            } catch (error) {
+                // Manejar el error y mostrar un mensaje o abrir un diálogo
+                console.error('Error:', error);
+                // Puedes mostrar el mensaje de error en tu componente
+                setDialogVisibleError(true);
+                return error;
+            }
         };
         fetchData();
-    }, []);*/
+    }, [currentPage, rowsPerPage]);
 
     const onPageChange = (event) => {
         const newPage = Math.floor(event.first / event.rows);
@@ -57,17 +64,26 @@ const EstadosCuenta = () => {
         const generarpdf = (rowData) => {
             return (
                 <div className="flex flex-wrap gap-2">
-                    <i className="pi pi-file-pdf" style={{ fontSize: '1rem' }} onClick={() => handleIconClick(rowData.cmbId)} ></i>
+                    <i className="pi pi-file-pdf" style={{ fontSize: '1.5rem' }} onClick={() => generarpfdpeti(rowData[0], rowData[1])} ></i>
                 </div>
             );
         };
+
+        const generarexel = (rowData) => {
+            return (
+                <div className="flex flex-wrap gap-2">
+                    <i className="pi pi-file-excel" style={{ fontSize: '1.5rem' }} onClick={() => generarexelpeti(rowData[0], rowData[1])} ></i>
+                </div>
+            );
+        };
+
         const startRecord = currentPage * rowsPerPage + 1;
         return (
             <div>
                 <DataTable value={dataar}
                     selection={selectedItems}
                     onSelectionChange={handleSelectionChange}
-                    selectionMode="check"
+                    selectionMode="checkbox"
                     lazy paginator
                     totalRecords={totalRecords}
                     onPage={onPageChange}
@@ -79,83 +95,72 @@ const EstadosCuenta = () => {
                     currentPageReportTemplate={`Registros ${startRecord} -  de {totalRecords}`}
                 >
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    <Column field="cmbId" header="Sociedad" />
-                    <Column field="cmbId" header="BpCodigo" />
-                    <Column field="codigo" header="Cedula" />
-                    <Column field="tArticulo.descripcion" style={{ width: '25%' }} header="Nombre" />
-                    <Column field="descripcion" style={{ width: '17%' }} header="Dirección" />
-                    <Column field="categoriaNueva" style={{ width: '8%' }} header="Compras" />
-                    <Column field="categoriaAnterior" style={{ width: '9%' }} header="Pagos" />
-                    <Column field="fecha" style={{ width: '10%' }} header="Cobros" />
-                    <Column field="icon" header="" body={generarpdf} />
+                    <Column field="0" header="Sociedad" />
+                    <Column field="1" header="BpCodigo" />
+                    <Column field="2" header="Tipo" />
+                    <Column field="3" header="Cedula" />
+                    <Column field="4" style={{ width: '25%' }} header="Nombre" />
+                    <Column field="5" style={{ width: '29%' }} header="Dirección" />
+                    <Column field="6" style={{ width: '6%' }} header="Telefono" />
+                    <Column field="8" style={{ width: '5%' }} header="Compra" />
+                    <Column field="9" style={{ width: '5%' }} header="Pagos" />
+                    <Column field="10" style={{ width: '5%' }} header="Cobros" />
+                    <Column header="" body={generarpdf} style={{ width: '3rem' }}></Column>
+                    <Column header="" body={generarexel} style={{ width: '3rem' }}></Column>
                 </DataTable>
             </div>
         );
+    }
+
+    const generarpfdpeti = (sociedad, codbp) => {
+        console.log(sociedad);
+        console.log(codbp);
+        estadocuentadata.getExcelEf25Fi(selectedsociedad, selectedbp).then((data) => {
+        })
+    }
+
+    const generarexelpeti = (sociedad, codbp) => {
+        estadocuentadata.getExcelEf25Fi(selectedsociedad, selectedbp).then((data) => {
+
+        })
+    }
+
+    
+    const handleYesClickenviarcorreos = () => {
+        if (selectedItems.length === 0) {
+            setVisible(false);
+            showWarn();
+        }else{
+            setLoading(true);
+            const selecionadosCuenta = selectedItems.map(item => ({
+                categoriaAnterior: item[1]
+            }));
+            console.log(selecionadosCuenta);
+            estadocuentadata.enviarCorreosEf25Fi(selecionadosCuenta).then((data)=>{
+                setSelectedItems([]);
+                setLoading(false);
+                showSuccess();
+                setvisibleEnviarCuenta(false);
+            })
+        }
+       
     };
 
 
-    const handleIconClick = (cmbId) => {
-        setSelectedCode(cmbId);
-        setestadoSelecionado(4);
-        setVisible(true);
-        setPosition('top');
+    const handleNoClick = () => {
+        showErrorcancel();
+        setvisibleEnviarCuenta(false)
     };
-
-    const handleIconClickNo = (cmbId, estado) => {
-        setSelectedCode(cmbId);
-        setestadoSelecionado(3);
-        setVisible(true);
-        setPosition('top');
-
-    };
-
 
     const enviarmensaje = () => {
         setvisibleEnviarCuenta(true);
     }
 
 
-
-
-    const handleYesClick = () => {
-
-        /*const cmbIdParam = selectedCode;
-        const nuevoEstadoParam = estadoSelecionado;
-        const usuarioParam = "";
-        //console.log("cmdi", cmbIdParam);
-        //console.log("nuevo estado", nuevoEstadoParam);
-        //console.log("usuario", usuarioParam);
-        categoriasdata.updateEstadoCambioCategoria(cmbIdParam, nuevoEstadoParam, usuarioParam).then((response) => {
-            if (response.data.status === 0) {
-                //console.log(response.data.message);
-                setError(response.data.message);
-                setPosition('top');
-                setDialogVisibleError(true);
-                return response.data.message;
-            } else {
-
-                //console.log("status", response.data.status);
-                const objectData = JSON.parse(response.data.object);
-                setVisible(false);
-                //console.log(response);
-                showSuccess();
-                cargaDatos();
-
-            }
-        });*/
-
-    };
-
-
-    const handleNoClick = () => {
-        setvisibleEnviarCuenta(false);
-        showErrorcancel();
-    };
-
     const footerContent = (
         <div>
             <Button label="No" icon="pi pi-times" onClick={handleNoClick} className="p-button-text" />
-            <Button label="Yes" icon="pi pi-check" onClick={handleYesClick} autoFocus />
+            <Button label="Yes" icon="pi pi-check" onClick={handleYesClickenviarcorreos} autoFocus />
         </div>
     );
 
@@ -163,8 +168,8 @@ const EstadosCuenta = () => {
         toast.current.show({ severity: 'success', summary: 'Success Message', detail: 'Cambio Completado.' });
     };
 
-    const showWarn = ()=>{
-        toast.current.show({severity:'warn', summary:'Warn Message', detail:'Que paso'})
+    const showWarn = () => {
+        toast.current.show({ severity: 'warn', summary: 'Warn Message', detail: 'No a selecionado nigun estado de cuenta' })
     }
 
     const showErrorcancel = () => {
@@ -177,8 +182,8 @@ const EstadosCuenta = () => {
 
     const cargaDatos = () => {
         setLoading(true);
-        categoriasdata.loadCategoriaCambio(bp, nombreCuenta, cedulaCuenta).then((data) => {
-            setDataCategoria(data);
+        estadocuentadata.listarEf25Fi(bp, nombreCuenta, cedulaCuenta, checked).then((data) => {
+            setDataEstadoCuenta(data);
             setLoading(false);
         });
     }
@@ -303,6 +308,10 @@ const EstadosCuenta = () => {
 
 
                                 &nbsp;
+                                <div className="p-field-checkbox">
+                                    <Checkbox onChange={e => setChecked(e.checked)} checked={checked}></Checkbox>
+                                    <label htmlFor="checkbox" className="p-checkbox-label">&nbsp; Enviados</label>
+                                </div>
                             </div>
                         </div>
 
@@ -311,14 +320,14 @@ const EstadosCuenta = () => {
 
                     &nbsp;
                     <div>
-                        <DataTablaar dataar={DataCategoria.data} loading={loading} onPageChange={onPageChange} />
+                        <DataTablaar dataar={DataEstadoCuenta} loading={loading} onPageChange={onPageChange} />
                     </div>
                 </form>
 
 
 
 
-                <Dialog header="Enviar Estados de Cuenta" visible={visibleEnviarCuenta} style={{ width: '400px', minWidth: '400px' }} onHide={() => setvisibleEnviarCuenta(false)} footer= {footerContent} draggable={false} resizable={false} >
+                <Dialog header="Enviar Estados de Cuenta" visible={visibleEnviarCuenta} style={{ width: '400px', minWidth: '400px' }} onHide={() => setvisibleEnviarCuenta(false)} footer={footerContent} draggable={false} resizable={false} >
 
                 </Dialog>
 

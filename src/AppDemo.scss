@@ -102,26 +102,6 @@ hr {
     margin: 0;
 }
 
-.datatable-demo {
-    .p-datatable-responsive .p-datatable-tbody>tr.p-datatable-row>td:last-child .p-column-title {
-        display: none;
-    }
-}
-
-.table-title {
-    text-align: center;
-}
-
-.custom-pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.rounded-table {
-    border-radius: 10px;
-    overflow: hidden;
-}
 
 .right-dropdown-menu {
     position: absolute;
@@ -227,14 +207,15 @@ hr {
     color: white;
 }
 
-_____________________ responsive .responsive-form-container {
+_____________________ responsive 
+.responsive-form-container {
     max-width: 100%;
     margin: 0 auto;
     padding: 1rem;
     box-sizing: border-box;
 }
 
-_________________________________________________________________________ .layout-wrapper.menu-layout-overlay .layout-main {
+_________________ ________________________________________________________ .layout-wrapper.menu-layout-overlay .layout-main {
     margin-left: 0px;
 }
 
