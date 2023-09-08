@@ -9,6 +9,8 @@ import { Checkbox } from 'primereact/checkbox';
 import { CategoriasCoralIntermediaws } from '../serviceIntermedia/CategoriasCoralIntermediaws';
 import "../assets/theme/indigo/theme-light.css";
 import { EstadosCuentaIntermediaws } from '../serviceIntermedia/EstadoCuentaIntermediaws';
+import * as XLSX from 'xlsx';
+
 const EstadosCuenta = () => {
     const [visible, setVisible] = useState(false);
     const [visibleEnviarCuenta, setvisibleEnviarCuenta] = useState(false);
@@ -31,6 +33,7 @@ const EstadosCuenta = () => {
     const [error, setError] = useState(null);
     const [selectedItems, setSelectedItems] = useState([]);
     const [dialogVisibleError, setDialogVisibleError] = useState(false);
+
     const handleSelectionChange = (e) => {
         setSelectedItems(e.value);
     };
@@ -38,14 +41,12 @@ const EstadosCuenta = () => {
         const fetchData = async () => {
             try {
                 estadocuentadata.listarEf25Fi(bp, nombreCuenta, cedulaCuenta, checked).then((data) => {
-       
+
                     setDataEstadoCuenta(data);
                     setLoading(false);
                 });
             } catch (error) {
-                // Manejar el error y mostrar un mensaje o abrir un diálogo
                 console.error('Error:', error);
-                // Puedes mostrar el mensaje de error en tu componente
                 setDialogVisibleError(true);
                 return error;
             }
@@ -60,19 +61,24 @@ const EstadosCuenta = () => {
         setCurrentPage(newPage);
     };
 
+    const paginatorLeft = <i />;
+    const paginatorRight = (
+        <div>
+            <div>
+                <img
+                    src="./assets/layout/images/exelimg.png"
+                    alt="Descripción de la imagen"
+                    style={{ width: '40px', height: '35px' }} onClick={() => generarexelpeti()}
+                />
+            </div>
+        </div>
+    );
+
     const DataTablaar = ({ dataar }) => {
         const generarpdf = (rowData) => {
             return (
                 <div className="flex flex-wrap gap-2">
                     <i className="pi pi-file-pdf" style={{ fontSize: '1.5rem' }} onClick={() => generarpfdpeti(rowData[0], rowData[1])} ></i>
-                </div>
-            );
-        };
-
-        const generarexel = (rowData) => {
-            return (
-                <div className="flex flex-wrap gap-2">
-                    <i className="pi pi-file-excel" style={{ fontSize: '1.5rem' }} onClick={() => generarexelpeti(rowData[0], rowData[1])} ></i>
                 </div>
             );
         };
@@ -84,13 +90,14 @@ const EstadosCuenta = () => {
                     selection={selectedItems}
                     onSelectionChange={handleSelectionChange}
                     selectionMode="checkbox"
-                    lazy paginator
+                    paginator
                     totalRecords={totalRecords}
                     onPage={onPageChange}
                     rows={rowsPerPage}
                     first={currentPage * rowsPerPage}
                     rowsPerPageOptions={[5, 10, 25]}
                     paginatorPosition="both"
+                    paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
                     currentPageReportTemplate={`Registros ${startRecord} -  de {totalRecords}`}
                 >
@@ -106,11 +113,54 @@ const EstadosCuenta = () => {
                     <Column field="9" style={{ width: '5%' }} header="Pagos" />
                     <Column field="10" style={{ width: '5%' }} header="Cobros" />
                     <Column header="" body={generarpdf} style={{ width: '3rem' }}></Column>
-                    <Column header="" body={generarexel} style={{ width: '3rem' }}></Column>
                 </DataTable>
             </div>
         );
     }
+
+
+    const generarExcelpropio = () => {
+        if (DataEstadoCuenta.length == 0) {
+            showWarnexe();
+        } else {
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet([
+                ['Estados de Cuenta'],
+                [
+                    'Sociedad',
+                    'BpCodigo',
+                    'Tipo',
+                    'Cedula',
+                    'Nombre',
+                    'Dirección',
+                    'Telefono',
+                    'Compra',
+                    'Pagos',
+                    'Cobros',
+                ],
+                ...DataEstadoCuenta.map(item => [
+                    item[0],
+                    item[1],
+                    item[2],
+                    item[3],
+                    item[4],
+                    item[5],
+                    item[6],
+                    item[8],
+                    item[9],
+                    item[10],
+                ]),
+            ]);
+
+            const mergeTitle = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: 0, c: 9 } });
+            ws['!merges'] = [XLSX.utils.decode_range(mergeTitle)];
+            ws['A1'].s = { halign: 'center', valign: 'center' };
+
+            XLSX.utils.book_append_sheet(wb, ws, 'EstadosdeCuentas');
+            XLSX.writeFile(wb, 'EstadosdeCuentas.xlsx');
+        }
+
+    };
 
     const generarpfdpeti = (sociedad, codbp) => {
         console.log(sociedad);
@@ -119,31 +169,29 @@ const EstadosCuenta = () => {
         })
     }
 
-    const generarexelpeti = (sociedad, codbp) => {
-        estadocuentadata.getExcelEf25Fi(selectedsociedad, selectedbp).then((data) => {
-
-        })
+    const generarexelpeti = () => {
+        generarExcelpropio();
     }
 
-    
+
     const handleYesClickenviarcorreos = () => {
         if (selectedItems.length === 0) {
             setVisible(false);
             showWarn();
-        }else{
+        } else {
             setLoading(true);
             const selecionadosCuenta = selectedItems.map(item => ({
                 categoriaAnterior: item[1]
             }));
             console.log(selecionadosCuenta);
-            estadocuentadata.enviarCorreosEf25Fi(selecionadosCuenta).then((data)=>{
+            estadocuentadata.enviarCorreosEf25Fi(selecionadosCuenta).then((data) => {
                 setSelectedItems([]);
                 setLoading(false);
                 showSuccess();
                 setvisibleEnviarCuenta(false);
             })
         }
-       
+
     };
 
 
@@ -165,11 +213,15 @@ const EstadosCuenta = () => {
     );
 
     const showSuccess = () => {
-        toast.current.show({ severity: 'success', summary: 'Success Message', detail: 'Cambio Completado.' });
+        toast.current.show({ severity: 'success', summary: 'Success Message', detail: 'Enviados Correctamente.' });
     };
 
     const showWarn = () => {
         toast.current.show({ severity: 'warn', summary: 'Warn Message', detail: 'No a selecionado nigun estado de cuenta' })
+    }
+
+    const showWarnexe = () => {
+        toast.current.show({ severity: 'warn', summary: 'Warn Message', detail: 'No hay datos existentes' })
     }
 
     const showErrorcancel = () => {
@@ -258,6 +310,7 @@ const EstadosCuenta = () => {
                                     className="ui-buttonleft ui-widget ui-state-default ui-corner-all ui-button-text-icon-right p-mr-2"
                                     disabled={loading}
                                     type="button"
+                                    onClick={cargaDatos}
                                     role="button"
                                     aria-disabled="false"
                                 >

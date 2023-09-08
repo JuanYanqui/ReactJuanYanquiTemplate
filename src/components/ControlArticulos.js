@@ -83,6 +83,10 @@ const ControlArticulos = ({ usuarioUppercase }) => {
         setRowsPerPage(event.rows);
         setCurrentPage(newPage);
     };
+
+    
+    const paginatorLeft = <i />;
+    const paginatorRight = <i />;
     const startRecord = currentPage * rowsPerPage + 1;
     const endRecord = Math.min((currentPage + 1) * rowsPerPage, totalRecords);
     const DataTablaar = ({ dataar }) => {
@@ -99,6 +103,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                     first={currentPage * rowsPerPage}
                     rowsPerPageOptions={[5, 10, 25]}
                     paginatorPosition="both"
+                    paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
                     currentPageReportTemplate={`Registros ${startRecord} - ${endRecord} de {totalRecords}`}
                 >

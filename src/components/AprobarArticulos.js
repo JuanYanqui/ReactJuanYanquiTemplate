@@ -59,6 +59,8 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
         setRowsPerPage(event.rows);
         setCurrentPage(newPage);
     };
+    const paginatorLeft = <i />;
+    const paginatorRight = <i />;
 
     const DataTablaar = ({ dataar }) => {
         const aprobarCambio = (rowData) => {
@@ -110,6 +112,7 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
                     first={currentPage * rowsPerPage}
                     rowsPerPageOptions={[5, 10, 25]}
                     paginatorPosition="both"
+                    paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
                     currentPageReportTemplate={`Registros ${startRecord} - ${endRecord} de {totalRecords}`}
                 >
