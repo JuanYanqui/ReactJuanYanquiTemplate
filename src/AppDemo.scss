@@ -1,15 +1,23 @@
 @import './assets/flags/flags.css';
 
 .selected-menuitem {
-    background-color: #2979FF;
+    background-color: #ffffff;
     color: #ffffff;
 }
-
 
 .layout-wrapper.menu-layout-overlay .layout-main {
     margin-left: 0px;
 }
 
+
+.custom-calendar-style.clicked {
+    border: 2px solid black;
+  }
+  
+  .custom-calendar-style.clicked:hover {
+    border: 2px solid black;
+  }
+  
 .layout-wrapper .layout-main {
     padding: 20px 0 0 0;
     display: flex;
@@ -20,6 +28,16 @@
     -o-transition: margin-left 0.2s;
     -webkit-transition: margin-left 0.2s;
     transition: margin-left 0.2s;
+}
+
+.custom-span-style {
+    width: 100%;
+    background-color: #fff;
+    font-size: 16px;
+}
+
+.custom-calendar-style .p-inputtext {
+    background-color: #fff !important;
 }
 
 .layout-wrapper .layout-main .layout-content {
@@ -90,7 +108,6 @@ hr {
     font-size: 16px;
     color: #080808;
     transition: all 0.3s ease-out;
-    position: absolute;
     left: 0;
     top: 0;
 }

@@ -18,6 +18,7 @@ import ControlArticulos from './components/ControlArticulos';
 import { UsuarioService } from './service/UsuarioService';
 import NotFound from './pages/NotFound';
 import EstadosCuenta from './components/EstadosCuenta';
+import VentasTargetas from './components/VentasTargetas';
 
 export const RTLContext = React.createContext();
 
@@ -536,6 +537,7 @@ const App = ({ userData, usuarioUppercase }) => {
                             <Route path="/ControlArticulos" element={<ControlArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                             <Route path="/AprobarArticulos" element={<AprobarArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                             <Route path="/EstadosCuenta" element={<EstadosCuenta colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route path="/VentasTarjeta" element={<VentasTargetas colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                             <Route path="/NotFound" element={<NotFound colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                         </Routes>
                     </div>

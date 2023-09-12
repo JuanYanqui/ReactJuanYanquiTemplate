@@ -42,7 +42,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
         setSelectedItems(e.value);
     };
 
-    useEffect(() => {
+    /*useEffect(() => {
         const fetchData = async () => {
             const soloPendientesParam = false
             const incluirBarrasParam = false
@@ -75,13 +75,14 @@ const ControlArticulos = ({ usuarioUppercase }) => {
             });
         };
         fetchData();
-    }, [currentPage, rowsPerPage]);
+    }, [currentPage, rowsPerPage]);*/
 
     const onPageChange = (event) => {
         const newPage = Math.floor(event.first / event.rows);
         setLoading(true);
         setRowsPerPage(event.rows);
         setCurrentPage(newPage);
+        handleCargaDatos();
     };
 
     
@@ -101,22 +102,22 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                     onPage={onPageChange}
                     rows={rowsPerPage}
                     first={currentPage * rowsPerPage}
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[5, 10, 50]}
                     paginatorPosition="both"
                     paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
                     currentPageReportTemplate={`Registros ${startRecord} - ${endRecord} de {totalRecords}`}
                 >
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    <Column field="codigo" header="Código" />
-                    <Column field="descripcion" header="Descripción" />
-                    <Column field="precio" header="Precio" />
-                    <Column field="unidadPedido" header="Unidad de Pedido" />
-                    <Column field="texto2" header="Categoria Anterior" />
-                    <Column field="texto3" header="Nivel 1" />
-                    <Column field="texto4" header="Nivel 2" />
-                    <Column field="texto5" header="Nivel 3" />
-                    <Column field="texto6" header="Nivel 4" />
+                    <Column field="codigo" style={{ minWidth: '100px' }}header="Código" />
+                    <Column field="descripcion" style={{ minWidth: '100px' }} header="Descripción" />
+                    <Column field="precio" style={{ minWidth: '100px' }} header="Precio" />
+                    <Column field="unidadPedido" style={{ minWidth: '100px' }} header="Unidad de Pedido" />
+                    <Column field="texto2" style={{ minWidth: '100px' }} header="Categoria Anterior" />
+                    <Column field="texto3" style={{ minWidth: '100px' }} header="Nivel 1" />
+                    <Column field="texto4" style={{ minWidth: '100px' }}header="Nivel 2" />
+                    <Column field="texto5" style={{ minWidth: '100px' }}header="Nivel 3" />
+                    <Column field="texto6" style={{ minWidth: '100px' }}header="Nivel 4" />
                 </DataTable>
             </div>
         );
@@ -271,34 +272,81 @@ const ControlArticulos = ({ usuarioUppercase }) => {
 
 
     const [loading, setLoading] = useState(false);
-    const handleCargaDatos = () => {
+    const handleCargaDatos = async () => {
         setLoading(true);
-
-        const soloPendientesParam = false
-        const incluirBarrasParam = false
-        const soloSinRentasParam = false
-        const soloCompraParam = false
-        const soloVentaRetailParam = false
-        const soloSinPreciosParam = false
+    
+        const soloPendientesParam = false;
+        const incluirBarrasParam = false;
+        const soloSinRentasParam = false;
+        const soloCompraParam = false;
+        const soloVentaRetailParam = false;
+        const soloSinPreciosParam = false;
         const presentacionParam = "";
         const proveedorParam = "";
         const barraParam = "";
         const jerarquiaParam = "";
-        articulosdata.listarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, checked, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam, currentPage).then((datas) => {
-            setDataArticulos(datas);
-            setLoading(false);
-        });
+    
+            const response1 = await articulosdata.listarArticulosListaFull(
+                codigoArticulo,
+                presentacionParam,
+                descripcionArticulo,
+                proveedorParam,
+                barraParam,
+                checked,
+                soloPendientesParam,
+                incluirBarrasParam,
+                soloSinRentasParam,
+                soloSinPreciosParam,
+                soloCompraParam,
+                soloVentaRetailParam,
+                jerarquiaParam,
+                currentPage,
+                rowsPerPage
+            );
+    
+            const response = await articulosdata.PaginacionlistarArticulosListaFull(
+                codigoArticulo,
+                presentacionParam,
+                descripcionArticulo,
+                proveedorParam,
+                barraParam,
+                checked,
+                soloPendientesParam,
+                incluirBarrasParam,
+                soloSinRentasParam,
+                soloSinPreciosParam,
+                soloCompraParam,
+                soloVentaRetailParam,
+                jerarquiaParam,currentPage,
+                rowsPerPage
+            );
+    
+            if (response1) {
+                if(response1){
+                    setDataArticulos(response1);
+                    console.log(response1);
+                    const pageSize = rowsPerPage;
+                    const totalCount = response.rowCount;
+                    const totalPages = Math.ceil(totalCount / pageSize);
+                    setTotalRecords(response.rowCount);
+                    setTotalPages(totalPages);
+                    setLoading(false);
+                }else{
+                    setLoading(false);
+                    setError(response1.data.message);
+                    console.log(response1.data.message);
+                    setPosition('top');
+                    setDialogVisibleError(true);
+                    return response1.data.message;
+                }
+                
+            }
+    
+            categoriasdata.listarCategoriasCoralVista(codigoCategoria, descripcionCategoria, selectedCity).then((data) => {
+                setDataCategoria(data);
+                setLoading(false);
+            });
 
-        articulosdata.PaginacionlistarArticulosListaFull(codigoArticulo, presentacionParam, descripcionArticulo, proveedorParam, barraParam, checked, soloPendientesParam, incluirBarrasParam, soloSinRentasParam, soloSinPreciosParam, soloCompraParam, soloVentaRetailParam, jerarquiaParam).then((datas) => {
-            const totalCount = datas.rowCount;
-            const pageSize = 10;
-            const totalPages = Math.ceil(totalCount / pageSize);
-            setTotalRecords(datas.rowCount);
-            setTotalPages(totalPages);
-            ////console.log("Total Datos:", datas.rowCount);
-            ////console.log("Numero de datos por Pagina:", pageSize);
-            ////console.log("Total Paginas:", totalPages);
-        });
     };
 
 

@@ -32,14 +32,16 @@ export class EstadosCuentaIntermediaws {
                         return null;
                     })
                     .catch((error) => {
-                        console.error('Error EstadosCuentaIntermediaws metodo enviarCorreosEf25Fi...!!!!', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo enviarCorreosEf25Fi', error);
+                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
-                    });
-            })
-            .catch((error) => {
-                console.error('Error EstadosCuentaIntermediaws metodo enviarCorreosEf25Fi', error);
-                return null;
-            });
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo enviarCorreosEf25Fi', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
     }
 
     generarEstadoCuenta(estIdParam) {
@@ -67,14 +69,16 @@ export class EstadosCuentaIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        console.error('Error EstadosCuentaIntermediaws metodo generarEstadoCuenta...!!!!', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo generarEstadoCuenta', error);
+                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
-                    });
-            })
-            .catch((error) => {
-                console.error('Error EstadosCuentaIntermediaws metodo generarEstadoCuenta', error);
-                return null;
-            });
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo generarEstadoCuenta', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
     }
 
     getExcelEf25Fi(sociedadParam, bpParam) {
@@ -103,14 +107,16 @@ export class EstadosCuentaIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        console.error('Error EstadosCuentaIntermediaws metodo getExcelEf25Fi...!!!!', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo getExcelEf25Fi', error);
+                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
-                    });
-            })
-            .catch((error) => {
-                console.error('Error EstadosCuentaIntermediaws metodo getExcelEf25Fi', error);
-                return null;
-            });
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo getExcelEf25Fi', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
     }
 
     getPdfEf25Fi(sociedadParam, bpParam) {
@@ -139,14 +145,16 @@ export class EstadosCuentaIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        console.error('Error EstadosCuentaIntermediaws metodo getPdfEf25Fi...!!!!', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo getPdfEf25Fi', error);
+                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
-                    });
-            })
-            .catch((error) => {
-                console.error('Error EstadosCuentaIntermediaws metodo getPdfEf25Fi', error);
-                return null;
-            });
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo getPdfEf25Fi', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
     }
 
     ingresarEstadosCuenta(estadosParam) {
@@ -173,14 +181,16 @@ export class EstadosCuentaIntermediaws {
                         return null;
                     })
                     .catch((error) => {
-                        console.error('Error EstadosCuentaIntermediaws metodo ingresarEstadosCuenta...!!!!', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo ingresarEstadosCuenta', error);
+                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
-                    });
-            })
-            .catch((error) => {
-                console.error('Error EstadosCuentaIntermediaws metodo ingresarEstadosCuenta', error);
-                return null;
-            });
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo ingresarEstadosCuenta', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
     }
 
     listarEf25Fi(bpParam, cedulaParam, nombreParam, enviandos) {
@@ -189,7 +199,7 @@ export class EstadosCuentaIntermediaws {
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
-                const nuevaSerUrl = "http://192.168.56.167:8080";
+                const nuevaSerUrl = "http://192.168.200.24:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
@@ -212,14 +222,16 @@ export class EstadosCuentaIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        console.error('Error EstadosCuentaIntermediaws metodo listarEf25Fi...!!!!', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo listarEf25Fi', error);
+                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
-                    });
-            })
-            .catch((error) => {
-                console.error('Error EstadosCuentaIntermediaws metodo listarEf25Fi', error);
-                return null;
-            });
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo listarEf25Fi', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
     }
 
     listarEstadosCuenta(fechaInicioParam, fechaFinParam, tipoBpParam, codigoBpParam, nombreBpParam, lazyInfoParam) {
@@ -252,13 +264,16 @@ export class EstadosCuentaIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        console.error('Error EstadosCuentaIntermediaws metodo listarEstadosCuenta...!!!!', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo listarEstadosCuenta', error);
+                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
-                    });
-            })
-            .catch((error) => {
-                return null;
-            });
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo listarEstadosCuenta', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
     }
 
 }

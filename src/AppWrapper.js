@@ -5,6 +5,7 @@ import ControlArticulos from './components/ControlArticulos';
 import AprobarArticulos from './components/AprobarArticulos';
 import NotFound from './pages/NotFound';
 import EstadosCuenta from './components/EstadosCuenta';
+import VentasTargetas from './components/VentasTargetas';
 
 const AppWrapper = ({userData, usuarioUppercase}) => {
     let location = useLocation();
@@ -20,6 +21,7 @@ const AppWrapper = ({userData, usuarioUppercase}) => {
             <Route path="ControlArticulos" element={<ControlArticulos />} />
             <Route path="AprobarArticulos" element={<AprobarArticulos />} />
             <Route path="EstadosCuenta" element={<EstadosCuenta />} />
+            <Route path="VentasTarjeta" element={<VentasTargetas />} />
             <Route path="NotFound" element={<NotFound />} />
             </Route>
         </Routes>

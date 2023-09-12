@@ -15,7 +15,7 @@ export class CategoriasCoralIntermediaws {
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
                 const nuevaSerUrl = "http://192.168.56.167:8080";
-
+                //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
@@ -37,14 +37,16 @@ export class CategoriasCoralIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        console.error('Error en el nuevo método', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo listarCategoriasCoralVista', error);
+                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
-                    });
-            })
-            .catch((error) => {
-                console.error('Error al obtener datos para el nuevo método', error);
-                return null;
-            });
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo listarCategoriasCoralVista', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
     }
 
 
@@ -55,6 +57,7 @@ export class CategoriasCoralIntermediaws {
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
                 const nuevaSerUrl = "http://192.168.56.167:8080";
+                //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
@@ -73,14 +76,16 @@ export class CategoriasCoralIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        console.error('Error CategoriasCoralIntermediaws metodo getCambioCategoria...!!!!', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo getCambioCategoria', error);
+                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
-                    });
-            })
-            .catch((error) => {
-                console.error('Error CategoriasCoralIntermediaws metodo getCambioCategoria', error);
-                return null;
-            });
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo getCambioCategoria', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
     }
 
     guardarCambiosCategoria(cambios, usuarioParam) {
@@ -89,6 +94,7 @@ export class CategoriasCoralIntermediaws {
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
                 const nuevaSerUrl = "http://192.168.56.167:8080";
+                //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
@@ -107,14 +113,16 @@ export class CategoriasCoralIntermediaws {
                         return response;
                     })
                     .catch((error) => {
-                        console.error('Error CategoriasCoralIntermediaws metodo guardarCambiosCategoria...!!!!', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo guardarCambiosCategoria', error);
+                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
-                    });
-            })
-            .catch((error) => {
-                console.error('Error CategoriasCoralIntermediaws metodo guardarCambiosCategoria', error);
-                return null;
-            });
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo guardarCambiosCategoria', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
     }
 
     listarCategoriaCambio(codigoParam, estadosParam, fechaInicioParam, fechaFinParam) {
@@ -123,6 +131,7 @@ export class CategoriasCoralIntermediaws {
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
                 const nuevaSerUrl = "http://192.168.56.167:8080";
+                //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
@@ -144,14 +153,16 @@ export class CategoriasCoralIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        console.error('Error CategoriasCoralIntermediaws metodo listarCategoriaCambio...!!!!', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo listarCategoriaCambio', error);
+                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
-                    });
-            })
-            .catch((error) => {
-                console.error('Error CategoriasCoralIntermediaws metodo listarCategoriaCambio', error);
-                return null;
-            });
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo listarCategoriaCambio', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
     }
 
 
@@ -161,6 +172,7 @@ export class CategoriasCoralIntermediaws {
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
                 const nuevaSerUrl = "http://192.168.56.167:8080";
+                //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const paginationInfo = {
                     count: false,
@@ -192,14 +204,16 @@ export class CategoriasCoralIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        console.error('Error CategoriasCoralIntermediaws metodo loadCategoriaCambio...!!!!', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo loadCategoriaCambio', error);
+                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
-                    });
-            })
-            .catch((error) => {
-                console.error('Error CategoriasCoralIntermediaws metodo loadCategoriaCambio', error);
-                return null;
-            });
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo loadCategoriaCambio', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
     }
 
     PaginacionloadCategoriaCambio(codArticuloParam, nombreArticuloParam, estadosParam, fechaInicioParam, fechaFinParam, usuarioParam, currentPage, rowsPerPage) {
@@ -208,6 +222,7 @@ export class CategoriasCoralIntermediaws {
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
                 const nuevaSerUrl = "http://192.168.56.167:8080";
+                //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const paginationInfo = {
                     count: true,
@@ -239,14 +254,16 @@ export class CategoriasCoralIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        console.error('Error CategoriasCoralIntermediaws metodo loadCategoriaCambio...!!!!', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo PaginacionloadCategoriaCambio', error);
+                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
-                    });
-            })
-            .catch((error) => {
-                console.error('Error CategoriasCoralIntermediaws metodo loadCategoriaCambio', error);
-                return null;
-            });
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo PaginacionloadCategoriaCambio', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
     }
 
     updateCambioCategoria(cmbIdParam, usuarioParam) {
@@ -255,6 +272,7 @@ export class CategoriasCoralIntermediaws {
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
                 const nuevaSerUrl = "http://192.168.56.167:8080";
+                //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
@@ -273,14 +291,16 @@ export class CategoriasCoralIntermediaws {
                         return null;
                     })
                     .catch((error) => {
-                        console.error('Error CategoriasCoralIntermediaws metodo updateCambioCategoria...!!!!', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo updateCambioCategoria', error);
+                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
-                    });
-            })
-            .catch((error) => {
-                console.error('Error CategoriasCoralIntermediaws metodo updateCambioCategoria', error);
-                return null;
-            });
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo updateCambioCategoria', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
     }
 
     updateEstadoCambioCategoria(cmbIdParam, nuevoEstadoParam, usuarioParam) {
@@ -289,6 +309,7 @@ export class CategoriasCoralIntermediaws {
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
                 const nuevaSerUrl = "http://192.168.56.167:8080";
+                //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
@@ -310,14 +331,16 @@ export class CategoriasCoralIntermediaws {
 
                     })
                     .catch((error) => {
-                        console.error('Error CategoriasCoralIntermediaws metodo updateEstadoCambioCategoria...!!!!', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo updateEstadoCambioCategoria', error);
+                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
-                    });
-            })
-            .catch((error) => {
-                console.error('Error CategoriasCoralIntermediaws metodo updateEstadoCambioCategoria', error);
-                return null;
-            });
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo updateEstadoCambioCategoria', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
     }
 
 }

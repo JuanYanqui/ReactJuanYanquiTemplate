@@ -26,7 +26,7 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
     const [dialogVisibleError, setDialogVisibleError] = useState(false);
     const [checkedValue, setCheckedValue] = useState(0);
 
-    useEffect(() => {
+    /*useEffect(() => {
         const fetchData = async () => {
             const fechaInicio = null;
             const fechaFin = null;
@@ -51,13 +51,14 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
             }
         };
         fetchData();
-    }, [currentPage, rowsPerPage]);
+    }, [currentPage, rowsPerPage]);*/
 
     const onPageChange = (event) => {
         const newPage = Math.floor(event.first / event.rows);
         setLoading(true);
         setRowsPerPage(event.rows);
         setCurrentPage(newPage);
+        cargaDatos();
     };
     const paginatorLeft = <i />;
     const paginatorRight = <i />;
@@ -116,17 +117,17 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
                     currentPageReportTemplate={`Registros ${startRecord} - ${endRecord} de {totalRecords}`}
                 >
-                    <Column field="cmbId" header="CMBID" />
-                    <Column field="codigo" header="Código" />
-                    <Column field="tArticulo.descripcion" style={{ width: '25%' }} header="Descripción" />
-                    <Column field="descripcion" style={{ width: '17%' }} header="Motivo" />
-                    <Column field="categoriaNueva" style={{ width: '8%' }} header="Categoria Nueva" />
-                    <Column field="categoriaAnterior" style={{ width: '9%' }} header="Categoria Anterior" />
-                    <Column field="fecha" style={{ width: '10%' }} header="Fecha Emisión" />
-                    <Column field="usuCrea" style={{ width: '8%' }} header="Usuario Emitido" />
-                    <Column field="estado" header="Estado" body={renderEstadoColumn} />
-                    <Column field="icon" header="" body={aprobarCambio} />
-                    <Column field="icon" header="" body={CancelarCambio} />
+                    <Column field="cmbId" style={{ minWidth: '100px' }}header="CMBID" />
+                    <Column field="codigo" style={{ minWidth: '100px' }}header="Código" />
+                    <Column field="tArticulo.descripcion"style={{ minWidth: '100px' }}header="Descripción" />
+                    <Column field="descripcion" style={{ minWidth: '100px' }} header="Motivo" />
+                    <Column field="categoriaNueva" style={{ minWidth: '100px' }} header="Categoria Nueva" />
+                    <Column field="categoriaAnterior" style={{ minWidth: '100px' }} header="Categoria Anterior" />
+                    <Column field="fecha" style={{ minWidth: '100px' }} header="Fecha Emisión" />
+                    <Column field="usuCrea" style={{ minWidth: '100px' }}header="Usuario Emitido" />
+                    <Column field="estado" style={{ minWidth: '100px' }}header="Estado" body={renderEstadoColumn} />
+                    <Column field="icon" style={{ minWidth: '100px' }}header="" body={aprobarCambio} />
+                    <Column field="icon" style={{ minWidth: '100px' }}header="" body={CancelarCambio} />
                 </DataTable>
             </div>
         );
@@ -204,17 +205,28 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
     const [loading, setLoading] = useState(false);
 
 
-    const cargaDatos = () => {
-        //console.log("entro")
-        setLoading(true);
+    const cargaDatos = async () => {
         const fechaInicio = null;
         const fechaFin = null;
         const usuario = "";
         categoriasdata.loadCategoriaCambio(codigoArticulo, descripcionArticulo, checkedValue, fechaInicio, fechaFin, usuario, currentPage, rowsPerPage).then((data) => {
-            ////console.log("coraldataaa", data)
+            //console.log("coraldataaa", data)
             setDataCategoria(data);
             setLoading(false);
         });
+
+        const response = await categoriasdata.PaginacionloadCategoriaCambio(codigoArticulo, descripcionArticulo, checkedValue, fechaInicio, fechaFin, usuario, currentPage, rowsPerPage);
+        if (response) {
+            const pageSize = rowsPerPage;
+            const totalCount = response.rowCount;
+            const totalPages = Math.ceil(totalCount / pageSize);
+            setTotalRecords(response.rowCount);
+            setTotalPages(totalPages);
+            //console.log("Total Datos:", response.rowCount);
+            //console.log("Numero de datos por Pagina:", pageSize);
+            //console.log("Total Paginas:", totalPages);
+            setLoading(false);
+        }
     }
 
     const handleInputChange = (event) => {

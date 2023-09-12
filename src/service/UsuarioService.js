@@ -15,8 +15,9 @@ export class UsuarioService {
         return userData;
       })
       .catch((error) => {
-        console.error('Error fetching user data:', error);
-        throw error;
+        console.error('Error UsuarioService metodo GetMenuUsuarioIngreso', error);
+        window.alert('Ocurrió un error: ' + error.message);
+        return null;
       });
   }
 
@@ -40,7 +41,8 @@ export class UsuarioService {
         return objectData;
       })
       .catch((error) => {
-        console.error('Error en el nuevo método', error);
+        console.error('Error UsuarioService metodo PostUsuarioIngreso', error);
+        window.alert('Ocurrió un error: ' + error.message);
         return null;
       });
   }

@@ -6,7 +6,6 @@ import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
 import { Checkbox } from 'primereact/checkbox';
-import { CategoriasCoralIntermediaws } from '../serviceIntermedia/CategoriasCoralIntermediaws';
 import "../assets/theme/indigo/theme-light.css";
 import { EstadosCuentaIntermediaws } from '../serviceIntermedia/EstadoCuentaIntermediaws';
 import * as XLSX from 'xlsx';
@@ -37,7 +36,7 @@ const EstadosCuenta = () => {
     const handleSelectionChange = (e) => {
         setSelectedItems(e.value);
     };
-    useEffect(() => {
+    /*useEffect(() => {
         const fetchData = async () => {
             try {
                 estadocuentadata.listarEf25Fi(bp, nombreCuenta, cedulaCuenta, checked).then((data) => {
@@ -52,13 +51,14 @@ const EstadosCuenta = () => {
             }
         };
         fetchData();
-    }, [currentPage, rowsPerPage]);
+    }, [currentPage, rowsPerPage]);*/
 
     const onPageChange = (event) => {
         const newPage = Math.floor(event.first / event.rows);
         setLoading(true);
         setRowsPerPage(event.rows);
         setCurrentPage(newPage);
+        cargaDatos();
     };
 
     const paginatorLeft = <i />;
@@ -87,32 +87,33 @@ const EstadosCuenta = () => {
         return (
             <div>
                 <DataTable value={dataar}
-                    selection={selectedItems}
-                    onSelectionChange={handleSelectionChange}
-                    selectionMode="checkbox"
-                    paginator
-                    totalRecords={totalRecords}
-                    onPage={onPageChange}
-                    rows={rowsPerPage}
-                    first={currentPage * rowsPerPage}
-                    rowsPerPageOptions={[5, 10, 25]}
-                    paginatorPosition="both"
-                    paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
-                    paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
-                    currentPageReportTemplate={`Registros ${startRecord} -  de {totalRecords}`}
-                >
+                      selection={selectedItems}
+                      onSelectionChange={handleSelectionChange}
+                      selectionMode="checkbox"
+                      paginator
+                      totalRecords={totalRecords}
+                      onPage={onPageChange}
+                      rows={rowsPerPage}
+                      first={currentPage * rowsPerPage}
+                      rowsPerPageOptions={[5, 10, 25]}
+                      paginatorPosition="both"
+                      paginatorLeft={paginatorLeft}
+                      paginatorRight={paginatorRight}
+                      paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
+                      currentPageReportTemplate={`Registros ${startRecord} -  de {totalRecords}`}
+                    >
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    <Column field="0" header="Sociedad" />
-                    <Column field="1" header="BpCodigo" />
-                    <Column field="2" header="Tipo" />
-                    <Column field="3" header="Cedula" />
-                    <Column field="4" style={{ width: '25%' }} header="Nombre" />
-                    <Column field="5" style={{ width: '29%' }} header="Dirección" />
-                    <Column field="6" style={{ width: '6%' }} header="Telefono" />
-                    <Column field="8" style={{ width: '5%' }} header="Compra" />
-                    <Column field="9" style={{ width: '5%' }} header="Pagos" />
-                    <Column field="10" style={{ width: '5%' }} header="Cobros" />
-                    <Column header="" body={generarpdf} style={{ width: '3rem' }}></Column>
+                    <Column field="7" header="Código" style={{ minWidth: '100px' }} />
+                    <Column field="1" header="BpCódigo" style={{ minWidth: '100px' }} />
+                    <Column field="2" header="Tipo" style={{ minWidth: '100px' }} />
+                    <Column field="3" header="Cédula" style={{ minWidth: '100px' }} />
+                    <Column field="4" header="Nombre" style={{ minWidth: '100px' }} />
+                    <Column field="5" header="Dirección" style={{ minWidth: '100px' }} />
+                    <Column field="6" header="Teléfono" style={{ minWidth: '100px' }} />
+                    <Column field="8" header="Compra" style={{ minWidth: '100px' }} />
+                    <Column field="9" header="Pagos" style={{ minWidth: '100px' }} />
+                    <Column field="10" header="Cobros" style={{ minWidth: '100px' }} />
+                    <Column header="" body={generarpdf} style={{ minWidth: '3rem' }}></Column>
                 </DataTable>
             </div>
         );
@@ -120,7 +121,7 @@ const EstadosCuenta = () => {
 
 
     const generarExcelpropio = () => {
-        if (DataEstadoCuenta.length == 0) {
+        if (DataEstadoCuenta == null || DataEstadoCuenta.length == 0) {
             showWarnexe();
         } else {
             const wb = XLSX.utils.book_new();
