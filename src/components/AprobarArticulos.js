@@ -117,17 +117,17 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
                     currentPageReportTemplate={`Registros ${startRecord} - ${endRecord} de {totalRecords}`}
                 >
-                    <Column field="cmbId" style={{ minWidth: '100px' }}header="CMBID" />
-                    <Column field="codigo" style={{ minWidth: '100px' }}header="Código" />
-                    <Column field="tArticulo.descripcion"style={{ minWidth: '100px' }}header="Descripción" />
-                    <Column field="descripcion" style={{ minWidth: '100px' }} header="Motivo" />
-                    <Column field="categoriaNueva" style={{ minWidth: '100px' }} header="Categoria Nueva" />
-                    <Column field="categoriaAnterior" style={{ minWidth: '100px' }} header="Categoria Anterior" />
-                    <Column field="fecha" style={{ minWidth: '100px' }} header="Fecha Emisión" />
+                    <Column field="cmbId" style={{ minWidth: '50px' }}header="CMBID" />
+                    <Column field="codigo" style={{ minWidth: '50px' }}header="Código" />
+                    <Column field="tArticulo.descripcion"style={{ minWidth: '350px' }}header="Descripción" />
+                    <Column field="descripcion" style={{ minWidth: '200px' }} header="Motivo" />
+                    <Column field="categoriaNueva" style={{ minWidth: '80px' }} header="Categoria Nueva" />
+                    <Column field="categoriaAnterior" style={{ minWidth: '80px' }} header="Categoria Anterior" />
+                    <Column field="fecha" style={{ minWidth: '200px' }} header="Fecha Emisión" />
                     <Column field="usuCrea" style={{ minWidth: '100px' }}header="Usuario Emitido" />
                     <Column field="estado" style={{ minWidth: '100px' }}header="Estado" body={renderEstadoColumn} />
-                    <Column field="icon" style={{ minWidth: '100px' }}header="" body={aprobarCambio} />
-                    <Column field="icon" style={{ minWidth: '100px' }}header="" body={CancelarCambio} />
+                    <Column field="icon" style={{ minWidth: '50px' }}header="" body={aprobarCambio} />
+                    <Column field="icon" style={{ minWidth: '50px' }}header="" body={CancelarCambio} />
                 </DataTable>
             </div>
         );

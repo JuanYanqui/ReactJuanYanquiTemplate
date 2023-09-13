@@ -108,11 +108,11 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
                     currentPageReportTemplate={`Registros ${startRecord} - ${endRecord} de {totalRecords}`}
                 >
-                    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    <Column field="codigo" style={{ minWidth: '100px' }}header="Código" />
-                    <Column field="descripcion" style={{ minWidth: '100px' }} header="Descripción" />
+                    <Column selectionMode="multiple" headerStyle={{ minWidth: '50px' }}></Column>
+                    <Column field="codigo" style={{ minWidth: '50px' }}header="Código" />
+                    <Column field="descripcion" style={{ minWidth: '300px' }} header="Descripción" />
                     <Column field="precio" style={{ minWidth: '100px' }} header="Precio" />
-                    <Column field="unidadPedido" style={{ minWidth: '100px' }} header="Unidad de Pedido" />
+                    <Column field="unidadPedido" style={{ minWidth: '50px' }} header="Unidad de Pedido" />
                     <Column field="texto2" style={{ minWidth: '100px' }} header="Categoria Anterior" />
                     <Column field="texto3" style={{ minWidth: '100px' }} header="Nivel 1" />
                     <Column field="texto4" style={{ minWidth: '100px' }}header="Nivel 2" />

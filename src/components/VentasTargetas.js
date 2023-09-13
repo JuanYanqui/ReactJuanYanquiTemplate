@@ -46,7 +46,6 @@ const VentasTargetas = () => {
     const paginatorRight = (
         <div>
             <div className="flex flex-wrap gap-2" style={{display: 'inline-block'}}>
-                <i className="pi pi-file-pdf" style={{ fontSize: '2rem' }} onClick={() => generarpfdpeti(null)} ></i>
                 <img
                     src="./assets/layout/images/exelimg.png"
                     alt="Descripción de la imagen"
@@ -71,7 +70,7 @@ const VentasTargetas = () => {
         const startRecord = currentPage * rowsPerPage + 1;
         return (
             <div>
-                <DataTable value={dataar}
+                <DataTable value={dataar} 
                     paginator
                     totalRecords={totalRecords}
                     onPage={onPageChange}
@@ -83,22 +82,21 @@ const VentasTargetas = () => {
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
                     currentPageReportTemplate={`Registros ${startRecord} -  de {totalRecords}`}
                 >
-                    <Column field="1" style={{ minWidth: '100px' }} header="Centro" />
-                    <Column field="2" style={{ minWidth: '100px' }}header="Ptoemi" />
-                    <Column field="3" style={{ minWidth: '100px' }} header="Comprobante" />
-                    <Column field="4" style={{ minWidth: '100px' }} header="Descripción" />
-                    <Column field="8" style={{ minWidth: '100px' }} header="Recap" />
-                    <Column field="6" style={{ minWidth: '100px' }} header="Lote" />
-                    <Column field="5" style={{ minWidth: '100px' }} header="Bin" />
-                    <Column field="7" style={{ minWidth: '100px' }} header="Autorización" />
-                    <Column field="9" style={{ minWidth: '100px' }} header="Factura" />
-                    <Column field="10" style={{ minWidth: '100px' }} header="Fecha E." />
+                    <Column field="1" style={{ minWidth: '50px' }} header="Centro" />
+                    <Column field="2" style={{ minWidth: '50px' }}header="Ptoemi" />
+                    <Column field="3" style={{ minWidth: '50px' }} header="Comprobante" />
+                    <Column field="4" style={{ minWidth: '250px' }} header="Descripción" />
+                    <Column field="8" style={{ minWidth: '50px' }} header="Recap" />
+                    <Column field="6" style={{ minWidth: '50px' }} header="Lote" />
+                    <Column field="5" style={{ minWidth: '50px' }} header="Bin" />
+                    <Column field="7" style={{ minWidth: '50px' }} header="Autorización" />
+                    <Column field="9" style={{ minWidth: '200px' }} header="Factura" />
+                    <Column field="10" style={{ minWidth: '200px' }}  header="Fecha E." />
                     <Column field="11" style={{ minWidth: '100px' }} header="Identificación" />
-                    <Column field="12" style={{ minWidth: '100px' }} header="Cliente" />  
-                    <Column field="3" style={{ minWidth: '100px' }} header="#Tarjeta" />              
-                    <Column field="16" style={{ minWidth: '100px' }} header="Val Recap." />
-                    <Column field="0" style={{ minWidth: '100px' }} header="Valor V." />
-                    <Column header="" body={generarpdf} style={{ width: '3rem' }}></Column>
+                    <Column field="12" style={{ minWidth: '300px' }} header="Cliente" />  
+                    <Column field="3" style={{ minWidth: '50px' }} header="#Tarjeta" />              
+                    <Column field="16" style={{ minWidth: '50px' }} header="Val Recap." />
+                    <Column field="0" style={{ minWidth: '50px' }} header="Valor V." />
                 </DataTable>
             </div>
         );
@@ -174,14 +172,18 @@ const VentasTargetas = () => {
                     'Autorización',
                     'Factura',
                     'Fecha E.',
-                    'Identificación',
-                    'Cliente',
-                    'Total',
-                    'Otros',
-                    'Iva',
-                    'Val Recap',
-                    '#Tarjeta',
-                    'Valor V.',
+                    'Identificación',//11
+                    'Cliente',//12
+                    'Base Iva',//13
+                    'Otros',//14
+                    'Iva',//15
+                    'Val Recap',//21
+                    '#Tarjeta',//3
+                    'Dif',//19
+                    'NombreBanco',//17
+                    'TCredito',//18
+                    'Descripcion',//20
+                    'Valor Total',//16
                 ],
                 ...DataEstadoCuenta.map(item => [
                     item[1],
@@ -199,9 +201,13 @@ const VentasTargetas = () => {
                     item[13],
                     item[14],
                     item[15],
-                    item[16],
+                    item[21],
                     item[3],
-                    item[0],
+                    item[19],
+                    item[17],
+                    item[18],
+                    item[20],
+                    item[16],
                 ]),
             ]);
 

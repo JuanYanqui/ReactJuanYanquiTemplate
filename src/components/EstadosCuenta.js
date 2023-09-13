@@ -102,18 +102,17 @@ const EstadosCuenta = () => {
                       paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
                       currentPageReportTemplate={`Registros ${startRecord} -  de {totalRecords}`}
                     >
-                    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    <Column field="7" header="Código" style={{ minWidth: '100px' }} />
-                    <Column field="1" header="BpCódigo" style={{ minWidth: '100px' }} />
-                    <Column field="2" header="Tipo" style={{ minWidth: '100px' }} />
+                    <Column selectionMode="multiple" headerStyle={{ minWidth: '50px' }}></Column>
+                    <Column field="1" header="BpCódigo" style={{ minWidth: '50px' }} />
+                    <Column field="2" header="Tipo" style={{ minWidth: '50px' }} />
                     <Column field="3" header="Cédula" style={{ minWidth: '100px' }} />
-                    <Column field="4" header="Nombre" style={{ minWidth: '100px' }} />
-                    <Column field="5" header="Dirección" style={{ minWidth: '100px' }} />
+                    <Column field="4" style={{ minWidth: '350px' }}header="Nombre"  />
+                    <Column field="5" style={{ minWidth: '350px' }}header="Dirección"  />
                     <Column field="6" header="Teléfono" style={{ minWidth: '100px' }} />
-                    <Column field="8" header="Compra" style={{ minWidth: '100px' }} />
-                    <Column field="9" header="Pagos" style={{ minWidth: '100px' }} />
-                    <Column field="10" header="Cobros" style={{ minWidth: '100px' }} />
-                    <Column header="" body={generarpdf} style={{ minWidth: '3rem' }}></Column>
+                    <Column field="8" header="Compra" style={{ minWidth: '50px' }} />
+                    <Column field="9" header="Pagos" style={{ minWidth: '50px' }} />
+                    <Column field="10" header="Cobros" style={{ minWidth: '50px' }} />
+                    <Column header="" body={generarpdf} style={{ minWidth: '50px' }}></Column>
                 </DataTable>
             </div>
         );

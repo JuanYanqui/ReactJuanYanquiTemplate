@@ -443,7 +443,7 @@ const App = ({ userData, usuarioUppercase }) => {
                 //console.log("entro");
                 const datanueva = datas
                 //console.log(datanueva);
-                /*datanueva.object.forEach((item) => {
+                datanueva.object.forEach((item) => {
                     const existingUrls = datanueva.object.map(item => item.url);
                     const existingUrlsHijos = datanueva.object.flatMap(item => {
                         if (item.hijos && Array.isArray(item.hijos)) {
@@ -466,7 +466,7 @@ const App = ({ userData, usuarioUppercase }) => {
                         navigate("/rsap/NotFound");
                         return;
                     }
-                });*/
+                });
             });
         };
 

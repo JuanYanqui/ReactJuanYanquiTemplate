@@ -1,5 +1,10 @@
 @import './assets/flags/flags.css';
 
+@media (max-width: 768px) {
+    .responsive-column {
+      width: 200px;
+    }
+  }
 .selected-menuitem {
     background-color: #ffffff;
     color: #ffffff;
