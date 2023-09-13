@@ -86,15 +86,17 @@ const VentasTargetas = () => {
                     <Column field="1" style={{ minWidth: '100px' }} header="Centro" />
                     <Column field="2" style={{ minWidth: '100px' }}header="Ptoemi" />
                     <Column field="3" style={{ minWidth: '100px' }} header="Comprobante" />
-                    <Column field="4" style={{ minWidth: '100px' }} header="Bin" />
-                    <Column field="5" style={{ minWidth: '100px' }} header="Lote" />
-                    <Column field="6" style={{ minWidth: '100px' }} header="Autorización" />
-                    <Column field="7" style={{ minWidth: '100px' }} header="Recap" />
-                    <Column field="10" style={{ minWidth: '100px' }} header="Identificación" />
-                    <Column field="11" style={{ minWidth: '100px' }} header="Nombres" />
-                    <Column field="9" style={{ minWidth: '100px' }} header="Descripción" />
-                    <Column field="8" style={{ minWidth: '100px' }} header="Fecha E." />
-                    <Column field="12" style={{ minWidth: '100px' }} header="Total F." />
+                    <Column field="4" style={{ minWidth: '100px' }} header="Descripción" />
+                    <Column field="8" style={{ minWidth: '100px' }} header="Recap" />
+                    <Column field="6" style={{ minWidth: '100px' }} header="Lote" />
+                    <Column field="5" style={{ minWidth: '100px' }} header="Bin" />
+                    <Column field="7" style={{ minWidth: '100px' }} header="Autorización" />
+                    <Column field="9" style={{ minWidth: '100px' }} header="Factura" />
+                    <Column field="10" style={{ minWidth: '100px' }} header="Fecha E." />
+                    <Column field="11" style={{ minWidth: '100px' }} header="Identificación" />
+                    <Column field="12" style={{ minWidth: '100px' }} header="Cliente" />  
+                    <Column field="3" style={{ minWidth: '100px' }} header="#Tarjeta" />              
+                    <Column field="16" style={{ minWidth: '100px' }} header="Val Recap." />
                     <Column field="0" style={{ minWidth: '100px' }} header="Valor V." />
                     <Column header="" body={generarpdf} style={{ width: '3rem' }}></Column>
                 </DataTable>
@@ -128,6 +130,11 @@ const VentasTargetas = () => {
     }
 
 
+    /*
+                        <Column field="13" style={{ minWidth: '100px' }} header="Otros" />
+                    <Column field="14" style={{ minWidth: '100px' }} header="Iva" />
+                    <Column field="15" style={{ minWidth: '100px' }} header="Val Recap" />*/
+
 
 
     function convertirBase64APDF(base64Data) {
@@ -160,15 +167,20 @@ const VentasTargetas = () => {
                     'Centro',
                     'Ptoemi',
                     'Comprobante',
-                    'Bin',
-                    'Lote',
-                    'Autorización',
-                    'Recap',
-                    'Identificación',
-                    'Nombres',
                     'Descripción',
+                    'Recap',
+                    'Lote',
+                    'Bin',
+                    'Autorización',
+                    'Factura',
                     'Fecha E.',
-                    'Total F.',
+                    'Identificación',
+                    'Cliente',
+                    'Total',
+                    'Otros',
+                    'Iva',
+                    'Val Recap',
+                    '#Tarjeta',
                     'Valor V.',
                 ],
                 ...DataEstadoCuenta.map(item => [
@@ -176,14 +188,19 @@ const VentasTargetas = () => {
                     item[2],
                     item[3],
                     item[4],
-                    item[5],
+                    item[8],
                     item[6],
+                    item[5],
                     item[7],
+                    item[9],
                     item[10],
                     item[11],
-                    item[9],
-                    item[8],
                     item[12],
+                    item[13],
+                    item[14],
+                    item[15],
+                    item[16],
+                    item[3],
                     item[0],
                 ]),
             ]);
