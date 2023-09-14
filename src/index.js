@@ -15,6 +15,7 @@ const keycloakConfig = {
     onLoad: 'login-required',
 };
 
+
 /*const keycloakConfig = {
     realm: "prueba",
     url: "http://127.0.0.1:8080/auth/",

@@ -9,7 +9,12 @@ export class UsuarioService {
 
   GetMenuUsuarioIngreso(usuario) {
     const url = `https://wsgo.gerardoortiz.com/ApiJavadb/menuUsuario/menuAllUser?userId=${usuario}&app=APP`;
-    return axios.get(url)
+    return axios.get(url,{
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Access-Control-Allow-Origin': 'https://wsgo.gerardoortiz.com'
+      }
+    })
       .then((res) => {
         const userData = res.data;
         return userData;
@@ -33,7 +38,8 @@ export class UsuarioService {
     return axios
       .post(url, requestData, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8',
+        'Access-Control-Allow-Origin': 'https://wsback.gerardoortiz.com:8443'
         },
       })
       .then((response) => {
