@@ -13,7 +13,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -50,7 +50,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -87,7 +87,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -124,7 +124,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -160,7 +160,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         return axios
@@ -191,7 +191,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -230,7 +230,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -268,7 +268,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -306,7 +306,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -345,7 +345,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -384,7 +384,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -423,7 +423,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -463,7 +463,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -503,7 +503,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -541,7 +541,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -579,7 +579,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -618,7 +618,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const paginationInfo = {
@@ -678,7 +678,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const paginationInfo = {
@@ -737,7 +737,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -785,7 +785,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -838,7 +838,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -877,7 +877,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -933,7 +933,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -971,7 +971,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -1009,7 +1009,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -1051,7 +1051,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -1095,7 +1095,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
@@ -1141,7 +1141,7 @@ export class ArticulosIntermediaws {
     return this.pathService.getUrl(ws_nombre)
       .then((data) => {
         const nuevaWsUrl = data.object.wsUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         const url = nuevaSerUrl + nuevaWsUrl;
         const requestData = {
           object: JSON.stringify({

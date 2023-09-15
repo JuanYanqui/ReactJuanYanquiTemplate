@@ -1,31 +1,27 @@
 import axios from 'axios';
 import { PathService } from '../service/Path.Service';
-
-
-export class CategoriasCoralIntermediaws {
+import { Toast } from 'primereact/toast';
+import React, { useState, useEffect, useRef } from 'react';
+export class EstadosCuentaIntermediaws {
 
     constructor() {
         this.pathService = new PathService();
     }
 
-
-    listarCategoriasCoralVista(cod, des, niv) {
-        const asignacion = "INTERMEDIAWS_CATEGCORAL_LIST_VISTA";
-        return this.pathService.getUrl(asignacion)
+    enviarCorreosEf25Fi(codigosParam) {
+        const ws_nombre = "INTERMEDIAWS_EST_CUENTA_CORREOS_EF25FI";
+        return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "http://192.168.56.167:8080";
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
+                const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
-                        codigo: cod,
-                        descripcion: des,
-                        nivel: niv,
+                        codigos: codigosParam
                     }),
                     rowCount: 0,
                 };
-
                 return axios
                     .post(url, requestData, {
                         headers: {
@@ -33,35 +29,32 @@ export class CategoriasCoralIntermediaws {
                         }
                     })
                     .then((response) => {
-                        const objectData = JSON.parse(response.data.object);
-                        return objectData;
+                        return null;
                     })
                     .catch((error) => {
-                        console.error('Error EstadosCuentaIntermediaws metodo listarCategoriasCoralVista', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo enviarCorreosEf25Fi', error);
                         window.alert('Ocurrió un error: ' + error.message);
                         return null;
                       });
                   })
                   .catch((error) => {
-                    console.error('Error EstadosCuentaIntermediaws metodo listarCategoriasCoralVista', error);
+                    console.error('Error EstadosCuentaIntermediaws metodo enviarCorreosEf25Fi', error);
                     window.alert('Ocurrió un error: ' + error.message);
                     return null;
                   });
     }
 
-
-
-    getCambioCategoria(cmbIdParam) {
-        const ws_nombre = "INTERMEDIAWS_CATEGCORAL_GET_CAMBIO";
+    generarEstadoCuenta(estIdParam) {
+        const ws_nombre = "INTERMEDIAWS_PDF_ESTADO_CUENTA";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "http://192.168.56.167:8080";
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
+                const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
-                        cmbId: cmbIdParam
+                        estId: estIdParam
                     }),
                     rowCount: 0,
                 };
@@ -76,69 +69,30 @@ export class CategoriasCoralIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        console.error('Error EstadosCuentaIntermediaws metodo getCambioCategoria', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo generarEstadoCuenta', error);
                         window.alert('Ocurrió un error: ' + error.message);
                         return null;
                       });
                   })
                   .catch((error) => {
-                    console.error('Error EstadosCuentaIntermediaws metodo getCambioCategoria', error);
+                    console.error('Error EstadosCuentaIntermediaws metodo generarEstadoCuenta', error);
                     window.alert('Ocurrió un error: ' + error.message);
                     return null;
                   });
     }
 
-    guardarCambiosCategoria(cambios, usuarioParam) {
-        const ws_nombre = "INTERMEDIAWS_CATEGCORAL_SAVE_CAMBIO";
+    getExcelEf25Fi(sociedadParam, bpParam) {
+        const ws_nombre = "INTERMEDIAWS_EST_CUENTA_EXCEL_EF25FI";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "http://192.168.56.167:8080";
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
+                const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({
-                        cambios: JSON.stringify(cambios),
-                        usuario: usuarioParam
-                    }),
-                    rowCount: 0,
-                };
-                return axios
-                    .post(url, requestData, {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then((response) => {
-                        return response;
-                    })
-                    .catch((error) => {
-                        console.error('Error EstadosCuentaIntermediaws metodo guardarCambiosCategoria', error);
-                        window.alert('Ocurrió un error: ' + error.message);
-                        return null;
-                      });
-                  })
-                  .catch((error) => {
-                    console.error('Error EstadosCuentaIntermediaws metodo guardarCambiosCategoria', error);
-                    window.alert('Ocurrió un error: ' + error.message);
-                    return null;
-                  });
-    }
-
-    listarCategoriaCambio(codigoParam, estadosParam, fechaInicioParam, fechaFinParam) {
-        const ws_nombre = "INTERMEDIAWS_CATEGCORAL_LIST_CAMBIOS";
-        return this.pathService.getUrl(ws_nombre)
-            .then((data) => {
-                const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "http://192.168.56.167:8080";
-                //const nuevaSerUrl = data.object.serCodigo.serUrl;
-                const url = nuevaSerUrl + nuevaWsUrl;
-                const requestData = {
-                    object: JSON.stringify({
-                        codigo: codigoParam,
-                        estados: estadosParam,
-                        fechaInicio: fechaInicioParam,
-                        fechaFin: fechaFinParam
+                        sociedad: sociedadParam,
+                        bp: bpParam
                     }),
                     rowCount: 0,
                 };
@@ -153,43 +107,149 @@ export class CategoriasCoralIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        console.error('Error EstadosCuentaIntermediaws metodo listarCategoriaCambio', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo getExcelEf25Fi', error);
                         window.alert('Ocurrió un error: ' + error.message);
                         return null;
                       });
                   })
                   .catch((error) => {
-                    console.error('Error EstadosCuentaIntermediaws metodo listarCategoriaCambio', error);
+                    console.error('Error EstadosCuentaIntermediaws metodo getExcelEf25Fi', error);
                     window.alert('Ocurrió un error: ' + error.message);
                     return null;
                   });
     }
 
-
-    loadCategoriaCambio(codArticuloParam, nombreArticuloParam, estadosParam, fechaInicioParam, fechaFinParam, usuarioParam, currentPage, rowsPerPage) {
-        const ws_nombre = "INTERMEDIAWS_CATEGCORAL_LOAD_CAMBIOS";
+    getPdfEf25Fi(sociedadParam, bpParam) {
+        const ws_nombre = "INTERMEDIAWS_EST_CUENTA_PDF_EF25FI";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "http://192.168.56.167:8080";
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
+                const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
                 const url = nuevaSerUrl + nuevaWsUrl;
-                const paginationInfo = {
-                    count: false,
-                    pagesize: rowsPerPage,
-                    first: currentPage,
-                    sortBy: {},
-                    filterBy: {}
-                };
                 const requestData = {
                     object: JSON.stringify({
-                        codArticulo: codArticuloParam,
-                        nombreArticulo: nombreArticuloParam,
-                        estados: estadosParam,
+                        sociedad: sociedadParam,
+                        bp: bpParam
+                    }),
+                    rowCount: 0,
+                };
+                return axios
+                    .post(url, requestData, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then((response) => {
+                        const objectData = JSON.parse(response.data.object);
+                        return objectData;
+                    })
+                    .catch((error) => {
+                        console.error('Error EstadosCuentaIntermediaws metodo getPdfEf25Fi', error);
+                        window.alert('Ocurrió un error: ' + error.message);
+                        return null;
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo getPdfEf25Fi', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
+    }
+
+    ingresarEstadosCuenta(estadosParam) {
+        const ws_nombre = "INTERMEDIAWS_INGRESAR_ESTADOS_CUENTA";
+        return this.pathService.getUrl(ws_nombre)
+            .then((data) => {
+                const nuevaWsUrl = data.object.wsUrl;
+                //const nuevaSerUrl = data.object.serCodigo.serUrl;
+                const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
+                const url = nuevaSerUrl + nuevaWsUrl;
+                const requestData = {
+                    object: JSON.stringify({
+                        estados: estadosParam
+                    }),
+                    rowCount: 0,
+                };
+                return axios
+                    .post(url, requestData, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then((response) => {
+                        return null;
+                    })
+                    .catch((error) => {
+                        console.error('Error EstadosCuentaIntermediaws metodo ingresarEstadosCuenta', error);
+                        window.alert('Ocurrió un error: ' + error.message);
+                        return null;
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo ingresarEstadosCuenta', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
+    }
+
+    listarEf25Fi(bpParam, cedulaParam, nombreParam, enviandos) {
+        const ws_nombre = "INTERMEDIAWS_EST_CUENTA_LISTAR_EF25FI";
+        return this.pathService.getUrl(ws_nombre)
+            .then((data) => {
+                const nuevaWsUrl = data.object.wsUrl;
+                //const nuevaSerUrl = data.object.serCodigo.serUrl;
+                const nuevaSerUrl = "http://localhost:8081/http://192.168.200.24:8080";
+                const url = nuevaSerUrl + nuevaWsUrl;
+                const requestData = {
+                    object: JSON.stringify({
+                        sociedad: null,
+                        bp: bpParam,
+                        cedula: cedulaParam,
+                        nombre: nombreParam,
+                        enviados: enviandos
+                    }),
+                    rowCount: 0,
+                };
+                return axios
+                    .post(url, requestData, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then((response) => {
+                        const objectData = JSON.parse(response.data.object);
+                        return objectData;
+                    })
+                    .catch((error) => {
+                        console.error('Error EstadosCuentaIntermediaws metodo listarEf25Fi', error);
+                        window.alert('Ocurrió un error: ' + error.message);
+                        return null;
+                      });
+                  })
+                  .catch((error) => {
+                    console.error('Error EstadosCuentaIntermediaws metodo listarEf25Fi', error);
+                    window.alert('Ocurrió un error: ' + error.message);
+                    return null;
+                  });
+    }
+
+    listarEstadosCuenta(fechaInicioParam, fechaFinParam, tipoBpParam, codigoBpParam, nombreBpParam, lazyInfoParam) {
+        const ws_nombre = "INTERMEDIAWS_LISTAR_ESTADO_CUENTA";
+        return this.pathService.getUrl(ws_nombre)
+            .then((data) => {
+                const nuevaWsUrl = data.object.wsUrl;
+                //const nuevaSerUrl = data.object.serCodigo.serUrl;
+                const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
+                const url = nuevaSerUrl + nuevaWsUrl;
+                const requestData = {
+                    object: JSON.stringify({
                         fechaInicio: fechaInicioParam,
                         fechaFin: fechaFinParam,
-                        usuario: usuarioParam,
-                        lazy: JSON.stringify(paginationInfo)
+                        tipoBp: tipoBpParam,
+                        codigoBp: codigoBpParam,
+                        nombreBp: nombreBpParam,
+                        lazyInfo: lazyInfoParam
                     }),
                     rowCount: 0,
                 };
@@ -204,140 +264,13 @@ export class CategoriasCoralIntermediaws {
                         return objectData;
                     })
                     .catch((error) => {
-                        console.error('Error EstadosCuentaIntermediaws metodo loadCategoriaCambio', error);
+                        console.error('Error EstadosCuentaIntermediaws metodo listarEstadosCuenta', error);
                         window.alert('Ocurrió un error: ' + error.message);
                         return null;
                       });
                   })
                   .catch((error) => {
-                    console.error('Error EstadosCuentaIntermediaws metodo loadCategoriaCambio', error);
-                    window.alert('Ocurrió un error: ' + error.message);
-                    return null;
-                  });
-    }
-
-    PaginacionloadCategoriaCambio(codArticuloParam, nombreArticuloParam, estadosParam, fechaInicioParam, fechaFinParam, usuarioParam, currentPage, rowsPerPage) {
-        const ws_nombre = "INTERMEDIAWS_CATEGCORAL_LOAD_CAMBIOS";
-        return this.pathService.getUrl(ws_nombre)
-            .then((data) => {
-                const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "http://192.168.56.167:8080";
-                //const nuevaSerUrl = data.object.serCodigo.serUrl;
-                const url = nuevaSerUrl + nuevaWsUrl;
-                const paginationInfo = {
-                    count: true,
-                    pagesize: rowsPerPage,
-                    first: currentPage,
-                    sortBy: {},
-                    filterBy: {}
-                };
-                const requestData = {
-                    object: JSON.stringify({
-                        codArticulo: codArticuloParam,
-                        nombreArticulo: nombreArticuloParam,
-                        estados: estadosParam,
-                        fechaInicio: fechaInicioParam,
-                        fechaFin: fechaFinParam,
-                        usuario: usuarioParam,
-                        lazy: JSON.stringify(paginationInfo)
-                    }),
-                    rowCount: 0,
-                };
-                return axios
-                    .post(url, requestData, {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then((response) => {
-                        const objectData = JSON.parse(response.data.object);
-                        return objectData;
-                    })
-                    .catch((error) => {
-                        console.error('Error EstadosCuentaIntermediaws metodo PaginacionloadCategoriaCambio', error);
-                        window.alert('Ocurrió un error: ' + error.message);
-                        return null;
-                      });
-                  })
-                  .catch((error) => {
-                    console.error('Error EstadosCuentaIntermediaws metodo PaginacionloadCategoriaCambio', error);
-                    window.alert('Ocurrió un error: ' + error.message);
-                    return null;
-                  });
-    }
-
-    updateCambioCategoria(cmbIdParam, usuarioParam) {
-        const ws_nombre = "INTERMEDIAWS_CATEGCORAL_UPDATE_CAMBIO";
-        return this.pathService.getUrl(ws_nombre)
-            .then((data) => {
-                const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "http://192.168.56.167:8080";
-                //const nuevaSerUrl = data.object.serCodigo.serUrl;
-                const url = nuevaSerUrl + nuevaWsUrl;
-                const requestData = {
-                    object: JSON.stringify({
-                        cmbId: cmbIdParam,
-                        usuario: usuarioParam
-                    }),
-                    rowCount: 0,
-                };
-                return axios
-                    .post(url, requestData, {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then((response) => {
-                        return null;
-                    })
-                    .catch((error) => {
-                        console.error('Error EstadosCuentaIntermediaws metodo updateCambioCategoria', error);
-                        window.alert('Ocurrió un error: ' + error.message);
-                        return null;
-                      });
-                  })
-                  .catch((error) => {
-                    console.error('Error EstadosCuentaIntermediaws metodo updateCambioCategoria', error);
-                    window.alert('Ocurrió un error: ' + error.message);
-                    return null;
-                  });
-    }
-
-    updateEstadoCambioCategoria(cmbIdParam, nuevoEstadoParam, usuarioParam) {
-        const ws_nombre = "INTERMEDIAWS_CATEGCORAL_UPDATE_ESTADO_CAMBIO";
-        return this.pathService.getUrl(ws_nombre)
-            .then((data) => {
-                const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "http://192.168.56.167:8080";
-                //const nuevaSerUrl = data.object.serCodigo.serUrl;
-                const url = nuevaSerUrl + nuevaWsUrl;
-                const requestData = {
-                    object: JSON.stringify({
-                        cmbId: cmbIdParam,
-                        nuevoEstado: nuevoEstadoParam,
-                        observaciones: "",
-                        usuario: usuarioParam
-                    }),
-                    rowCount: 0,
-                };
-                return axios
-                    .post(url, requestData, {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then((response) => {
-                        return response;
-
-                    })
-                    .catch((error) => {
-                        console.error('Error EstadosCuentaIntermediaws metodo updateEstadoCambioCategoria', error);
-                        window.alert('Ocurrió un error: ' + error.message);
-                        return null;
-                      });
-                  })
-                  .catch((error) => {
-                    console.error('Error EstadosCuentaIntermediaws metodo updateEstadoCambioCategoria', error);
+                    console.error('Error EstadosCuentaIntermediaws metodo listarEstadosCuenta', error);
                     window.alert('Ocurrió un error: ' + error.message);
                     return null;
                   });

@@ -12,7 +12,7 @@ export class VentasTargetasPosws {
 
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
         const nuevaSerUrl = "http://localhost:8080";
-        const url = "http://192.168.200.24:8080/posws/ws/vouchers/ventasTargetas";
+        const url = "http://localhost:8081/http://192.168.200.24:8080/posws/ws/vouchers/ventasTargetas";
         const requestData = {
             object: JSON.stringify({
                 centro: centro,
@@ -43,7 +43,7 @@ export class VentasTargetasPosws {
 
 
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
-        const nuevaSerUrl = "http://192.168.56.167:8080";
+        const nuevaSerUrl = "http://localhost:8081/http://192.168.56.167:8080";
         const url = "http://localhost:8080/posws/ws/vouchers/generateVouchersReport";
         const requestData = {
             object: JSON.stringify({

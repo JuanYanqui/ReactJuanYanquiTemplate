@@ -48,12 +48,10 @@ initKeycloak()
         const usuarioService = new UsuarioService();
         ////console.log("datos del keycloak",keycloak);
         usuarioService.PostUsuarioIngreso(usuarioUppercase)
-            .then((usuarioingresado) => {
-                if (usuarioingresado != null) {
-                    ////console.log(usuarioingresado);
+  
                     usuarioService.GetMenuUsuarioIngreso(usuarioUppercase)
                         .then((userData) => {
-                            ////console.log(userData);
+                            console.log(userData);
                             const root = ReactDOM.createRoot(document.getElementById('root'));
                             root.render(
 
@@ -67,15 +65,7 @@ initKeycloak()
                         .catch((error) => {
                             console.error('Error fetching user data:', error);
                         });
-                } else {
-                    console.error('Error fetching user data:');
-                    window.location.href = keycloakConfig.url + 'realms/' + keycloakConfig.realm + '/protocol/openid-connect/logout?redirect_uri=' + encodeURIComponent(window.location.origin);
-                }
-
-            })
-            .catch((error) => {
-                console.error('Error fetching user data:', error);
-            });
+    
 
         reportWebVitals();
     })
