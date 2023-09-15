@@ -1,0 +1,54 @@
+.fontRegular {
+    font-family: 'titillium_webregular' !important;
+}
+.red-back {
+    background-color: #EF3C56;
+}
+
+.fontRegular {
+    font-family: 'titillium_webregular' !important;
+}
+body {
+    height: 100%;
+    width: 100%;
+}
+body {
+    background-color: #F6F8F8;
+    margin: 0px;
+}
+body {
+    display: block;
+    margin: 8px;
+}
+
+
+
+.Container100 {
+    width: 100%;
+    float: left;
+}
+.MarAuto {
+    margin-left: auto;
+    margin-right: auto;
+}
+.OvHidden {
+    overflow: hidden;
+}
+.PosAbsolute {
+    position: absolute;
+}
+.Top20Percent {
+    top: 20%;
+}
+
+
+div {
+    display: block;
+}
+.fontRegular {
+    font-family: 'titillium_webregular' !important;
+}
+.fontRegular {
+    font-family: 'titillium_webregular' !important;
+}
+

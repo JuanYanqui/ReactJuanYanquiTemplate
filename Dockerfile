@@ -15,8 +15,10 @@ RUN cd react-app && npm install
 # Copia el resto de los archivos de tu servidor CORS Anywhere y la aplicación React
 COPY . .
 
+
 # Expón los puertos de ambas partes
 EXPOSE 3000
+
 
 # Comando para iniciar tanto el servidor CORS Anywhere como la aplicación React
 CMD ["bash", "-c", "cd cors-anywhere-master && node server.js & cd react-app && npm start"]
