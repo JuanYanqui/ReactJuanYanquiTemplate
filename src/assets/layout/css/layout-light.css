@@ -40,7 +40,7 @@ h6 {
 
 mark {
   background: #FFF8E1;
-  padding: 0.25rem 0.5.5rem;
+  padding: 0.25rem 0.4rem;
   border-radius: 5px;
   font-family: monospace;
 }
@@ -692,7 +692,7 @@ body .p-overlay-badge .p-badge {
   left: 0;
   z-index: 998;
   width: 100%;
-  height: 5.5rem;
+  height: 4rem;
   transition: width 0.2s;
   display: flex;
 }
@@ -790,7 +790,7 @@ body .p-overlay-badge .p-badge {
 .layout-topbar .layout-topbar-right .layout-topbar-actions-right .layout-topbar-items .layout-topbar-item .layout-topbar-action {
   user-select: none;
   padding: 0 0.8rem;
-  margin: 0 0.5.5rem;
+  margin: 0 0.4rem;
   border-radius: 4px;
   height: 3.2rem;
   min-width: 3.2rem;
@@ -800,7 +800,7 @@ body .p-overlay-badge .p-badge {
 }
 .layout-topbar .layout-topbar-right .layout-topbar-actions-right .layout-topbar-items .layout-topbar-item .layout-topbar-action-panel {
   position: absolute;
-  top: 5.5rem;
+  top: 4rem;
   right: 0;
   z-index: 1000;
   min-width: 25rem;
@@ -812,7 +812,7 @@ body .p-overlay-badge .p-badge {
   padding: 1rem;
 }
 .layout-topbar .layout-topbar-right .layout-topbar-actions-right .layout-topbar-items .layout-topbar-item.layout-search-item .layout-search-panel {
-  height: 5.5rem;
+  height: 4rem;
   width: 100%;
   position: fixed;
   top: 0;
@@ -854,7 +854,7 @@ body .p-overlay-badge .p-badge {
     flex-direction: column;
   }
   .layout-topbar .layout-topbar-left {
-    height: 5.5rem;
+    height: 4rem;
     width: 100%;
     justify-content: flex-start;
   }
@@ -874,7 +874,7 @@ body .p-overlay-badge .p-badge {
     display: flex;
   }
   .layout-topbar .layout-topbar-right .layout-topbar-actions-left {
-    height: 5.5rem;
+    height: 4rem;
     display: flex;
     justify-content: space-between;
   }
@@ -897,7 +897,7 @@ body .p-overlay-badge .p-badge {
     min-width: 12.5rem;
   }
   .layout-topbar .layout-topbar-right .layout-topbar-actions-right {
-    height: 5.5rem;
+    height: 4rem;
     width: 100%;
   }
   .layout-topbar .layout-topbar-right .layout-topbar-actions-right .layout-topbar-items {
@@ -2458,8 +2458,8 @@ body .p-overlay-badge .p-badge {
 }
 
 .layout-rightmenu.p-sidebar {
-  top: 5.5rem;
-  height: calc(100% - 5.5rem);
+  top: 4rem;
+  height: calc(100% - 4rem);
   overflow: auto;
   transition: transform 0.2s;
 }
@@ -2481,11 +2481,11 @@ body .p-overlay-badge .p-badge {
   }
 }
 .menu-wrapper {
-  height: calc(100% - 5.5rem);
+  height: calc(100% - 4rem);
   width: 17rem;
   position: fixed;
   left: 0;
-  top: 5.5rem;
+  top: 4rem;
   z-index: 997;
   transform: none;
 }
@@ -2778,8 +2778,8 @@ body .p-overlay-badge .p-badge {
 
 @media (max-width: 991px) {
   .layout-wrapper .menu-wrapper {
-    top: 5.5rem;
-    height: calc(100% - 5.5rem);
+    top: 4rem;
+    height: calc(100% - 4rem);
     transform: translate3d(-17rem, 0px, 0px);
     transition: transform 0.2s;
     transition-timing-function: cubic-bezier(0.86, 0, 0.07, 1);
@@ -3642,7 +3642,7 @@ body .p-overlay-badge .p-badge {
     clear: right;
   }
   .layout-rtl .p-datatable.p-datatable-products .p-datatable-tbody > tr > td .p-column-title {
-    margin: -0.5.5rem -0.5.5rem -0.5.5rem 1rem;
+    margin: -0.4rem -0.4rem -0.4rem 1rem;
   }
 }
 .pages-body {
@@ -3765,7 +3765,7 @@ body .p-overlay-badge .p-badge {
   background: #D81B60;
 }
 .pages-body.notfound-page {
-  background: #f7f7f7;
+  background: url("../images/pages/404-bg.jpg");
   background-size: cover;
 }
 .pages-body.notfound-page .pages-panel .pages-header {
@@ -3843,7 +3843,7 @@ body .p-overlay-badge .p-badge {
   height: 100%;
 }
 .landing-container #pricing .pricing-content .options {
-  padding: 2rem 5.5rem;
+  padding: 2rem 4rem;
 }
 .landing-container #pricing .pricing-content .options li {
   display: flex;
@@ -4319,7 +4319,7 @@ body a {
 }
 
 .layout-wrapper .layout-main {
-  padding-top: 5.5rem;
+  padding-top: 4rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -4417,7 +4417,7 @@ body a {
   left: 2rem;
   bottom: -1rem;
   border-radius: 4px;
-  width: calc(100% - 5.5rem);
+  width: calc(100% - 4rem);
 }
 .layout-help-page .layout-help-page-header .layout-help-page-search .p-inputtext {
   border: 0 none;

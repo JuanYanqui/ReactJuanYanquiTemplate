@@ -11,7 +11,6 @@ export class VentasTargetasPosws {
     ventasTargetas(centro, fecha, ptoemi) {
 
         //const nuevaSerUrl = data.object.serCodigo.serUrl;
-        const nuevaSerUrl = "http://localhost:8080";
         const url = "http://192.168.200.24:8080/posws/ws/vouchers/ventasTargetas";
         const requestData = {
             object: JSON.stringify({

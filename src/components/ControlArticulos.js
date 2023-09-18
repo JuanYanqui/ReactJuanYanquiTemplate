@@ -324,7 +324,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
             if (response1) {
                 if(response1){
                     setDataArticulos(response1);
-                    console.log(response1);
+                    //console.log(response1);
                     const pageSize = rowsPerPage;
                     const totalCount = response.rowCount;
                     const totalPages = Math.ceil(totalCount / pageSize);
@@ -334,7 +334,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                 }else{
                     setLoading(false);
                     setError(response1.data.message);
-                    console.log(response1.data.message);
+                    //console.log(response1.data.message);
                     setPosition('top');
                     setDialogVisibleError(true);
                     return response1.data.message;

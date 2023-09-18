@@ -130,8 +130,8 @@ export class CategoriasCoralIntermediaws {
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                const nuevaSerUrl = "http://192.168.56.167:8080";
-                //const nuevaSerUrl = data.object.serCodigo.serUrl;
+                //const nuevaSerUrl = "http://192.168.56.167:8080";
+                const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const requestData = {
                     object: JSON.stringify({

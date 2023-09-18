@@ -1,25 +1,28 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { classNames } from 'primereact/utils';
-import { Route, Routes, useLocation } from 'react-router-dom';
-import '@fortawesome/fontawesome-free/css/all.css';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+
 import AppTopbar from './AppTopbar';
+import AppBreadcrumb from './AppBreadcrumb';
 import AppInlineMenu from './AppInlineMenu';
+import AppFooter from './AppFooter';
 import AppMenu from './AppMenu';
+import AppConfig from './AppConfig';
 import AppRightMenu from './AppRightMenu';
-import { useNavigate } from 'react-router-dom';
+import MessagesDemo from './components/MessagesDemo';
 import PrimeReact from 'primereact/api';
 import { Tooltip } from 'primereact/tooltip';
+import EstadosCuenta from './components/EstadosCuenta';
+import VentasTargetas from './components/VentasTargetas';
+import AprobarArticulos from './components/AprobarArticulos';
+import ControlArticulos from './components/ControlArticulos';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 import './App.scss';
-import AprobarArticulos from './components/AprobarArticulos';
-import ControlArticulos from './components/ControlArticulos';
+import Documentation from './components/Documentation';
 import { UsuarioService } from './service/UsuarioService';
-import NotFound from './pages/NotFound';
-import EstadosCuenta from './components/EstadosCuenta';
-import VentasTargetas from './components/VentasTargetas';
-
+import '@fortawesome/fontawesome-free/css/all.css';
 export const RTLContext = React.createContext();
 
 const App = ({ userData, usuarioUppercase }) => {
@@ -45,6 +48,7 @@ const App = ({ userData, usuarioUppercase }) => {
     const copyTooltipRef = useRef();
     let currentInlineMenuKey = useRef(null);
     const location = useLocation();
+
     PrimeReact.ripple = true;
 
     let searchClick;
@@ -129,9 +133,9 @@ const App = ({ userData, usuarioUppercase }) => {
 
     }
 
-
-    const menu = generateMenuFromUserData(userData);
+       const menu = generateMenuFromUserData(userData);
     const routes = generateRoutesFromUserData(userData);
+
     const onMenuItemClick = (event, item) => {
         if (!item.items) {
 
@@ -146,7 +150,7 @@ const App = ({ userData, usuarioUppercase }) => {
             const url = item.to;
             //console.log('URL:', url);
             const url2 = url.trim();
-            if (url2.includes("/rsap")) {
+            if (url2.includes("/react")) {
                 usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datan) => {
                     datan.object.forEach((item) => {
                         const currentUrl = url;
@@ -161,7 +165,7 @@ const App = ({ userData, usuarioUppercase }) => {
                             redirectToExternalUrl(url);
                         } else {
 
-                            window.location.href = 'not-found.html';
+                            navigate("/rsap/access");
                         }
 
                     });
@@ -196,9 +200,9 @@ const App = ({ userData, usuarioUppercase }) => {
         const appLogoLink = document.getElementById('app-logo');
 
         if (topbarTheme === 'white' || topbarTheme === 'yellow' || topbarTheme === 'amber' || topbarTheme === 'orange' || topbarTheme === 'lime') {
-            appLogoLink.src = 'assets/layout/images/web_logo_header.png';
+            appLogoLink.src = '../assets/layout/images/web_logo_header.png';
         } else {
-            appLogoLink.src = 'assets/layout/images/web_logo_header.png';
+            appLogoLink.src = '../assets/layout/images/web_logo_header.png';
         }
     }, [topbarTheme]);
 
@@ -223,7 +227,7 @@ const App = ({ userData, usuarioUppercase }) => {
         }
 
         const layoutLink = document.getElementById('layout-css');
-        const layoutHref = 'assets/layout/css/layout-' + mode + '.css';
+        const layoutHref = '../assets/layout/css/layout-' + mode + '.css';
         replaceLink(layoutLink, layoutHref);
 
         const themeLink = document.getElementById('theme-css');
@@ -431,21 +435,21 @@ const App = ({ userData, usuarioUppercase }) => {
     };
 
 
-
     useEffect(() => {
         const verificarYRedirigir = async () => {
             const url = window.location.href;
             //const parts = url.split('/');
             //const lastPart = parts.pop();
             //const valorurl = '/' + lastPart;
-            //console.log(valorurl);
-           /* usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
+            //console.log(url);
+            //menuextra();
+           usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
                 //console.log("entro");
                 const datanueva = datas
                 //console.log(datanueva);
-                datanueva.object.forEach((item) => {
-                    const existingUrls = datanueva.object.map(item => item.url);
-                    const existingUrlsHijos = datanueva.object.flatMap(item => {
+                datas.object.forEach((item) => {
+                    const existingUrls = datas.object.map(item => item.url);
+                    const existingUrlsHijos = datas.object.flatMap(item => {
                         if (item.hijos && Array.isArray(item.hijos)) {
                             return item.hijos.map(hijo => hijo.url);
                         }
@@ -463,11 +467,11 @@ const App = ({ userData, usuarioUppercase }) => {
                     } else if (aprobarArticulosExists) {
                         navigate(url);
                     } else {
-                        window.location.href = 'not-found.html';
+                         navigate("/rsap/access");
                         return;
                     }
                 });
-            });*/
+            });
         };
 
         verificarYRedirigir();
@@ -488,14 +492,14 @@ const App = ({ userData, usuarioUppercase }) => {
                     menId: 1000,
                     nombre: "Control de Artículos",
                     descripcion: "Descripción del submenu 1",
-                    url: "http://localhost:3000/rsap/ControlArticulos",
+                    url: "http://localhost:3000/rsap/go/EstadosCuenta",
                     icono: "fa fa-pencil"
                 },
                 {
                     menId: 1001,
                     nombre: "Aprobar Artículos",
                     descripcion: "Descripción del submenu 2",
-                    url: "http://localhost:3000/rsap/AprobarArticulos",
+                    url: "http://localhost:3000/rsap/go/VentasTarjeta",
                     icono: "fa fa-check"
                 }
             ]
@@ -508,46 +512,48 @@ const App = ({ userData, usuarioUppercase }) => {
 
     return (
         <RTLContext.Provider value={isRTL}>
-            <div className={layoutContainerClassName} onClick={onDocumentClick}>
-                <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
-                <AppTopbar
-                    horizontal={isHorizontal()}
-                    activeTopbarItem={activeTopbarItem}
-                    onMenuButtonClick={onMenuButtonClick}
-                    onTopbarItemClick={onTopbarItemClick}
-                    onRightMenuButtonClick={onRightMenuButtonClick}
-                    onMobileTopbarButtonClick={onMobileTopbarButtonClick}
-                    mobileTopbarActive={mobileTopbarActive}
-                    searchActive={searchActive}
-                    onSearch={onSearch}
-                    usuarioUppercase={usuarioUppercase}
-                />
+        <div className={layoutContainerClassName} onClick={onDocumentClick}>
+            <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
+            <AppTopbar
+                horizontal={isHorizontal()}
+                activeTopbarItem={activeTopbarItem}
+                onMenuButtonClick={onMenuButtonClick}
+                onTopbarItemClick={onTopbarItemClick}
+                onRightMenuButtonClick={onRightMenuButtonClick}
+                onMobileTopbarButtonClick={onMobileTopbarButtonClick}
+                mobileTopbarActive={mobileTopbarActive}
+                searchActive={searchActive}
+                onSearch={onSearch}
+                usuarioUppercase={usuarioUppercase}
+            />
+            
 
-                <div className="menu-wrapper" onClick={onMenuClick} style={{ backgroundColor: '#2b3135' }}>
-                    <div className="layout-menu-container" style={{ backgroundColor: '#2b3135' }}>
-                        < AppMenu model={filteredMenu.length > 0 ? filteredMenu : menu} onMenuItemClick={onMenuItemClick} onRootMenuItemClick={onRootMenuItemClick} menuMode={menuMode} active={menuActive} />
-                    </div>
+
+            <div className="menu-wrapper" onClick={onMenuClick} style={{ backgroundColor: '#2b3135' }}>
+                <div className="layout-menu-container" style={{ backgroundColor: '#2b3135' }}>
+                    < AppMenu model={filteredMenu.length > 0 ? filteredMenu : menu} onMenuItemClick={onMenuItemClick} onRootMenuItemClick={onRootMenuItemClick} menuMode={menuMode} active={menuActive} />
+                </div>
+            </div>
+
+
+            <div className="layout-main">
+
+                <div className="layout-content" >
+                    <Routes>
+                        <Route path="/controlArticulos" element={<ControlArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                        <Route path="/aprobarArticulos" element={<AprobarArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                        <Route path="/estadosCuenta" element={<EstadosCuenta colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                        <Route path="/ventasTarjeta" element={<VentasTargetas colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                       
+                    </Routes>
                 </div>
 
-
-                <div className="layout-main">
-
-                    <div className="layout-content" >
-                        <Routes>
-                            <Route path="/ControlArticulos" element={<ControlArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
-                            <Route path="/AprobarArticulos" element={<AprobarArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
-                            <Route path="/EstadosCuenta" element={<EstadosCuenta colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
-                            <Route path="/VentasTarjeta" element={<VentasTargetas colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
-                            <Route path="/NotFound" element={<NotFound colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
-                        </Routes>
-                    </div>
-
-
-                </div>
-                <AppRightMenu rightMenuActive={rightMenuActive} onRightMenuButtonClick={onRightMenuButtonClick} />
 
             </div>
-        </RTLContext.Provider>
+            <AppRightMenu rightMenuActive={rightMenuActive} onRightMenuButtonClick={onRightMenuButtonClick} />
+
+        </div>
+    </RTLContext.Provider>
     );
 };
 

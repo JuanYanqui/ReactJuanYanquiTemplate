@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { InputText } from 'primereact/inputtext';
-import AppCodeHiglight from '../AppCodeHighlight';
 
 const IconsDemo = () => {
     const [icons, setIcons] = useState([]);
@@ -15,6 +14,7 @@ const IconsDemo = () => {
                 else if (icon1.properties.name < icon2.properties.name) return 1;
                 else return 0;
             });
+
             setIcons(icons);
             setFilteredIcons(icons);
         });
@@ -49,61 +49,74 @@ const IconsDemo = () => {
 
             <h5>Download</h5>
             <p>PrimeIcons is available at npm, run the following command to download it to your project.</p>
-            <AppCodeHiglight>
+            <pre className="app-code">
+                <code>
                 {`
 npm install primeicons --save
 `}
-            </AppCodeHiglight>
+            </code>
+            </pre>
 
             <h5>Getting Started</h5>
             <p>
                 PrimeIcons use the <strong>pi pi-&#123;icon&#125;</strong> syntax such as <strong>pi pi-check</strong>. A standalone icon can be displayed using an element like <i>i</i> or <i>span</i>
             </p>
 
-            <AppCodeHiglight>
+            <pre className="app-code">
+                <code>
                 {`
 <i className="pi pi-check" style={{ marginRight: '.5rem' }}></i>
 <i className="pi pi-times"></i>
 `}
-            </AppCodeHiglight>
+            </code>
+            </pre>
 
             <h5>Size</h5>
             <p>Size of the icons can easily be changed using font-size property.</p>
 
-            <AppCodeHiglight>
+            <pre className="app-code">
+                <code>
                 {`
 <i className="pi pi-check"></i>
 `}
-            </AppCodeHiglight>
+            </code>
+            </pre>
 
             <i className="pi pi-check"></i>
 
-            <AppCodeHiglight>
+            <pre className="app-code">
+                <code>
                 {`
 <i className="pi pi-check" style={{ fontSize: '2rem' }}></i>
 `}
-            </AppCodeHiglight>
+            </code>
+            </pre>
 
             <i className="pi pi-check" style={{ fontSize: '2rem' }}></i>
 
             <h5>Spinning Animation</h5>
             <p>Special pi-spin class applies continuous rotation to an icon.</p>
-            <AppCodeHiglight>
+            <pre className="app-code">
+                <code>
                 {`
 <i className="pi pi-spin pi-spinner" style={{ fontSize: '2rem' }}></i>
 `}
-            </AppCodeHiglight>
+            </code>
+            </pre>
 
             <i className="pi pi-spin pi-spinner" style={{ fontSize: '2rem' }}></i>
 
             <h5>Constants</h5>
             <p>PrimeIcons constants API is provided to easily choose an icon with typescript e.g. when defining a menu model.</p>
-            <AppCodeHiglight>
+            <pre className="app-code">
+                <code>
                 {`
 <Menu model={items} />
 `}
-            </AppCodeHiglight>
-            <AppCodeHiglight lang="js">
+            </code>
+            </pre>
+            <pre className="app-code">
+                <code>
                 {`
 import {PrimeIcons} from 'primereact/api';
 
@@ -120,7 +133,8 @@ const items = [
     }
 ]
 `}
-            </AppCodeHiglight>
+            </code>
+            </pre>
             <h5>List of Icons</h5>
             <p>
                 Here is the current list of PrimeIcons, more icons are added periodically. You may also{' '}

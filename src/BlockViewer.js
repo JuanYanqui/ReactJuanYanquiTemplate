@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { classNames } from 'primereact/utils';
-import AppCodeHighlight from './AppCodeHighlight';
 
 const BlockViewer = (props) => {
     const [blockView, setBlockView] = useState('PREVIEW');
@@ -37,7 +36,11 @@ const BlockViewer = (props) => {
                         </div>
                     )}
 
-                    {blockView === 'CODE' && <AppCodeHighlight>{props.code}</AppCodeHighlight>}
+                    {blockView === 'CODE' && (
+                        <pre className="app-code">
+                            <code>{props.code}</code>
+                        </pre>
+                    )}
                 </div>
             </div>
         </div>

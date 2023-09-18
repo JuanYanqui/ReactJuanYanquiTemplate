@@ -47,7 +47,7 @@ const VentasTargetas = () => {
         <div>
             <div className="flex flex-wrap gap-2" style={{display: 'inline-block'}}>
                 <img
-                    src="./assets/layout/images/exelimg.png"
+                    src="../assets/layout/images/exelimg.png"
                     alt="Descripción de la imagen"
                     style={{ width: '40px', height: '35px' }} onClick={() => generarexelpeti()}
                 />
@@ -252,17 +252,17 @@ const VentasTargetas = () => {
 
     const cargaDatos = () => {
         setLoading(true);
-        console.log(fecha)
+        //console.log(fecha)
         if (fecha == null) {
             ventastarjetadata.ventasTargetas(centro, fecha, ptoemi).then((data) => {
-                console.log(data);
+                //console.log(data);
                 setDataEstadoCuenta(data);
                 setLoading(false);
             });
         } else {
             const fechaFormateada = `${fecha.getFullYear()}-${(fecha.getMonth() + 1).toString().padStart(2, '0')}-${fecha.getDate().toString().padStart(2, '0')} ${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}:${fecha.getSeconds().toString().padStart(2, '0')}`;
             ventastarjetadata.ventasTargetas(centro, fechaFormateada, ptoemi).then((data) => {
-                console.log(data);
+                //console.log(data);
                 setDataEstadoCuenta(data);
                 setLoading(false);
             });

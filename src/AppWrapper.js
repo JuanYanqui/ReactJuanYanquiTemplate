@@ -1,101 +1,52 @@
-import React, { useEffect, useState } from 'react';
-import { Route, Routes, useLocation, Navigate } from 'react-router-dom';
+import React, { useEffect ,useState} from 'react';
+import { Route, Routes, useLocation,useNavigate   } from 'react-router-dom';
 import App from './App';
+import Login from './pages/Login';
+import Error from './pages/Error';
+import NotFound from './pages/NotFound';
+import Access from './pages/Access';
+import Landing from './pages/Landing';
+import Documentation from './components/Documentation';
+import MessagesDemo from './components/MessagesDemo';
 import ControlArticulos from './components/ControlArticulos';
 import AprobarArticulos from './components/AprobarArticulos';
-import NotFound from './pages/NotFound';
 import EstadosCuenta from './components/EstadosCuenta';
 import VentasTargetas from './components/VentasTargetas';
-import { Dialog } from 'primereact/dialog';
 
 const AppWrapper = ({ userData, usuarioUppercase }) => {
     let location = useLocation();
-    const [isDataLoaded, setIsDataLoaded] = useState(false);
+    let navigate = useNavigate();
+    const [redirected, setRedirected] = useState(false);
 
     useEffect(() => {
-        window.scrollTo(0, 0);
-        setTimeout(() => {
-
-            /*const newMenuItem = {
-                menId: 999,
-                nombre: "Cambio Categoria Articulo",
-                descripcion: "Descripción del nuevo menú",
-                url: "#",
-                icono: "fa fa-plus",
-                hijos: [
-                    {
-                        menId: 1000,
-                        nombre: "Control de Artículos",
-                        descripcion: "Descripción del submenu 1",
-                        url: "http://localhost:3000/rsap/ControlArticulos",
-                        icono: "fa fa-pencil"
-                    },
-                    {
-                        menId: 1001,
-                        nombre: "Aprobar Artículos",
-                        descripcion: "Descripción del submenu 2",
-                        url: "http://localhost:3000/rsap/AprobarArticulos",
-                        icono: "fa fa-check"
-                    }
-                ]
-            };
-
-            userData.object.push(newMenuItem);
-            console.log(userData);*/
-            setIsDataLoaded(true);
-        }, 1000);
-    }, [userData, location]);
-
-    if (!isDataLoaded) {
-        // Muestra el componente de diálogo mientras se carga la data
-        return (
-            <Dialog visible={true} modal closable={false} showHeader={false} style={{ width: '52px', height: '57px', borderRadius: '4px', overflow: 'hidden' }}>
-                <div className="d-flex justify-content-center align-items-center h-100" style={{ borderRadius: '4px' }}>
-                    <i className="pi pi-spin pi-spinner loading-icon" aria-hidden="true" style={{ transform: 'scale(0.5)', marginTop: '18px' }}></i>
-                </div>
-            </Dialog>
-        );
-    }
-
-    // Resto del código para verificar las rutas permitidas y renderizar
-    const existingUrls = userData.object.map(item => item.url);
-    const existingUrlsHijos = userData.object.flatMap(item => {
-        if (item.hijos && Array.isArray(item.hijos)) {
-            return item.hijos.map(hijo => hijo.url);
+        // Comprueba si la redirección ya ha ocurrido en el almacenamiento local
+        const hasRedirected = localStorage.getItem('hasRedirected');
+        
+        if (!hasRedirected) {
+            navigate('/rsap/go/');
+            setRedirected(true);
+            
+            // Marca que la redirección ha ocurrido en el almacenamiento local
+            localStorage.setItem('hasRedirected', 'true');
         }
-        return [];
-    });
-
-    const urlsPermitidas2 = existingUrls;
-    const urlsPermitidas = existingUrlsHijos;
-    const isURLPermitida = urlsPermitidas.includes(window.location.href);
-    const isURLPermitida2 = urlsPermitidas2.includes(window.location.href);
-
-    const redirectToNotFound = () => {
-        window.location.href = 'not-found.html';
-    };
+        
+        window.scrollTo(0, 0);
+    }, [navigate]);
 
     return (
         <Routes>
-            <Route path="/" element={<Navigate to="/rsap/" />} />
-            <Route path="/rsap/*" element={<App usuarioUppercase={usuarioUppercase} userData={userData} />} >
-                <Route
-                    path="ControlArticulos"
-                    element={isURLPermitida || isURLPermitida2 ? <ControlArticulos /> : redirectToNotFound()}
-                />
-                <Route
-                    path="AprobarArticulos"
-                    element={isURLPermitida || isURLPermitida2 ? <AprobarArticulos /> : redirectToNotFound()}
-                />
-                <Route
-                    path="EstadosCuenta"
-                    element={isURLPermitida || isURLPermitida2 ? <EstadosCuenta /> : redirectToNotFound()}
-                />
-                <Route
-                    path="VentasTarjeta"
-                    element={isURLPermitida || isURLPermitida2 ? <VentasTargetas /> : redirectToNotFound()}
-                />
-                <Route path="NotFound" element={<NotFound />} />
+            <Route path="/rsap/*" >
+                <Route path="login" element={<Login />} />
+                <Route path="error" element={<Error />} />
+                <Route path="notfound" element={<NotFound />} />
+                <Route path="access" element={<Access usuarioUppercase={usuarioUppercase}/>}/>
+                <Route path="landing" element={<Landing />} />
+                <Route path="go/*" element={<App usuarioUppercase={usuarioUppercase} userData={userData} />}>
+                    <Route path="ControlArticulos" element={<ControlArticulos />} />
+                    <Route path="AprobarArticulos" element={<AprobarArticulos />} />
+                    <Route path="EstadosCuenta" element={<EstadosCuenta />} />
+                    <Route path="VentasTarjeta" element={<VentasTargetas />} />
+                </Route>
             </Route>
         </Routes>
     );

@@ -38,6 +38,7 @@ const AppTopbar = (props) => {
     };
 
     const handleLogout = () => {
+        localStorage.removeItem('hasRedirected');
         window.location.href = keycloakConfig.url + 'realms/' + keycloakConfig.realm + '/protocol/openid-connect/logout?redirect_uri=' + encodeURIComponent(window.location.origin);
     };
 
@@ -52,7 +53,7 @@ const AppTopbar = (props) => {
         <div className="layout-topbar shadow-4" style={{ backgroundColor: '#3e464c', height: '5.5rem' }}>
             <div className="layout-topbar-left" style={{ height: '5.5rem' }}>
                 <button type="button" style={{ cursor: 'pointer', background: '#2b3135', height: '5.5rem' }} className="layout-topbar-logo p-link" onClick={() => navigate('/')}>
-                    <img id="app-logo" src="assets/layout/images/web_logo_header.png" alt="ultima-layout" style={{ height: '2rem' }} />
+                    <img id="app-logo" src="./assets/layout/images/web_logo_header.png" alt="ultima-layout" style={{ height: '2rem' }} />
                 </button>
                 <button type="button" className="layout-menu-button shadow-6 p-link" onClick={props.onMenuButtonClick} style={botonEstilo2}>
                     <i className="pi pi-chevron-right"></i>

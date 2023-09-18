@@ -66,7 +66,7 @@ const EstadosCuenta = () => {
         <div>
             <div>
                 <img
-                    src="./assets/layout/images/exelimg.png"
+                    src="../assets/layout/images/exelimg.png"
                     alt="Descripción de la imagen"
                     style={{ width: '40px', height: '35px' }} onClick={() => generarexelpeti()}
                 />
@@ -163,8 +163,8 @@ const EstadosCuenta = () => {
     };
 
     const generarpfdpeti = (sociedad, codbp) => {
-        console.log(sociedad);
-        console.log(codbp);
+        //console.log(sociedad);
+        //console.log(codbp);
         estadocuentadata.getExcelEf25Fi(selectedsociedad, selectedbp).then((data) => {
         })
     }
@@ -183,7 +183,7 @@ const EstadosCuenta = () => {
             const selecionadosCuenta = selectedItems.map(item => ({
                 categoriaAnterior: item[1]
             }));
-            console.log(selecionadosCuenta);
+            //console.log(selecionadosCuenta);
             estadocuentadata.enviarCorreosEf25Fi(selecionadosCuenta).then((data) => {
                 setSelectedItems([]);
                 setLoading(false);
