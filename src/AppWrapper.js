@@ -1,13 +1,11 @@
-import React, { useEffect ,useState} from 'react';
-import { Route, Routes, useLocation,useNavigate   } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import App from './App';
 import Login from './pages/Login';
 import Error from './pages/Error';
 import NotFound from './pages/NotFound';
 import Access from './pages/Access';
 import Landing from './pages/Landing';
-import Documentation from './components/Documentation';
-import MessagesDemo from './components/MessagesDemo';
 import ControlArticulos from './components/ControlArticulos';
 import AprobarArticulos from './components/AprobarArticulos';
 import EstadosCuenta from './components/EstadosCuenta';
@@ -21,26 +19,26 @@ const AppWrapper = ({ userData, usuarioUppercase }) => {
     useEffect(() => {
         // Comprueba si la redirección ya ha ocurrido en el almacenamiento local
         const hasRedirected = localStorage.getItem('hasRedirected');
-        
+
         if (!hasRedirected) {
             navigate('/rsap/go/');
             setRedirected(true);
-            
+
             // Marca que la redirección ha ocurrido en el almacenamiento local
             localStorage.setItem('hasRedirected', 'true');
         }
-        
+
         window.scrollTo(0, 0);
     }, [navigate]);
-
-    return (
-        <Routes>
-            <Route path="/rsap/*" >
+    /*
                 <Route path="login" element={<Login />} />
                 <Route path="error" element={<Error />} />
                 <Route path="notfound" element={<NotFound />} />
-                <Route path="access" element={<Access usuarioUppercase={usuarioUppercase}/>}/>
-                <Route path="landing" element={<Landing />} />
+                <Route path="landing" element={<Landing />} />*/
+    return (
+        <Routes>
+            <Route path="/rsap/*" >
+                <Route path="access" element={<Access usuarioUppercase={usuarioUppercase} />} />
                 <Route path="go/*" element={<App usuarioUppercase={usuarioUppercase} userData={userData} />}>
                     <Route path="ControlArticulos" element={<ControlArticulos />} />
                     <Route path="AprobarArticulos" element={<AprobarArticulos />} />

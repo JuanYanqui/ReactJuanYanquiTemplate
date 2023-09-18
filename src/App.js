@@ -150,7 +150,7 @@ const App = ({ userData, usuarioUppercase }) => {
             const url = item.to;
             //console.log('URL:', url);
             const url2 = url.trim();
-            if (url2.includes("/react")) {
+            if (url2.includes("/rsap")) {
                 usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datan) => {
                     datan.object.forEach((item) => {
                         const currentUrl = url;
