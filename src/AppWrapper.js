@@ -10,6 +10,7 @@ import ControlArticulos from './components/ControlArticulos';
 import AprobarArticulos from './components/AprobarArticulos';
 import EstadosCuenta from './components/EstadosCuenta';
 import VentasTargetas from './components/VentasTargetas';
+import ReporteVentasCorales from './components/ReporteVentasCorales';
 
 const AppWrapper = ({ userData, usuarioUppercase }) => {
     let location = useLocation();
@@ -44,6 +45,7 @@ const AppWrapper = ({ userData, usuarioUppercase }) => {
                     <Route path="AprobarArticulos" element={<AprobarArticulos />} />
                     <Route path="EstadosCuenta" element={<EstadosCuenta />} />
                     <Route path="VentasTarjeta" element={<VentasTargetas />} />
+                    <Route path="ReporteVentasCorales" element={<ReporteVentasCorales />} />
                 </Route>
             </Route>
         </Routes>

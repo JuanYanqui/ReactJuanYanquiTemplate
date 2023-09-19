@@ -23,6 +23,7 @@ import './App.scss';
 import Documentation from './components/Documentation';
 import { UsuarioService } from './service/UsuarioService';
 import '@fortawesome/fontawesome-free/css/all.css';
+import ReporteVentasCorales from './components/ReporteVentasCorales';
 export const RTLContext = React.createContext();
 
 const App = ({ userData, usuarioUppercase }) => {
@@ -443,7 +444,7 @@ const App = ({ userData, usuarioUppercase }) => {
             //const valorurl = '/' + lastPart;
             //console.log(url);
             //menuextra();
-           usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
+           /*usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
                 //console.log("entro");
                 const datanueva = datas
                 //console.log(datanueva);
@@ -471,7 +472,7 @@ const App = ({ userData, usuarioUppercase }) => {
                         return;
                     }
                 });
-            });
+            });*/
         };
 
         verificarYRedirigir();
@@ -540,10 +541,11 @@ const App = ({ userData, usuarioUppercase }) => {
 
                 <div className="layout-content" >
                     <Routes>
-                        <Route path="/controlArticulos" element={<ControlArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
-                        <Route path="/aprobarArticulos" element={<AprobarArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
-                        <Route path="/estadosCuenta" element={<EstadosCuenta colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
-                        <Route path="/ventasTarjeta" element={<VentasTargetas colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                        <Route path="/ControlArticulos" element={<ControlArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                        <Route path="/AprobarArticulos" element={<AprobarArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                        <Route path="/EstadosCuenta" element={<EstadosCuenta colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                        <Route path="/VentasTarjeta" element={<VentasTargetas colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                        <Route path="/ReporteVentasCorales" element={<ReporteVentasCorales colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                        
                     </Routes>
                 </div>

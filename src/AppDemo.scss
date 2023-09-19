@@ -117,7 +117,90 @@ hr {
     top: 0;
 }
 
+.option {
+    font-weight: normal;
+    display: block;
+    white-space-collapse: collapse;
+    text-wrap: nowrap;
+    min-height: 1.2em;
+    padding: 0px 2px 1px;
+}
+.ui-helper-hidden-accessible input, .ui-helper-hidden-accessible select {
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+}
 
+.ui-selectonemenu label.ui-selectonemenu-label {
+    cursor: pointer;
+}
+body .ui-selectonemenu .ui-inputfield {
+    background-image: none;
+    background: transparent;
+    border: 0 none;
+}
+body .ui-selectonemenu .ui-selectonemenu-label {
+    background: transparent;
+    padding-right: 2.75rem;
+    min-height: calc(2rem + 3px);
+}
+.ui-selectonemenu .ui-selectonemenu-label {
+    display: block;
+    border: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    font-weight: normal;
+    width: 100%;
+    text-align: left;
+}
+body .ui-inputfield {
+    color: rgba(0, 0, 0, 0.87);
+    background: #ffffff;
+    padding: 0.75rem 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.38);
+    outline: 0 none;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+}
+.ui-inputfield {
+    margin: 0;
+    outline: medium none;
+    padding: 4px;
+    font-weight: normal;
+}
+.custom-select {
+    position: relative;
+    display: inline-block;
+    width: 200px; /* Ancho deseado del select */
+}
+
+/* Estilos para el select */
+.custom-select select {
+    appearance: none;
+    border: 1px solid #ccc;
+    padding: 5px;
+    font-size: 16px;
+    width: 100%;
+    border-radius: 0; /* Desactivar cualquier borde redondeado en el select */
+}
+
+/* Estilos para las opciones del select */
+.custom-select select option {
+    min-width: 200px; /* Ancho mínimo deseado para las opciones */
+    border: 1px solid #ccc; /* Agregar un borde a las opciones */
+    padding: 5px; /* Ajustar el relleno según sea necesario */
+    white-space: nowrap; /* Evitar el ajuste de texto automático */
+}
+
+/* Estilos para el select cuando está abierto (cambiado con JavaScript) */
+.custom-select.open select {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
 .layout-menu {
     list-style: none;
     padding: 0;
