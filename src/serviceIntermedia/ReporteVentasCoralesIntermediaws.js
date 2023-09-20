@@ -50,7 +50,7 @@ export class ReporteVentasCoralesIntermediaws {
             });
     }
 
-    centrologistico2(sucursal, sociedad, centro, nombreCentro, tipoCentro, urls) {
+    centrologistico2(caja, fechaini, fechafin, currentPage, rowsPerPage,urls) {
         const ws_nombre = "INTERMEDIAWS_LISTAR_CENTRO";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
@@ -59,14 +59,20 @@ export class ReporteVentasCoralesIntermediaws {
                 const nuevaSerUrl = urls;
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
+                const paginationInfo = {
+                    count: false,
+                    pagesize: rowsPerPage,
+                    first: currentPage,
+                    sortBy: {},
+                    filterBy: {}
+                  };
                 console.log(url);
                 const requestData = {
                     object: JSON.stringify({
-                        sucursal: sucursal,
-                        sociedad: sociedad,
-                        centro: centro,
-                        nombreCentro: nombreCentro,
-                        tipoCentro: tipoCentro
+                        caja: caja,
+                        fechaini: fechaini,
+                        fechafin: fechafin,
+                        lazyInfo: JSON.stringify(paginationInfo)
                     }),
                     rowCount: 0,
                 };
