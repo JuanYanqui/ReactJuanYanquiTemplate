@@ -19,7 +19,8 @@ const VentasTargetas = () => {
     const toast = useRef(null);
     const [centro, setCentro] = useState("");
     const [ptoemi, setPtoemi] = useState("");
-    const [fecha, setFecha] = useState(null);
+    const [fechaini, setFechaini] = useState(null);
+    const [fechafin, setFechafin] = useState(null);
     const ventastarjetadata = new VentasTargetasPosws();
     const [DataEstadoCuenta, setDataEstadoCuenta] = useState("");
 
@@ -96,7 +97,7 @@ const VentasTargetas = () => {
                     <Column field="12" style={{ minWidth: '300px' }} header="Cliente" />  
                     <Column field="3" style={{ minWidth: '50px' }} header="#Tarjeta" />              
                     <Column field="16" style={{ minWidth: '50px' }} header="Val Recap." />
-                    <Column field="0" style={{ minWidth: '50px' }} header="Valor V." />
+                    <Column field="21" style={{ minWidth: '50px' }} header="Valor V." />
                 </DataTable>
             </div>
         );
@@ -201,13 +202,13 @@ const VentasTargetas = () => {
                     item[13],
                     item[14],
                     item[15],
-                    item[21],
+                    item[16],
                     item[3],
                     item[19],
                     item[17],
                     item[18],
                     item[20],
-                    item[16],
+                    item[21],
                 ]),
             ]);
 
@@ -253,15 +254,16 @@ const VentasTargetas = () => {
     const cargaDatos = () => {
         setLoading(true);
         //console.log(fecha)
-        if (fecha == null) {
-            ventastarjetadata.ventasTargetas(centro, fecha, ptoemi).then((data) => {
+        if (fechaini == null||fechafin == null) {
+            ventastarjetadata.ventasTargetas(centro, fechaini, fechafin,ptoemi).then((data) => {
                 //console.log(data);
                 setDataEstadoCuenta(data);
                 setLoading(false);
             });
         } else {
-            const fechaFormateada = `${fecha.getFullYear()}-${(fecha.getMonth() + 1).toString().padStart(2, '0')}-${fecha.getDate().toString().padStart(2, '0')} ${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}:${fecha.getSeconds().toString().padStart(2, '0')}`;
-            ventastarjetadata.ventasTargetas(centro, fechaFormateada, ptoemi).then((data) => {
+            const fechaFormateadaini = `${fechaini.getFullYear()}-${(fechaini.getMonth() + 1).toString().padStart(2, '0')}-${fechaini.getDate().toString().padStart(2, '0')} ${fechaini.getHours().toString().padStart(2, '0')}:${fechaini.getMinutes().toString().padStart(2, '0')}:${fechaini.getSeconds().toString().padStart(2, '0')}`;
+            const fechaFormateadafin = `${fechafin.getFullYear()}-${(fechafin.getMonth() + 1).toString().padStart(2, '0')}-${fechafin.getDate().toString().padStart(2, '0')} ${fechafin.getHours().toString().padStart(2, '0')}:${fechafin.getMinutes().toString().padStart(2, '0')}:${fechafin.getSeconds().toString().padStart(2, '0')}`;
+            ventastarjetadata.ventasTargetas(centro, fechaFormateadaini, fechaFormateadafin,ptoemi).then((data) => {
                 //console.log(data);
                 setDataEstadoCuenta(data);
                 setLoading(false);
@@ -280,15 +282,24 @@ const VentasTargetas = () => {
 
     };
 
-
     const handleDateChange = (event) => {
-        setFecha(event.value);
+        setFechaini(event.value);
+    };
+    const handleDateChange2 = (event) => {
+        setFechafin(event.value);
     };
     const [isCalendarClicked, setIsCalendarClicked] = useState(false);
     const calendarRef = useRef(null);
 
+    const [isCalendarClicked2, setIsCalendarClicked2] = useState(false);
+    const calendarRef2 = useRef(null);
+
     const handleCalendarClick = () => {
         setIsCalendarClicked(true);
+    };
+
+    const handleCalendarClick2 = () => {
+        setIsCalendarClicked2(true);
     };
 
     const handleOutsideClick = (event) => {
@@ -297,11 +308,19 @@ const VentasTargetas = () => {
         }
     };
 
+    const handleOutsideClick2 = (event) => {
+        if (calendarRef2.current && !calendarRef2.current.contains(event.target)) {
+            setIsCalendarClicked2(false);
+        }
+    };
+
     useEffect(() => {
         window.addEventListener('click', handleOutsideClick);
+        window.addEventListener('click', handleOutsideClick2);
 
         return () => {
             window.removeEventListener('click', handleOutsideClick);
+            window.removeEventListener('click', handleOutsideClick2);
         };
     }, []);
 
@@ -343,9 +362,10 @@ const VentasTargetas = () => {
                             &nbsp;
                             &nbsp;
 
+                            
                             <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                 <input
-                                    id="inputptoemi"
+                                    id="input1"
                                     className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${ptoemi ? 'ui-state-filled' : ''}`}
                                     value={ptoemi}
                                     onChange={handleInputChange2}
@@ -367,11 +387,29 @@ const VentasTargetas = () => {
                                 }}
                                 ref={calendarRef}
                             >
+                                <label
+                                    style={{
+                                        position: 'absolute',
+                                        top: isCalendarClicked ? '10px' : '-10px', // Ajusta la posición vertical
+                                        left: '1px',
+                                        backgroundColor: 'white',
+                                        padding: '0 5px',
+                                        display: 'block',
+                                        opacity: 1,
+                                        transition: 'top 0.5s ease', // Agregar una transición suave
+                                        fontSize: '12px', // Ajusta el tamaño de la letra según tus necesidades
+                                        color: '#7f8990', // Cambia el color del texto a #7f8990
+                                        zIndex: 1,
+
+                                    }}
+                                >
+                                    Fecha Inicial
+                                </label>
                                 <Calendar
-                                    id="inputnombrecuenta"
-                                    value={fecha}
+                                    id="calfechaini"
+                                    value={fechaini}
                                     onChange={handleDateChange}
-                                    dateFormat="yy-dd-mm"
+                                    dateFormat="yy-mm-dd"
                                     showIcon
                                     className={`custom-calendar-style ${isCalendarClicked ? 'clicked' : ''}`}
                                     onClick={handleCalendarClick}
@@ -382,6 +420,48 @@ const VentasTargetas = () => {
 
 
                             &nbsp;
+                            &nbsp;
+
+                            <span
+                                style={{
+                                    position: 'relative',
+                                    display: 'inline-block',
+                                    maxWidth: '180px',
+                                    border: isCalendarClicked2 ? '2px solid black' : '1px solid #808080',
+                                    borderRadius: '3px',
+                                }}
+                                ref={calendarRef2}
+                            >
+                                <label
+                                    style={{
+                                        position: 'absolute',
+                                        top: isCalendarClicked2 ? '10px' : '-10px', // Ajusta la posición vertical
+                                        left: '1px',
+                                        backgroundColor: 'white',
+                                        padding: '0 5px',
+                                        display: 'block',
+                                        opacity: 1,
+                                        transition: 'top 0.5s ease', // Agregar una transición suave
+                                        fontSize: '12px', // Ajusta el tamaño de la letra según tus necesidades
+                                        color: '#7f8990', // Cambia el color del texto a #7f8990
+                                        zIndex: 1,
+
+                                    }}
+                                >
+                                    Fecha Final
+                                </label>
+                                <Calendar
+                                    id="calfechafin"
+                                    value={fechafin}
+                                    onChange={handleDateChange2}
+                                    dateFormat="yy-mm-dd"
+                                    showIcon
+                                    className={`custom-calendar-style ${isCalendarClicked2 ? 'clicked' : ''}`}
+                                    onClick={handleCalendarClick2}
+                                />
+                            </span>
+                            &nbsp;
+
                             &nbsp;
 
                         </div>

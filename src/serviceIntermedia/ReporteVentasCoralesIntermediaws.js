@@ -15,7 +15,7 @@ export class ReporteVentasCoralesIntermediaws {
                 //const nuevaSerUrl = "http://192.168.56.167:8080";
                 const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
-                console.log(url);
+                //console.log(url);
                 const requestData = {
                     object: JSON.stringify({
                         sucursal: sucursal,
@@ -50,13 +50,13 @@ export class ReporteVentasCoralesIntermediaws {
             });
     }
 
-    loadVentas(caja, fechaini, fechafin, currentPage, rowsPerPage,urls) {
+    loadVentas(numCaja, fechaInicio, fechaFin,serverseleccionado, currentPage,rowsPerPage) {
         const ws_nombre = "INTERMEDIAWS_LISTAR_CENTRO";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 //const nuevaWsUrl = data.object.wsUrl;
-                const nuevaWsUrl = ":18080/retailws/ws/vouchers/loadVentas";
-                const nuevaSerUrl = urls;
+                const nuevaWsUrl = ":18443/retailws/ws/vouchers/loadVentas";
+                const nuevaSerUrl = serverseleccionado;
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const paginationInfo = {
@@ -66,12 +66,12 @@ export class ReporteVentasCoralesIntermediaws {
                     sortBy: {},
                     filterBy: {}
                   };
-                console.log(url);
+                //console.log(url);
                 const requestData = {
                     object: JSON.stringify({
-                        caja: caja,
-                        fechaini: fechaini,
-                        fechafin: fechafin,
+                        numCaja: numCaja,
+                        fechaInicio: fechaInicio,
+                        fechaFin: fechaFin,
                         lazyInfo: JSON.stringify(paginationInfo)
                     }),
                     rowCount: 0,
@@ -84,6 +84,7 @@ export class ReporteVentasCoralesIntermediaws {
                     })
                     .then((response) => {
                         const objectData = JSON.parse(response.data.object);
+                        //console.log(objectData);
                         return objectData;
 
                     })
@@ -101,13 +102,13 @@ export class ReporteVentasCoralesIntermediaws {
     }
 
 
-    loadVentasPaginacion(caja, fechaini, fechafin, currentPage, rowsPerPage,urls) {
+    loadVentasPaginacion(numCaja, fechaInicio, fechaFin,serverseleccionado, currentPage,rowsPerPage) {
         const ws_nombre = "INTERMEDIAWS_LISTAR_CENTRO";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 //const nuevaWsUrl = data.object.wsUrl;
-                const nuevaWsUrl = ":18080/retailws/ws/vouchers/loadVentas";
-                const nuevaSerUrl = urls;
+                const nuevaWsUrl = ":18443/retailws/ws/vouchers/loadVentas";
+                const nuevaSerUrl = serverseleccionado;
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const paginationInfo = {
@@ -117,12 +118,12 @@ export class ReporteVentasCoralesIntermediaws {
                     sortBy: {},
                     filterBy: {}
                   };
-                console.log(url);
+                //console.log(url);
                 const requestData = {
                     object: JSON.stringify({
-                        caja: caja,
-                        fechaini: fechaini,
-                        fechafin: fechafin,
+                        numCaja: numCaja,
+                        fechaInicio: fechaInicio,
+                        fechaFin: fechaFin,
                         lazyInfo: JSON.stringify(paginationInfo)
                     }),
                     rowCount: 0,

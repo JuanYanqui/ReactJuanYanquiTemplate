@@ -20,18 +20,23 @@ const ReporteVentasCorales = () => {
     const [position, setPosition] = useState('center');
     const toast = useRef(null);
     const [centro, setCentro] = useState("");
-    const [ptoemi, setPtoemi] = useState("");
-    const [fecha, setFecha] = useState(null);
-    const [fecha2, setFecha2] = useState(null);
+    const [numCaja, setNumCaja] = useState("");
+    const fechaActual = new Date();
+    fechaActual.setHours(0, 0, 0, 0);
+    const [fechaini, setFechaini] = useState(fechaActual);
+    const [fechafin, setFechafin] = useState(fechaActual);
+    const [fechamodiini, setFechamodini] = useState(null);
+    const [fechamodifin, setFechamodfin] = useState(null);
     const ventastarjetadata = new VentasTargetasPosws();
     const repoteventascorales = new ReporteVentasCoralesIntermediaws();
     const [listalogistica, setlistalogistica] = useState([]);
-    const [DataEstadoCuenta, setDataEstadoCuenta] = useState("");
+    const [datoscompletos, setdatoscompletos] = useState([]);
+    const [DataReporteventas, setReporteventas] = useState("");
     const [serverseleccionado, setServerseleccionado] = useState("");
     const [totalRecords, setTotalRecords] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [totalPages, setTotalPages] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(null);
     const [selectedbp, setSelectedbp] = useState(null);
     const [selectedsociedad, setSelectedsociedad] = useState(null);
     const [estadoSelecionado, setestadoSelecionado] = useState(null);
@@ -42,6 +47,7 @@ const ReporteVentasCorales = () => {
     const onPageChange = (event) => {
         const newPage = Math.floor(event.first / event.rows);
         setLoading(true);
+        //console.log(event.rows);
         setRowsPerPage(event.rows);
         setCurrentPage(newPage);
         cargaDatos();
@@ -54,7 +60,7 @@ const ReporteVentasCorales = () => {
                 <img
                     src="../assets/layout/images/exelimg.png"
                     alt="Descripción de la imagen"
-                    style={{ width: '40px', height: '35px' }} onClick={() => generarexelpeti()}
+                    style={{ width: '40px', height: '35px' }} onClick={() => cargarDatosexel()}
                 />
             </div>
 
@@ -73,46 +79,47 @@ const ReporteVentasCorales = () => {
         };
 
         const startRecord = currentPage * rowsPerPage + 1;
+        const endRecord = Math.min((currentPage + 1) * rowsPerPage, totalRecords);
         return (
             <div>
                 <DataTable value={dataar}
-                    paginator
+                    lazy paginator
                     totalRecords={totalRecords}
                     onPage={onPageChange}
                     rows={rowsPerPage}
                     first={currentPage * rowsPerPage}
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[5, 10, 50]}
                     paginatorPosition="both"
                     paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
-                    currentPageReportTemplate={`Registros ${startRecord} -  de {totalRecords}`}
+                    currentPageReportTemplate={`Registros ${startRecord} - ${endRecord} de {totalRecords}`}
                 >
-                    <Column field="1" style={{ minWidth: '50px' }} header="Recap" />
-                    <Column field="2" style={{ minWidth: '50px' }} header="Lote" />
-                    <Column field="3" style={{ minWidth: '50px' }} header="Bin" />
-                    <Column field="4" style={{ minWidth: '50px' }} header="Factura" />
-                    <Column field="8" style={{ minWidth: '50px' }} header="Fecha" />
-                    <Column field="6" style={{ minWidth: '50px' }} header="Codigo/tipo/nombre" />
-                    <Column field="5" style={{ minWidth: '50px' }} header="Total" />
-                    <Column field="7" style={{ minWidth: '50px' }} header="Otros" />
-                    <Column field="9" style={{ minWidth: '50px' }} header="Iva" />
-                    <Column field="10" style={{ minWidth: '50px' }} header="Val Recap" />
-                    <Column field="11" style={{ minWidth: '50px' }} header="Descripción" />
-                    <Column field="12" style={{ minWidth: '50px' }} header="#Tarjeta" />
-                    <Column field="3" style={{ minWidth: '50px' }} header="Tipo pago" />
-                    <Column field="16" style={{ minWidth: '50px' }} header="Autorización" />
-                    <Column field="0" style={{ minWidth: '50px' }} header="Voucher" />
-                    <Column field="0" style={{ minWidth: '50px' }} header="Forma pago" />
-                    <Column field="0" style={{ minWidth: '50px' }} header="Tipo diferido" />
-                    <Column field="0" style={{ minWidth: '50px' }} header="Plazo" />
-                    <Column field="0" style={{ minWidth: '50px' }} header="Meses gracia" />
-                    <Column field="0" style={{ minWidth: '50px' }} header="Descripción" />
-                    <Column field="0" style={{ minWidth: '50px' }} header="Código Tcredito" />
-                    <Column field="0" style={{ minWidth: '50px' }} header="Nombre marca" />
-                    <Column field="0" style={{ minWidth: '50px' }} header="Tipo pago" />
-                    <Column field="0" style={{ minWidth: '50px' }} header="Red" />
-                    <Column field="0" style={{ minWidth: '50px' }} header="Respuesta" />
-                    <Column field="0" style={{ minWidth: '50px' }} header="Grupo tarjeta" />
+                    <Column field="2" style={{ minWidth: '50px' }} header="Recap" />
+                    <Column field="3" style={{ minWidth: '50px' }} header="Lote" />
+                    <Column field="4" style={{ minWidth: '50px' }} header="Bin" />
+                    <Column field="5" style={{ minWidth: '50px' }} header="Factura" />
+                    <Column field="6" style={{ minWidth: '50px' }} header="Fecha" />
+                    <Column field="7" style={{ minWidth: '50px' }} header="Codigo/tipo/nombre" />
+                    <Column field="8" style={{ minWidth: '50px' }} header="Total" />
+                    <Column field="9" style={{ minWidth: '50px' }} header="Otros" />
+                    <Column field="10" style={{ minWidth: '50px' }} header="Iva" />
+                    <Column field="11" style={{ minWidth: '50px' }} header="Val Recap" />
+                    <Column field="12" style={{ minWidth: '50px' }} header="Descripción" />
+                    <Column field="13" style={{ minWidth: '50px' }} header="#Tarjeta" />
+                    <Column field="14" style={{ minWidth: '50px' }} header="Tipo pago" />
+                    <Column field="15" style={{ minWidth: '50px' }} header="Autorización" />
+                    <Column field="16" style={{ minWidth: '50px' }} header="Voucher" />
+                    <Column field="17" style={{ minWidth: '50px' }} header="Forma pago" />
+                    <Column field="18" style={{ minWidth: '50px' }} header="Tipo diferido" />
+                    <Column field="19" style={{ minWidth: '50px' }} header="Plazo" />
+                    <Column field="20" style={{ minWidth: '50px' }} header="Meses gracia" />
+                    <Column field="21" style={{ minWidth: '50px' }} header="Descripción" />
+                    <Column field="22" style={{ minWidth: '50px' }} header="Código Tcredito" />
+                    <Column field="23" style={{ minWidth: '50px' }} header="Nombre marca" />
+                    <Column field="24" style={{ minWidth: '50px' }} header="Tipo pago" />
+                    <Column field="25" style={{ minWidth: '50px' }} header="Red" />
+                    <Column field="26" style={{ minWidth: '50px' }} header="Respuesta" />
+                    <Column field="27" style={{ minWidth: '50px' }} header="Grupo tarjeta" />
                 </DataTable>
             </div>
         );
@@ -165,13 +172,142 @@ const ReporteVentasCorales = () => {
         return URL.createObjectURL(blob);
     }
 
-    const generarexelpeti = () => {
-        generarExcelpropio();
-    }
 
 
-    const generarExcelpropio = () => {
-        if (DataEstadoCuenta == null || DataEstadoCuenta.length == 0) {
+
+    const cargarDatosexel = async () => {
+        try {
+            let allData = [];
+
+            for (let page = 1; page <= totalPages; page++) {
+                const response = await repoteventascorales.loadVentas(
+                    numCaja, fechamodiini, fechamodifin, serverseleccionado, page, rowsPerPage
+                );
+
+                if (response && response.data) {
+                    allData = [...allData, ...response.data];
+                } else {
+                    throw new Error(response?.data?.message || 'Error desconocido');
+                }
+                setLoading(true);
+            }
+
+            if (allData == null || allData.length == 0) {
+                showWarnexe();
+            } else {
+                setLoading(false);
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet([
+                    ['Ventas de Tarjeta'],
+                    [
+                        "Recap",
+                        "Lote",
+                        "Bin",
+                        "Factura",
+                        "Fecha",
+                        "Codigo/tipo/nombre",
+                        "Total",
+                        "Otros",
+                        "Iva",
+                        "Val Recap",
+                        "Descripción",
+                        "#Tarjeta",
+                        "Tipo pago",
+                        "Autorización",
+                        "Voucher",
+                        "Forma pago",
+                        "Tipo diferido",
+                        "Plazo",
+                        "Meses gracia",
+                        "Descripción",
+                        "Código Tcredito",
+                        "Nombre marca",
+                        "Tipo pago",
+                        "Red",
+                        "Respuesta",
+                        "Grupo tarjeta"
+                    ],
+                    ...allData.map(item => [
+                        item[2],
+                        item[3],
+                        item[4],
+                        item[5],
+                        item[6],
+                        item[7],
+                        item[8],
+                        item[9],
+                        item[10],
+                        item[11],
+                        item[12],
+                        item[13],
+                        item[14],
+                        item[15],
+                        item[16],
+                        item[17],
+                        item[18],
+                        item[19],
+                        item[20],
+                        item[21],
+                        item[22],
+                        item[23],
+                        item[24],
+                        item[25],
+                        item[26],
+                        item[27],
+                    ]),
+                ]);
+
+                const mergeTitle = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: 0, c: 9 } });
+                ws['!merges'] = [XLSX.utils.decode_range(mergeTitle)];
+                ws['A1'].s = { halign: 'center', valign: 'center' };
+
+                XLSX.utils.book_append_sheet(wb, ws, 'VentasdeTarjetas');
+                XLSX.writeFile(wb, 'VentasdeTarjetas.xlsx');
+            }
+
+
+        } catch (error) {
+            setLoading(false);
+            setError(error.message || 'Error desconocido');
+            setPosition('top');
+            setDialogVisibleError(true);
+        }
+    };
+
+    /*const generarExcelpropio = async () => {
+        try {
+        
+           
+        } catch (error) {
+            setLoading(false);
+            setError(error.message || 'Error desconocido');
+            setPosition('top');
+            setDialogVisibleError(true);
+        }
+    };*/
+
+
+
+    /*const generarExcelpropio  = async () => {
+        let allData = [];
+        for (let page = 1; page <= totalPages; page++) {
+            const response2 = await repoteventascorales.loadVentas(
+                numCaja, fechamodiini, fechamodifin, serverseleccionado, page, rowsPerPage
+            );
+
+            if (response2 && response2.data) {
+                // Agrega los datos de la página actual a la variable allData
+                allData = [...allData, ...response2.data];
+            } else {
+                // Maneja el error si ocurriera durante la obtención de datos de la página actual
+                setLoading(false);
+                setError(response2?.data?.message || 'Error desconocido');
+                setPosition('top');
+                setDialogVisibleError(true);
+                return;
+            }
+        }
+        if (datoscompletos == null || datoscompletos.length == 0) {
             showWarnexe();
         } else {
             const wb = XLSX.utils.book_new();
@@ -205,15 +341,14 @@ const ReporteVentasCorales = () => {
                     "Respuesta",
                     "Grupo tarjeta"
                 ],
-                ...DataEstadoCuenta.map(item => [
-                    item[1],
+                ...datoscompletos.map(item => [
                     item[2],
                     item[3],
                     item[4],
-                    item[8],
-                    item[6],
                     item[5],
+                    item[6],
                     item[7],
+                    item[8],
                     item[9],
                     item[10],
                     item[11],
@@ -221,17 +356,18 @@ const ReporteVentasCorales = () => {
                     item[13],
                     item[14],
                     item[15],
-                    item[21],
-                    item[3],
-                    item[19],
+                    item[16],
                     item[17],
                     item[18],
+                    item[19],
                     item[20],
-                    item[16],
-                    item[16],
-                    item[16],
-                    item[16],
-                    item[16],
+                    item[21],
+                    item[22],
+                    item[23],
+                    item[24],
+                    item[25],
+                    item[26],
+                    item[27],
                 ]),
             ]);
 
@@ -243,7 +379,7 @@ const ReporteVentasCorales = () => {
             XLSX.writeFile(wb, 'VentasdeTarjetas.xlsx');
         }
 
-    };
+    };*/
 
 
 
@@ -270,37 +406,77 @@ const ReporteVentasCorales = () => {
         toast.current.show({ severity: 'warn', summary: 'Warn Message', detail: 'No hay datos existentes' })
     }
 
+    const showrangofechas = () => {
+        toast.current.show({ severity: 'warn', summary: 'Warn Message', detail: 'Debe Ingresar un rago de fechas' })
+    }
+
+    const showrangocentro = () => {
+        toast.current.show({ severity: 'warn', summary: 'Warn Message', detail: 'Debe seleccionar un centro' })
+    }
+
+    const exccesofecha = () => {
+        toast.current.show({ severity: 'warn', summary: 'Warn Message', detail: 'A excedido el numero maximo de diferencia de 21 días.' })
+    }
+
 
     const [loading, setLoading] = useState(false);
 
 
-    const cargaDatos = () => {
-        setLoading(true);
+    const cargaDatos = async () => {
         //console.log(fecha)
-        if (fecha == null) {
-            const sucursal = "";
-            const sociedad = "1000";
-            const centrol = "";
-            const nombreCentro = "";
-            const tipoCentro = "";
-            setLoading(false);
-            repoteventascorales.loadVentas(sucursal, sociedad, centrol, nombreCentro, tipoCentro, serverseleccionado).then((data) => {
-                //console.log(data);
 
-            });
+        //console.log(fechaini);
+        console.log(fechafin);
+
+        if (serverseleccionado == "") {
+            showrangocentro();
+        } else if (fechaini == null || fechafin == null) {
+            showrangofechas();
         } else {
-            const fechaFormateada = `${fecha.getFullYear()}-${(fecha.getMonth() + 1).toString().padStart(2, '0')}-${fecha.getDate().toString().padStart(2, '0')} ${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}:${fecha.getSeconds().toString().padStart(2, '0')}`;
-            const sucursal = "";
-            const sociedad = "1000";
-            const centrol = "";
-            const nombreCentro = "";
-            const tipoCentro = "";
-            setLoading(false);
-            repoteventascorales.loadVentas(sucursal, sociedad, centrol, nombreCentro, tipoCentro, serverseleccionado).then((data) => {
-                //console.log(data);
-                setDataEstadoCuenta(data);
-                setLoading(false);
-            });
+
+            const diasLimite = 21; // Cambia este valor según tus necesidades
+
+            const diferenciaDias = Math.abs((fechafin - fechaini) / (1000 * 60 * 60 * 24));
+
+            if (diferenciaDias > diasLimite) {
+                // La diferencia es mayor a 21 días, realiza alguna acción de manejo de error
+                exccesofecha();
+            } else {
+                setLoading(true);
+                //console.log(`Server Host del centro seleccionado: ${serverseleccionado}`);
+                const fechaFormateadaini = `${fechaini.getFullYear()}-${(fechaini.getMonth() + 1).toString().padStart(2, '0')}-${fechaini.getDate().toString().padStart(2, '0')} ${fechaini.getHours().toString().padStart(2, '0')}:${fechaini.getMinutes().toString().padStart(2, '0')}:${fechaini.getSeconds().toString().padStart(2, '0')}`;
+                const fechaFormateadafin = `${fechafin.getFullYear()}-${(fechafin.getMonth() + 1).toString().padStart(2, '0')}-${fechafin.getDate().toString().padStart(2, '0')} ${fechafin.getHours().toString().padStart(2, '0')}:${fechafin.getMinutes().toString().padStart(2, '0')}:${fechafin.getSeconds().toString().padStart(2, '0')}`;
+                //console.log(fechaFormateadaini);
+                //console.log(fechaFormateadafin);
+                setFechamodini(fechaFormateadaini);
+                setFechamodfin(fechaFormateadafin);
+                const response1 = await repoteventascorales.loadVentas(numCaja, fechaFormateadaini, fechaFormateadafin, serverseleccionado, currentPage, rowsPerPage);
+
+                const response = await repoteventascorales.loadVentasPaginacion(numCaja, fechaFormateadaini, fechaFormateadafin, serverseleccionado, currentPage, rowsPerPage
+                );
+
+                if (response1) {
+
+                    if (response1) {
+                        setReporteventas(response1);
+                        const pageSize = rowsPerPage;
+                        const totalCount = response.rowCount;
+                        const totalPages = Math.ceil(totalCount / pageSize);
+                        setTotalRecords(response.rowCount);
+                        setTotalPages(totalPages);
+                        setLoading(false);
+                    } else {
+                        setLoading(false);
+                        setError(response1.data.message);
+                        //console.log(response1.data.message);
+                        setPosition('top');
+                        setDialogVisibleError(true);
+                        return response1.data.message;
+                    }
+
+                }
+            }
+
         }
 
     }
@@ -311,16 +487,16 @@ const ReporteVentasCorales = () => {
     };
 
     const handleInputChange2 = (event) => {
-        setPtoemi(event.target.value);
+        setNumCaja(event.target.value);
 
     };
 
 
     const handleDateChange = (event) => {
-        setFecha(event.value);
+        setFechaini(event.value);
     };
     const handleDateChange2 = (event) => {
-        setFecha2(event.value);
+        setFechafin(event.value);
     };
     const [isCalendarClicked, setIsCalendarClicked] = useState(false);
     const calendarRef = useRef(null);
@@ -355,21 +531,21 @@ const ReporteVentasCorales = () => {
         const nombreCentro = "";
         const tipoCentro = "";
         const listaDescripcionYCodigo = [];
-        repoteventascorales.loadVentas(sucursal, sociedad, centrol, nombreCentro, tipoCentro).then((data) => {
-            console.log(data);
+        repoteventascorales.centrologistico(sucursal, sociedad, centrol, nombreCentro, tipoCentro).then((data) => {
+            // console.log(data);
             for (const dato of data) {
                 if (dato.serverHost && dato.serverHost.includes("http://app")) {
                     const descripcionCentro = dato.descripcionCentro;
                     const codigoCentro = dato.id.codigoCentro;
                     const hostcentro = dato.serverHost;
-
                     // Creamos un objeto con la descripciónCentro y el codigoCentro y lo agregamos a la lista.
                     listaDescripcionYCodigo.push({ descripcionCentro, codigoCentro, hostcentro });
                 }
             }
             setlistalogistica(listaDescripcionYCodigo);
+            //console.log(listaDescripcionYCodigo);
         })
-        console.log(listaDescripcionYCodigo);
+
 
         window.addEventListener('click', handleOutsideClick);
         window.addEventListener('click', handleOutsideClick2);
@@ -385,16 +561,28 @@ const ReporteVentasCorales = () => {
     const handleSelectChange = (event) => {
         const selectedCentro = event.target.value;
         setCentroSeleccionado(selectedCentro);
-
+        console.log(selectedCentro)
         // Encuentra el serverHost correspondiente al centro seleccionado en listaDescripcionYCodigo
         const selectedCentroData = listalogistica.find(item => item.codigoCentro === selectedCentro);
 
         if (selectedCentroData) {
             const serverHostSeleccionado = selectedCentroData.hostcentro;
-            console.log(`Server Host del centro seleccionado: ${serverHostSeleccionado}`);
-            setServerseleccionado(serverHostSeleccionado);
+            const serverHostSeleccionadoHttps = serverHostSeleccionado.replace("http:", "https:");
+
+            setServerseleccionado(serverHostSeleccionadoHttps);
         }
     };
+
+    const [filtro, setFiltro] = useState('');
+
+    const handleInputChangebu = (event) => {
+        setFiltro(event.target.value);
+    };
+
+    const options = listalogistica.map((item, index) => ({
+        value: item.codigoCentro,
+        label: item.descripcionCentro,
+    }));
     return (
         <div className='layout-wrapper menu-layout-overlay'>
             <div style={{ height: '15px' }}></div>
@@ -420,25 +608,32 @@ const ReporteVentasCorales = () => {
                             <hr className="ui-separator ui-state-default ui-corner-all" />
 
                             <div className="custom-select">
-                                <select
-                                    tabIndex="-1"
-                                    autoComplete="off"
-                                    aria-hidden="true"
-                                    className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all}`}
-                                    id="mySelect"
-                                    onChange={handleSelectChange} // Agrega el evento onChange aquí
-                                    value={centroSeleccionado} // Establece el valor seleccionad
-                                >
-                                    {/* Agrega una opción por defecto si lo deseas */}
-                                    <option value="">Selecciona un centro</option>
+                                <div className="custom-select">
+                                    <div className="custom-select">
+                                        <div className="custom-select">
+                                            <select
+                                                tabIndex="-1"
+                                                autoComplete="off"
+                                                aria-hidden="true"
+                                                className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all}`}
+                                                id="mySelect"
+                                                onChange={handleSelectChange} // Agrega el evento onChange aquí
+                                                value={centroSeleccionado} // Establece el valor seleccionad
+                                            >
+                                                {/* Agrega una opción por defecto si lo deseas */}
+                                                <option value="">Selecciona un centro</option>
 
-                                    {/* Mapea la lista y crea opciones para cada elemento */}
-                                    {listalogistica.map((item, index) => (
-                                        <option key={index} value={item.codigoCentro}>
-                                            {item.descripcionCentro}
-                                        </option>
-                                    ))}
-                                </select>
+                                                {/* Mapea la lista y crea opciones para cada elemento */}
+                                                {listalogistica.map((item, index) => (
+                                                    <option key={index} value={item.codigoCentro}>
+                                                        {item.descripcionCentro}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <i className="ui-icon ui-icon-triangle-1-s ui-c select-arrow"></i>
+                                        </div>
+                                    </div>
+                                </div>
 
                             </div>
 
@@ -448,13 +643,13 @@ const ReporteVentasCorales = () => {
                             <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                 <input
                                     id="input1"
-                                    className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${ptoemi ? 'ui-state-filled' : ''}`}
-                                    value={ptoemi}
+                                    className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${numCaja ? 'ui-state-filled' : ''}`}
+                                    value={numCaja}
                                     onChange={handleInputChange2}
                                     style={{ width: '100%' }}
 
                                 />
-                                <label className={ptoemi ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Caja</label>
+                                <label className={numCaja ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Caja</label>
                             </span>
 
                             &nbsp;
@@ -489,9 +684,9 @@ const ReporteVentasCorales = () => {
                                 </label>
                                 <Calendar
                                     id="calfechaini"
-                                    value={fecha}
+                                    value={fechaini}
                                     onChange={handleDateChange}
-                                    dateFormat="yy-dd-mm"
+                                    dateFormat="yy-mm-dd"
                                     showIcon
                                     className={`custom-calendar-style ${isCalendarClicked ? 'clicked' : ''}`}
                                     onClick={handleCalendarClick}
@@ -534,9 +729,9 @@ const ReporteVentasCorales = () => {
                                 </label>
                                 <Calendar
                                     id="calfechafin"
-                                    value={fecha2}
+                                    value={fechafin}
                                     onChange={handleDateChange2}
-                                    dateFormat="yy-dd-mm"
+                                    dateFormat="yy-mm-dd"
                                     showIcon
                                     className={`custom-calendar-style ${isCalendarClicked2 ? 'clicked' : ''}`}
                                     onClick={handleCalendarClick2}
@@ -553,7 +748,7 @@ const ReporteVentasCorales = () => {
 
                     &nbsp;
                     <div>
-                        <DataTablaar dataar={DataEstadoCuenta} loading={loading} onPageChange={onPageChange} />
+                        <DataTablaar dataar={DataReporteventas.data} loading={loading} onPageChange={onPageChange} />
                     </div>
                 </form>
 

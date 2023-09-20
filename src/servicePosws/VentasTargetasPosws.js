@@ -7,36 +7,45 @@ export class VentasTargetasPosws {
         this.pathService = new PathService();
     }
 
-
-    ventasTargetas(centro, fecha, ptoemi) {
-
-        //const nuevaSerUrl = data.object.serCodigo.serUrl;
-        const url = "http://192.168.200.24:8080/posws/ws/vouchers/ventasTargetas";
-        const requestData = {
-            object: JSON.stringify({
-                centro: centro,
-                fecha: fecha,
-                ptoemi: ptoemi
-            }),
-            rowCount: 0,
-        };
-        return axios
-            .post(url, requestData, {
+    ventasTargetas(centro, fechaini,fechafin, ptoemi) {
+        const ws_nombre = "POSWS_VOUCHERS_DATOSCENTRO";
+        return this.pathService.getUrl(ws_nombre)
+          .then((data) => {
+            const nuevaWsUrl = data.object.wsUrl;
+            //const nuevaSerUrl = "http://192.168.56.167:8080";
+            const nuevaSerUrl = data.object.serCodigo.serUrl;
+            const url = nuevaSerUrl + nuevaWsUrl;
+            const requestData = {
+                object: JSON.stringify({
+                    centro: centro,
+                    fechaini: fechaini,
+                    fechafin: fechafin,
+                    ptoemi: ptoemi
+                }),
+                rowCount: 0,
+            };
+            return axios
+              .post(url, requestData, {
                 headers: {
-                    'Content-Type': 'application/json'
+                  'Content-Type': 'application/json'
                 }
-            })
-            .then((response) => {
+              })
+              .then((response) => {
                 const objectData = JSON.parse(response.data.object);
                 return objectData;
-            })
-            .catch((error) => {
-                console.error('Error EstadosCuentaIntermediaws metodo getPdfEf25Fi', error);
+              })
+              .catch((error) => {
+                console.error('Error VentasTargetasPosws metodo ventasTargetas', error);
                 window.alert('Ocurrió un error: ' + error.message);
                 return null;
-            });
-
-    }
+              });
+          })
+          .catch((error) => {
+            console.error('Error VentasTargetasPosws metodo ventasTargetas', error);
+            window.alert('Ocurrió un error: ' + error.message);
+            return null;
+          });
+      }
 
     generateVouchersReport(centro, sociedad) {
 

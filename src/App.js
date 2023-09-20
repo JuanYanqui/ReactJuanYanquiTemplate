@@ -444,11 +444,11 @@ const App = ({ userData, usuarioUppercase }) => {
             //const valorurl = '/' + lastPart;
             //console.log(url);
             //menuextra();
-           /*usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
+           usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
                 //console.log("entro");
                 const datanueva = datas
                 //console.log(datanueva);
-                datas.object.forEach((item) => {
+                /*datas.object.forEach((item) => {
                     const existingUrls = datas.object.map(item => item.url);
                     const existingUrlsHijos = datas.object.flatMap(item => {
                         if (item.hijos && Array.isArray(item.hijos)) {
@@ -471,8 +471,8 @@ const App = ({ userData, usuarioUppercase }) => {
                          navigate("/rsap/access");
                         return;
                     }
-                });
-            });*/
+                });*/
+            });
         };
 
         verificarYRedirigir();
