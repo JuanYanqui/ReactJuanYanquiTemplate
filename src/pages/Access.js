@@ -3,6 +3,7 @@ import { Button } from 'primereact/button';
 import { useNavigate } from 'react-router-dom';
 import { Menu } from 'primereact/menu';
 import { RTLContext } from '../App';
+import keycloak from 'keycloak-js'; 
 
 const Access = (props) => {
 
@@ -11,8 +12,8 @@ const Access = (props) => {
         realm: "gocorp",
         url: "https://goauth.gerardoortiz.com/auth/",
         clientId: "react-test",
-        port: 0,
         onLoad: 'login-required',
+        logoutRedirectUri: "https://gerardoortiz.com/logout-redirect", // Nueva propiedad
     };
 
     useEffect(() => {
@@ -38,8 +39,7 @@ const Access = (props) => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('hasRedirected');
-        window.location.href = keycloakConfig.url + 'realms/' + keycloakConfig.realm + '/protocol/openid-connect/logout?redirect_uri=' + encodeURIComponent(window.location.origin);
+        window.location.href = keycloakConfig.url + 'realms/' + keycloakConfig.realm + '/protocol/openid-connect/logout?redirect_uri=' + encodeURIComponent(window.location.origin +'/rsap');
     };
 
     const menuRef = useRef(null);

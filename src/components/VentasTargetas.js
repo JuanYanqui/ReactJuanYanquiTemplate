@@ -330,7 +330,7 @@ const VentasTargetas = () => {
                             <hr className="ui-separator ui-state-default ui-corner-all" />
                             <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                 <input
-                                    id="inputbp"
+                                    id="inputcentro"
                                     className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${centro ? 'ui-state-filled' : ''}`}
                                     value={centro}
                                     onChange={handleInputChange}
@@ -345,7 +345,7 @@ const VentasTargetas = () => {
 
                             <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                 <input
-                                    id="inputbp"
+                                    id="inputptoemi"
                                     className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${ptoemi ? 'ui-state-filled' : ''}`}
                                     value={ptoemi}
                                     onChange={handleInputChange2}

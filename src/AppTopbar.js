@@ -7,13 +7,14 @@ const AppTopbar = (props) => {
     const navigate = useNavigate();
 
 
-    const keycloakConfig = {
-        realm: "gocorp",
-        url: "https://goauth.gerardoortiz.com/auth/",
-        clientId: "react-test",
-        port: 0,
-        onLoad: 'login-required',
-    };
+   const keycloakConfig = {
+    realm: "gocorp",
+    url: "https://goauth.gerardoortiz.com/auth/",
+    clientId: "react-test",
+    redirectUri: "https://gerardoortiz.com/rsap/",
+    onLoad: 'login-required',
+    logoutRedirectUri: "https://gerardoortiz.com/logout-redirect", // Nueva propiedad
+};
 
     useEffect(() => {
     }, [props.searchActive]);
@@ -38,8 +39,8 @@ const AppTopbar = (props) => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('hasRedirected');
-        window.location.href = keycloakConfig.url + 'realms/' + keycloakConfig.realm + '/protocol/openid-connect/logout?redirect_uri=' + encodeURIComponent(window.location.origin);
+
+        window.location.href = keycloakConfig.url + 'realms/' + keycloakConfig.realm + '/protocol/openid-connect/logout?redirect_uri=' + encodeURIComponent(window.location.origin +'/rsap');
     };
 
     const menuRef = useRef(null);

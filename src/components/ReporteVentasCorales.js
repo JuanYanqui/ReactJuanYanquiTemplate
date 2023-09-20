@@ -27,7 +27,7 @@ const ReporteVentasCorales = () => {
     const repoteventascorales = new ReporteVentasCoralesIntermediaws();
     const [listalogistica, setlistalogistica] = useState([]);
     const [DataEstadoCuenta, setDataEstadoCuenta] = useState("");
-
+    const [serverseleccionado, setServerseleccionado] = useState("");
     const [totalRecords, setTotalRecords] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -87,21 +87,32 @@ const ReporteVentasCorales = () => {
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
                     currentPageReportTemplate={`Registros ${startRecord} -  de {totalRecords}`}
                 >
-                    <Column field="1" style={{ minWidth: '50px' }} header="Centro" />
-                    <Column field="2" style={{ minWidth: '50px' }} header="Ptoemi" />
-                    <Column field="3" style={{ minWidth: '50px' }} header="Comprobante" />
-                    <Column field="4" style={{ minWidth: '250px' }} header="Descripción" />
-                    <Column field="8" style={{ minWidth: '50px' }} header="Recap" />
-                    <Column field="6" style={{ minWidth: '50px' }} header="Lote" />
-                    <Column field="5" style={{ minWidth: '50px' }} header="Bin" />
-                    <Column field="7" style={{ minWidth: '50px' }} header="Autorización" />
-                    <Column field="9" style={{ minWidth: '200px' }} header="Factura" />
-                    <Column field="10" style={{ minWidth: '200px' }} header="Fecha E." />
-                    <Column field="11" style={{ minWidth: '100px' }} header="Identificación" />
-                    <Column field="12" style={{ minWidth: '300px' }} header="Cliente" />
-                    <Column field="3" style={{ minWidth: '50px' }} header="#Tarjeta" />
-                    <Column field="16" style={{ minWidth: '50px' }} header="Val Recap." />
-                    <Column field="0" style={{ minWidth: '50px' }} header="Valor V." />
+                    <Column field="1" style={{ minWidth: '50px' }} header="Recap" />
+                    <Column field="2" style={{ minWidth: '50px' }} header="Lote" />
+                    <Column field="3" style={{ minWidth: '50px' }} header="Bin" />
+                    <Column field="4" style={{ minWidth: '50px' }} header="Factura" />
+                    <Column field="8" style={{ minWidth: '50px' }} header="Fecha" />
+                    <Column field="6" style={{ minWidth: '50px' }} header="Codigo/tipo/nombre" />
+                    <Column field="5" style={{ minWidth: '50px' }} header="Total" />
+                    <Column field="7" style={{ minWidth: '50px' }} header="Otros" />
+                    <Column field="9" style={{ minWidth: '50px' }} header="Iva" />
+                    <Column field="10" style={{ minWidth: '50px' }} header="Val Recap" />
+                    <Column field="11" style={{ minWidth: '50px' }} header="Descripción" />
+                    <Column field="12" style={{ minWidth: '50px' }} header="#Tarjeta" />
+                    <Column field="3" style={{ minWidth: '50px' }} header="Tipo pago" />
+                    <Column field="16" style={{ minWidth: '50px' }} header="Autorización" />
+                    <Column field="0" style={{ minWidth: '50px' }} header="Voucher" />
+                    <Column field="0" style={{ minWidth: '50px' }} header="Forma pago" />
+                    <Column field="0" style={{ minWidth: '50px' }} header="Tipo diferido" />
+                    <Column field="0" style={{ minWidth: '50px' }} header="Plazo" />
+                    <Column field="0" style={{ minWidth: '50px' }} header="Meses gracia" />
+                    <Column field="0" style={{ minWidth: '50px' }} header="Descripción" />
+                    <Column field="0" style={{ minWidth: '50px' }} header="Código Tcredito" />
+                    <Column field="0" style={{ minWidth: '50px' }} header="Nombre marca" />
+                    <Column field="0" style={{ minWidth: '50px' }} header="Tipo pago" />
+                    <Column field="0" style={{ minWidth: '50px' }} header="Red" />
+                    <Column field="0" style={{ minWidth: '50px' }} header="Respuesta" />
+                    <Column field="0" style={{ minWidth: '50px' }} header="Grupo tarjeta" />
                 </DataTable>
             </div>
         );
@@ -167,28 +178,32 @@ const ReporteVentasCorales = () => {
             const ws = XLSX.utils.aoa_to_sheet([
                 ['Ventas de Tarjeta'],
                 [
-                    'Centro',
-                    'Ptoemi',
-                    'Comprobante',
-                    'Descripción',
-                    'Recap',
-                    'Lote',
-                    'Bin',
-                    'Autorización',
-                    'Factura',
-                    'Fecha E.',
-                    'Identificación',//11
-                    'Cliente',//12
-                    'Base Iva',//13
-                    'Otros',//14
-                    'Iva',//15
-                    'Val Recap',//21
-                    '#Tarjeta',//3
-                    'Dif',//19
-                    'NombreBanco',//17
-                    'TCredito',//18
-                    'Descripcion',//20
-                    'Valor Total',//16
+                    "Recap",
+                    "Lote",
+                    "Bin",
+                    "Factura",
+                    "Fecha",
+                    "Codigo/tipo/nombre",
+                    "Total",
+                    "Otros",
+                    "Iva",
+                    "Val Recap",
+                    "Descripción",
+                    "#Tarjeta",
+                    "Tipo pago",
+                    "Autorización",
+                    "Voucher",
+                    "Forma pago",
+                    "Tipo diferido",
+                    "Plazo",
+                    "Meses gracia",
+                    "Descripción",
+                    "Código Tcredito",
+                    "Nombre marca",
+                    "Tipo pago",
+                    "Red",
+                    "Respuesta",
+                    "Grupo tarjeta"
                 ],
                 ...DataEstadoCuenta.map(item => [
                     item[1],
@@ -212,6 +227,10 @@ const ReporteVentasCorales = () => {
                     item[17],
                     item[18],
                     item[20],
+                    item[16],
+                    item[16],
+                    item[16],
+                    item[16],
                     item[16],
                 ]),
             ]);
@@ -259,14 +278,25 @@ const ReporteVentasCorales = () => {
         setLoading(true);
         //console.log(fecha)
         if (fecha == null) {
-            ventastarjetadata.ventasTargetas(centro, fecha, ptoemi).then((data) => {
+            const sucursal = "";
+            const sociedad = "1000";
+            const centrol = "";
+            const nombreCentro = "";
+            const tipoCentro = "";
+            setLoading(false);
+            repoteventascorales.centrologistico2(sucursal, sociedad, centrol, nombreCentro, tipoCentro, serverseleccionado).then((data) => {
                 //console.log(data);
-                setDataEstadoCuenta(data);
-                setLoading(false);
+
             });
         } else {
             const fechaFormateada = `${fecha.getFullYear()}-${(fecha.getMonth() + 1).toString().padStart(2, '0')}-${fecha.getDate().toString().padStart(2, '0')} ${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}:${fecha.getSeconds().toString().padStart(2, '0')}`;
-            ventastarjetadata.ventasTargetas(centro, fechaFormateada, ptoemi).then((data) => {
+            const sucursal = "";
+            const sociedad = "1000";
+            const centrol = "";
+            const nombreCentro = "";
+            const tipoCentro = "";
+            setLoading(false);
+            repoteventascorales.centrologistico2(sucursal, sociedad, centrol, nombreCentro, tipoCentro, serverseleccionado).then((data) => {
                 //console.log(data);
                 setDataEstadoCuenta(data);
                 setLoading(false);
@@ -320,7 +350,7 @@ const ReporteVentasCorales = () => {
 
     useEffect(() => {
         const sucursal = "";
-        const sociedad = "";
+        const sociedad = "1000";
         const centrol = "";
         const nombreCentro = "";
         const tipoCentro = "";
@@ -328,7 +358,7 @@ const ReporteVentasCorales = () => {
         repoteventascorales.centrologistico(sucursal, sociedad, centrol, nombreCentro, tipoCentro).then((data) => {
             console.log(data);
             for (const dato of data) {
-                if (dato.serverHost) {
+                if (dato.serverHost && dato.serverHost.includes("http://app")) {
                     const descripcionCentro = dato.descripcionCentro;
                     const codigoCentro = dato.id.codigoCentro;
                     const hostcentro = dato.serverHost;
@@ -337,9 +367,10 @@ const ReporteVentasCorales = () => {
                     listaDescripcionYCodigo.push({ descripcionCentro, codigoCentro, hostcentro });
                 }
             }
+            setlistalogistica(listaDescripcionYCodigo);
         })
         console.log(listaDescripcionYCodigo);
-        setlistalogistica(listaDescripcionYCodigo);
+
         window.addEventListener('click', handleOutsideClick);
         window.addEventListener('click', handleOutsideClick2);
         return () => {
@@ -361,6 +392,7 @@ const ReporteVentasCorales = () => {
         if (selectedCentroData) {
             const serverHostSeleccionado = selectedCentroData.hostcentro;
             console.log(`Server Host del centro seleccionado: ${serverHostSeleccionado}`);
+            setServerseleccionado(serverHostSeleccionado);
         }
     };
     return (
@@ -373,7 +405,7 @@ const ReporteVentasCorales = () => {
                             <div >
                                 <span className="Fs20 FontBold">Reporte Ventas Corales</span>
                                 <button
-                                    id="FiltrarEstadoCuenta"
+                                    id="FiltrarReporteEstadoCuenta"
                                     className="ui-buttonleft ui-widget ui-state-default ui-corner-all ui-button-text-icon-right p-mr-2"
                                     disabled={loading}
                                     type="button"
@@ -386,36 +418,36 @@ const ReporteVentasCorales = () => {
                             </div>
                             <div style={{ height: '1px' }}></div>
                             <hr className="ui-separator ui-state-default ui-corner-all" />
-                            {listalogistica.length > 0 && (
-                                <div className="custom-select">
-                                    <select
-                                        tabIndex="-1"
-                                        autoComplete="off"
-                                        aria-hidden="true"
-                                        className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all}`}
-                                        id="mySelect"
-                                        onChange={handleSelectChange} // Agrega el evento onChange aquí
-                                        value={centroSeleccionado} // Establece el valor seleccionad
-                                    >
-                                        {/* Agrega una opción por defecto si lo deseas */}
-                                        <option value="">Selecciona un centro</option>
 
-                                        {/* Mapea la lista y crea opciones para cada elemento */}
-                                        {listalogistica.map((item, index) => (
-                                            <option key={index} value={item.codigoCentro}>
-                                                {item.descripcionCentro}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <i className="ui-icon ui-icon-triangle-1-s ui-c select-arrow"></i>
-                                </div>
-                            )}
+                            <div className="custom-select">
+                                <select
+                                    tabIndex="-1"
+                                    autoComplete="off"
+                                    aria-hidden="true"
+                                    className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all}`}
+                                    id="mySelect"
+                                    onChange={handleSelectChange} // Agrega el evento onChange aquí
+                                    value={centroSeleccionado} // Establece el valor seleccionad
+                                >
+                                    {/* Agrega una opción por defecto si lo deseas */}
+                                    <option value="">Selecciona un centro</option>
+
+                                    {/* Mapea la lista y crea opciones para cada elemento */}
+                                    {listalogistica.map((item, index) => (
+                                        <option key={index} value={item.codigoCentro}>
+                                            {item.descripcionCentro}
+                                        </option>
+                                    ))}
+                                </select>
+
+                            </div>
+
                             &nbsp;
                             &nbsp;
 
                             <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                 <input
-                                    id="inputbp"
+                                    id="input1"
                                     className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${ptoemi ? 'ui-state-filled' : ''}`}
                                     value={ptoemi}
                                     onChange={handleInputChange2}
@@ -440,7 +472,7 @@ const ReporteVentasCorales = () => {
                                 <label
                                     style={{
                                         position: 'absolute',
-                                        top: isCalendarClicked ? '10px' : '-13px', // Ajusta la posición vertical
+                                        top: isCalendarClicked ? '10px' : '-10px', // Ajusta la posición vertical
                                         left: '1px',
                                         backgroundColor: 'white',
                                         padding: '0 5px',
@@ -449,13 +481,14 @@ const ReporteVentasCorales = () => {
                                         transition: 'top 0.5s ease', // Agregar una transición suave
                                         fontSize: '12px', // Ajusta el tamaño de la letra según tus necesidades
                                         color: '#7f8990', // Cambia el color del texto a #7f8990
+                                        zIndex: 1,
 
                                     }}
                                 >
                                     Fecha Inicial
                                 </label>
                                 <Calendar
-                                    id="inputnombrecuenta"
+                                    id="calfechaini"
                                     value={fecha}
                                     onChange={handleDateChange}
                                     dateFormat="yy-dd-mm"
@@ -484,7 +517,7 @@ const ReporteVentasCorales = () => {
                                 <label
                                     style={{
                                         position: 'absolute',
-                                        top: isCalendarClicked2 ? '10px' : '-13px', // Ajusta la posición vertical
+                                        top: isCalendarClicked2 ? '10px' : '-10px', // Ajusta la posición vertical
                                         left: '1px',
                                         backgroundColor: 'white',
                                         padding: '0 5px',
@@ -493,13 +526,14 @@ const ReporteVentasCorales = () => {
                                         transition: 'top 0.5s ease', // Agregar una transición suave
                                         fontSize: '12px', // Ajusta el tamaño de la letra según tus necesidades
                                         color: '#7f8990', // Cambia el color del texto a #7f8990
+                                        zIndex: 1,
 
                                     }}
                                 >
                                     Fecha Final
                                 </label>
                                 <Calendar
-                                    id="inputnombrecuenta"
+                                    id="calfechafin"
                                     value={fecha2}
                                     onChange={handleDateChange2}
                                     dateFormat="yy-dd-mm"

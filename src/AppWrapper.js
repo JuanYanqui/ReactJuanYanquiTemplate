@@ -18,7 +18,7 @@ const AppWrapper = ({ userData, usuarioUppercase }) => {
     const [redirected, setRedirected] = useState(false);
 
     useEffect(() => {
-        // Comprueba si la redirección ya ha ocurrido en el almacenamiento local
+        /*// Comprueba si la redirección ya ha ocurrido en el almacenamiento local
         const hasRedirected = localStorage.getItem('hasRedirected');
 
         if (!hasRedirected) {
@@ -27,7 +27,7 @@ const AppWrapper = ({ userData, usuarioUppercase }) => {
 
             // Marca que la redirección ha ocurrido en el almacenamiento local
             localStorage.setItem('hasRedirected', 'true');
-        }
+        }*/
 
         window.scrollTo(0, 0);
     }, [navigate]);
