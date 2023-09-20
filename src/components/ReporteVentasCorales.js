@@ -284,7 +284,7 @@ const ReporteVentasCorales = () => {
             const nombreCentro = "";
             const tipoCentro = "";
             setLoading(false);
-            repoteventascorales.centrologistico2(sucursal, sociedad, centrol, nombreCentro, tipoCentro, serverseleccionado).then((data) => {
+            repoteventascorales.loadVentas(sucursal, sociedad, centrol, nombreCentro, tipoCentro, serverseleccionado).then((data) => {
                 //console.log(data);
 
             });
@@ -296,7 +296,7 @@ const ReporteVentasCorales = () => {
             const nombreCentro = "";
             const tipoCentro = "";
             setLoading(false);
-            repoteventascorales.centrologistico2(sucursal, sociedad, centrol, nombreCentro, tipoCentro, serverseleccionado).then((data) => {
+            repoteventascorales.loadVentas(sucursal, sociedad, centrol, nombreCentro, tipoCentro, serverseleccionado).then((data) => {
                 //console.log(data);
                 setDataEstadoCuenta(data);
                 setLoading(false);
@@ -355,7 +355,7 @@ const ReporteVentasCorales = () => {
         const nombreCentro = "";
         const tipoCentro = "";
         const listaDescripcionYCodigo = [];
-        repoteventascorales.centrologistico(sucursal, sociedad, centrol, nombreCentro, tipoCentro).then((data) => {
+        repoteventascorales.loadVentas(sucursal, sociedad, centrol, nombreCentro, tipoCentro).then((data) => {
             console.log(data);
             for (const dato of data) {
                 if (dato.serverHost && dato.serverHost.includes("http://app")) {
