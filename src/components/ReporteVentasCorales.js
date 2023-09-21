@@ -583,6 +583,11 @@ const ReporteVentasCorales = () => {
         value: item.codigoCentro,
         label: item.descripcionCentro,
     }));
+
+    const listaDescripcionYCodigoFormateada = listalogistica.map(item => ({
+        ...item,
+        label: `${item.descripcionCentro} (${item.codigoCentro})`
+      }));
     return (
         <div className='layout-wrapper menu-layout-overlay'>
             <div style={{ height: '15px' }}></div>
@@ -607,35 +612,31 @@ const ReporteVentasCorales = () => {
                             <div style={{ height: '1px' }}></div>
                             <hr className="ui-separator ui-state-default ui-corner-all" />
 
-                            <div className="custom-select">
-                                <div className="custom-select">
-                                    <div className="custom-select">
-                                        <div className="custom-select">
-                                            <select
-                                                tabIndex="-1"
-                                                autoComplete="off"
-                                                aria-hidden="true"
-                                                className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all}`}
-                                                id="mySelect"
-                                                onChange={handleSelectChange} // Agrega el evento onChange aquí
-                                                value={centroSeleccionado} // Establece el valor seleccionad
-                                            >
-                                                {/* Agrega una opción por defecto si lo deseas */}
-                                                <option value="">Selecciona un centro</option>
 
-                                                {/* Mapea la lista y crea opciones para cada elemento */}
-                                                {listalogistica.map((item, index) => (
-                                                    <option key={index} value={item.codigoCentro}>
-                                                        {item.descripcionCentro}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            <i className="ui-icon ui-icon-triangle-1-s ui-c select-arrow"></i>
-                                        </div>
-                                    </div>
-                                </div>
+                            <span style={{
+                                position: 'relative',
+                                display: 'inline-block',
+                                maxWidth: '180px',
+                                border: isCalendarClicked ? '2px solid black' : '1px solid #808080',
+                                borderRadius: '3px',
+                                top: '1px',
 
-                            </div>
+                            }}>
+                                <Dropdown
+                                    autoComplete="off"
+                                    aria-hidden="true"
+                                    className="w-full md:w-12rem"
+                                    optionLabel="name" placeholder="Seleccione"
+                                    id="mySelect"
+                                    style={{ backgroundColor: "#ffffff", height: "36px" }}
+                                    onChange={handleSelectChange}
+                                    value={centroSeleccionado}
+                                    options={listaDescripcionYCodigoFormateada}
+                                >
+                                </Dropdown>
+                            </span>
+
+
 
                             &nbsp;
                             &nbsp;
