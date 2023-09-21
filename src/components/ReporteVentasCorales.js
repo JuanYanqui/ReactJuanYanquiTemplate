@@ -34,9 +34,10 @@ const ReporteVentasCorales = () => {
     const [DataReporteventas, setReporteventas] = useState("");
     const [serverseleccionado, setServerseleccionado] = useState("");
     const [totalRecords, setTotalRecords] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(null);
+    const [ultimodato, setultimodato] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(100);
+    const [totalPages, setTotalPages] = useState(10);
     const [selectedbp, setSelectedbp] = useState(null);
     const [selectedsociedad, setSelectedsociedad] = useState(null);
     const [estadoSelecionado, setestadoSelecionado] = useState(null);
@@ -44,15 +45,48 @@ const ReporteVentasCorales = () => {
     const [dialogVisibleError, setDialogVisibleError] = useState(false);
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedLevel, setSelectedLevel] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (serverseleccionado == "") {
+
+            } else if (ultimodato) {
+                setLoading(true);
+                const lastPageRowCount = totalRecords % rowsPerPage;
+                repoteventascorales.loadVentas(numCaja, fechamodiini, fechamodifin, serverseleccionado, currentPage, lastPageRowCount).then((data) => {
+                    setReporteventas(data);
+                    setLoading(false);
+                });
+
+
+
+            } else {
+                setLoading(true);
+                const response1 = await repoteventascorales.loadVentas(numCaja, fechamodiini, fechamodifin, serverseleccionado, currentPage, rowsPerPage);
+                const response = await repoteventascorales.loadVentasPaginacion(numCaja, fechamodiini, fechamodifin, serverseleccionado, currentPage, rowsPerPage);
+                if (response) {
+                    setReporteventas(response1);
+                    const pageSize = rowsPerPage;
+                    const totalCount = response.rowCount;
+                    const totalPages = Math.ceil(totalCount / pageSize);
+                    setTotalRecords(response.rowCount);
+                    setTotalPages(totalPages);
+                    setLoading(false);
+
+                }
+            }
+
+        };
+        fetchData();
+    }, [currentPage, rowsPerPage]);
+
     const onPageChange = (event) => {
         const newPage = Math.floor(event.first / event.rows);
-        setLoading(true);
-        //console.log(event.rows);
-        setRowsPerPage(event.rows);
         setCurrentPage(newPage);
-        cargaDatos();
+        setRowsPerPage(event.rows);
+        const isLastPage = newPage === Math.floor(totalRecords / rowsPerPage);
+        setultimodato(isLastPage);
     };
-
     const paginatorLeft = <i />;
     const paginatorRight = (
         <div>
@@ -70,30 +104,25 @@ const ReporteVentasCorales = () => {
     );
 
     const DataTablaar = ({ dataar }) => {
-        const generarpdf = (rowData) => {
-            return (
-                <div className="flex flex-wrap gap-2">
-                    <i className="pi pi-file-pdf" style={{ fontSize: '1.5rem' }} onClick={() => generarpfdpeti(rowData[1])} ></i>
-                </div>
-            );
-        };
-
         const startRecord = currentPage * rowsPerPage + 1;
         const endRecord = Math.min((currentPage + 1) * rowsPerPage, totalRecords);
+
         return (
             <div>
                 <DataTable value={dataar}
-                    lazy paginator
+                    lazy
+                    paginator
                     totalRecords={totalRecords}
                     onPage={onPageChange}
                     rows={rowsPerPage}
                     first={currentPage * rowsPerPage}
-                    rowsPerPageOptions={[5, 10, 50]}
+                    rowsPerPageOptions={[10, 50, 100]}
                     paginatorPosition="both"
                     paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
                     currentPageReportTemplate={`Registros ${startRecord} - ${endRecord} de {totalRecords}`}
                 >
+                    <Column header="#" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
                     <Column field="2" style={{ minWidth: '50px' }} header="Recap" />
                     <Column field="3" style={{ minWidth: '50px' }} header="Lote" />
                     <Column field="4" style={{ minWidth: '50px' }} header="Bin" />
@@ -125,70 +154,43 @@ const ReporteVentasCorales = () => {
         );
     }
 
-    const generarpfdpeti = (centroingre) => {
-        //console.log(centroingre);
-        ventastarjetadata.generateVouchersReport(centroingre).then((data) => {
-            //console.log(data);
-
-            // Convierte la cadena Base64 en una URL de archivo PDF
-            const pdfURL = convertirBase64APDF(data);
-
-            // Crea un enlace de descarga
-            const a = document.createElement('a');
-            a.href = pdfURL;
-            a.download = 'documento.pdf';
-            a.textContent = 'Descargar PDF';
-
-            // Agrega el enlace de descarga al cuerpo del documento
-            document.body.appendChild(a);
-
-            // Simula un clic en el enlace para iniciar la descarga
-            a.click();
-
-            // Limpia el enlace después de la descarga
-            document.body.removeChild(a);
-        });
-    }
-
-
-    /*
-                        <Column field="13" style={{ minWidth: '100px' }} header="Otros" />
-                    <Column field="14" style={{ minWidth: '100px' }} header="Iva" />
-                    <Column field="15" style={{ minWidth: '100px' }} header="Val Recap" />*/
-
-
-
-    function convertirBase64APDF(base64Data) {
-        const byteCharacters = atob(base64Data);
-        const byteNumbers = new Array(byteCharacters.length);
-
-        for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'application/pdf' });
-
-        return URL.createObjectURL(blob);
-    }
-
-
-
 
     const cargarDatosexel = async () => {
         try {
             let allData = [];
 
             for (let page = 1; page <= totalPages; page++) {
-                const response = await repoteventascorales.loadVentas(
-                    numCaja, fechamodiini, fechamodifin, serverseleccionado, page, rowsPerPage
-                );
-
+                let response;
+            
+                // Verificar si estamos en la última página
+                if (page === totalPages) {
+                    const lastPageRowCount = totalRecords % rowsPerPage;
+                    response = await repoteventascorales.loadVentas(
+                        numCaja,
+                        fechamodiini,
+                        fechamodifin,
+                        serverseleccionado,
+                        page,
+                        lastPageRowCount // Cargar solo los registros restantes en la última página
+                    );
+                } else {
+                    response = await repoteventascorales.loadVentas(
+                        numCaja,
+                        fechamodiini,
+                        fechamodifin,
+                        serverseleccionado,
+                        page,
+                        rowsPerPage // Cargar la cantidad estándar de registros
+                    );
+                }
+            
                 if (response && response.data) {
+                    //console.log('Datos en la página', page, ':', response.data);
                     allData = [...allData, ...response.data];
                 } else {
                     throw new Error(response?.data?.message || 'Error desconocido');
                 }
+                //console.log('Registros cargados en la página', page, ':', response.data.length);
                 setLoading(true);
             }
 
@@ -198,7 +200,6 @@ const ReporteVentasCorales = () => {
                 setLoading(false);
                 const wb = XLSX.utils.book_new();
                 const ws = XLSX.utils.aoa_to_sheet([
-                    ['Ventas de Tarjeta'],
                     [
                         "Recap",
                         "Lote",
@@ -257,8 +258,8 @@ const ReporteVentasCorales = () => {
                     ]),
                 ]);
 
-                const mergeTitle = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: 0, c: 9 } });
-                ws['!merges'] = [XLSX.utils.decode_range(mergeTitle)];
+                
+                
                 ws['A1'].s = { halign: 'center', valign: 'center' };
 
                 XLSX.utils.book_append_sheet(wb, ws, 'VentasdeTarjetas');
@@ -273,115 +274,6 @@ const ReporteVentasCorales = () => {
             setDialogVisibleError(true);
         }
     };
-
-    /*const generarExcelpropio = async () => {
-        try {
-        
-           
-        } catch (error) {
-            setLoading(false);
-            setError(error.message || 'Error desconocido');
-            setPosition('top');
-            setDialogVisibleError(true);
-        }
-    };*/
-
-
-
-    /*const generarExcelpropio  = async () => {
-        let allData = [];
-        for (let page = 1; page <= totalPages; page++) {
-            const response2 = await repoteventascorales.loadVentas(
-                numCaja, fechamodiini, fechamodifin, serverseleccionado, page, rowsPerPage
-            );
-
-            if (response2 && response2.data) {
-                // Agrega los datos de la página actual a la variable allData
-                allData = [...allData, ...response2.data];
-            } else {
-                // Maneja el error si ocurriera durante la obtención de datos de la página actual
-                setLoading(false);
-                setError(response2?.data?.message || 'Error desconocido');
-                setPosition('top');
-                setDialogVisibleError(true);
-                return;
-            }
-        }
-        if (datoscompletos == null || datoscompletos.length == 0) {
-            showWarnexe();
-        } else {
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.aoa_to_sheet([
-                ['Ventas de Tarjeta'],
-                [
-                    "Recap",
-                    "Lote",
-                    "Bin",
-                    "Factura",
-                    "Fecha",
-                    "Codigo/tipo/nombre",
-                    "Total",
-                    "Otros",
-                    "Iva",
-                    "Val Recap",
-                    "Descripción",
-                    "#Tarjeta",
-                    "Tipo pago",
-                    "Autorización",
-                    "Voucher",
-                    "Forma pago",
-                    "Tipo diferido",
-                    "Plazo",
-                    "Meses gracia",
-                    "Descripción",
-                    "Código Tcredito",
-                    "Nombre marca",
-                    "Tipo pago",
-                    "Red",
-                    "Respuesta",
-                    "Grupo tarjeta"
-                ],
-                ...datoscompletos.map(item => [
-                    item[2],
-                    item[3],
-                    item[4],
-                    item[5],
-                    item[6],
-                    item[7],
-                    item[8],
-                    item[9],
-                    item[10],
-                    item[11],
-                    item[12],
-                    item[13],
-                    item[14],
-                    item[15],
-                    item[16],
-                    item[17],
-                    item[18],
-                    item[19],
-                    item[20],
-                    item[21],
-                    item[22],
-                    item[23],
-                    item[24],
-                    item[25],
-                    item[26],
-                    item[27],
-                ]),
-            ]);
-
-            const mergeTitle = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: 0, c: 9 } });
-            ws['!merges'] = [XLSX.utils.decode_range(mergeTitle)];
-            ws['A1'].s = { halign: 'center', valign: 'center' };
-
-            XLSX.utils.book_append_sheet(wb, ws, 'VentasdeTarjetas');
-            XLSX.writeFile(wb, 'VentasdeTarjetas.xlsx');
-        }
-
-    };*/
-
-
 
 
 
@@ -426,7 +318,7 @@ const ReporteVentasCorales = () => {
         //console.log(fecha)
 
         //console.log(fechaini);
-        console.log(fechafin);
+        //console.log(fechafin);
 
         if (serverseleccionado == "") {
             showrangocentro();
@@ -459,12 +351,14 @@ const ReporteVentasCorales = () => {
 
                     if (response1) {
                         setReporteventas(response1);
+                        //console.log(response1);
                         const pageSize = rowsPerPage;
                         const totalCount = response.rowCount;
                         const totalPages = Math.ceil(totalCount / pageSize);
                         setTotalRecords(response.rowCount);
                         setTotalPages(totalPages);
                         setLoading(false);
+                        //console.log(response);
                     } else {
                         setLoading(false);
                         setError(response1.data.message);
@@ -481,10 +375,7 @@ const ReporteVentasCorales = () => {
 
     }
 
-    const handleInputChange = (event) => {
-        setCentro(event.target.value);
 
-    };
 
     const handleInputChange2 = (event) => {
         setNumCaja(event.target.value);
@@ -561,9 +452,9 @@ const ReporteVentasCorales = () => {
     const handleSelectChange = (event) => {
         const selectedCentro = event.target.value;
         setCentroSeleccionado(selectedCentro);
-        console.log(selectedCentro)
+        //console.log(selectedCentro)
         // Encuentra el serverHost correspondiente al centro seleccionado en listaDescripcionYCodigo
-        const selectedCentroData = listalogistica.find(item => item.codigoCentro === selectedCentro);
+        const selectedCentroData = listalogistica.find(item => item.codigoCentro === selectedCentro.codigoCentro);
 
         if (selectedCentroData) {
             const serverHostSeleccionado = selectedCentroData.hostcentro;
@@ -573,48 +464,6 @@ const ReporteVentasCorales = () => {
         }
     };
 
-    const [filtro, setFiltro] = useState('');
-
-    const handleInputChangebu = (event) => {
-        setFiltro(event.target.value);
-    };
-
-    const options = listalogistica.map((item, index) => ({
-        value: item.codigoCentro,
-        label: item.descripcionCentro,
-    }));
-
-    const listaDescripcionYCodigoFormateada = listalogistica.map(item => ({
-        ...item,
-        label: `${item.descripcionCentro} (${item.codigoCentro})`
-    }));
-
-    const listaCiudades = [
-        { id: 1, nombre: 'Nueva York', codigoPostal: '10001', pais: 'Estados Unidos' },
-        { id: 2, nombre: 'Londres', codigoPostal: 'SW1A 1AA', pais: 'Reino Unido' },
-        { id: 3, nombre: 'París', codigoPostal: '75000', pais: 'Francia' },
-        { id: 4, nombre: 'Tokio', codigoPostal: '100-0001', pais: 'Japón' },
-    ];
-
-    const handleSelectChange2 = (e) => {
-        setCiudadSeleccionada(e.value);
-    };
-    const [filtroCiudades, setFiltroCiudades] = useState([]);
-    const [busqueda, setBusqueda] = useState('');
-
-    useEffect(() => {
-        const ciudadesFiltradas = listaCiudades.filter((ciudad) =>
-            ciudad.nombre.toLowerCase().includes(busqueda.toLowerCase())
-        );
-        setFiltroCiudades(ciudadesFiltradas);
-    }, [busqueda]);
-
-    const handleInputChange3 = (e) => {
-        setBusqueda(e.target.value);
-    };
-
-
-    const [ciudadSeleccionada, setCiudadSeleccionada] = useState(null);
     return (
         <div className='layout-wrapper menu-layout-overlay'>
             <div style={{ height: '15px' }}></div>
@@ -640,10 +489,12 @@ const ReporteVentasCorales = () => {
                             <hr className="ui-separator ui-state-default ui-corner-all" />
 
 
+
+
                             <span style={{
                                 position: 'relative',
                                 display: 'inline-block',
-                                maxWidth: '180px',
+                                maxWidth: '250px',
                                 border: isCalendarClicked ? '2px solid black' : '1px solid #808080',
                                 borderRadius: '3px',
                                 top: '1px',
@@ -652,27 +503,17 @@ const ReporteVentasCorales = () => {
                                 <Dropdown
                                     autoComplete="off"
                                     aria-hidden="true"
-                                    className="w-full md:w-12rem"
+                                    className="w-full md:w-60rem"
                                     placeholder="Seleccione"
                                     id="mySelect"
                                     style={{ backgroundColor: "#ffffff", height: "36px" }}
-                                    optionLabel="nombre" // Mostrar solo el nombre en el Dropdown
-                                    value={ciudadSeleccionada}
-                                    options={listaCiudades}
-                                    onChange={handleSelectChange2}
-                                    filter onInputChange={handleInputChange3} 
+                                    optionLabel="descripcionCentro" // Mostrar solo el nombre en el Dropdown
+                                    value={centroSeleccionado}
+                                    options={listalogistica}
+                                    onChange={handleSelectChange}
+                                    filter={true}
                                 />
-                                {ciudadSeleccionada && (
-                                    <div>
-                                        <h2>Detalles de la ciudad seleccionada:</h2>
-                                        <p>Nombre: {ciudadSeleccionada.nombre}</p>
-                                        <p>Código Postal: {ciudadSeleccionada.codigoPostal}</p>
-                                        <p>País: {ciudadSeleccionada.pais}</p>
-                                    </div>
-                                )}
                             </span>
-
-
 
                             &nbsp;
                             &nbsp;

@@ -55,10 +55,12 @@ export class ReporteVentasCoralesIntermediaws {
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 //const nuevaWsUrl = data.object.wsUrl;
+                //console.log(serverseleccionado)
                 const nuevaWsUrl = ":18443/retailws/ws/vouchers/loadVentas";
                 const nuevaSerUrl = serverseleccionado;
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
+                //console.log(url)
                 const paginationInfo = {
                     count: false,
                     pagesize: rowsPerPage,
@@ -84,7 +86,7 @@ export class ReporteVentasCoralesIntermediaws {
                     })
                     .then((response) => {
                         const objectData = JSON.parse(response.data.object);
-                        //console.log(objectData);
+                        ///console.log(objectData);
                         return objectData;
 
                     })
@@ -102,7 +104,7 @@ export class ReporteVentasCoralesIntermediaws {
     }
 
 
-    loadVentasPaginacion(numCaja, fechaInicio, fechaFin,serverseleccionado, currentPage,rowsPerPage) {
+    loadVentasPaginacion(numCaja, fechaInicio, fechaFin,serverseleccionado) {
         const ws_nombre = "INTERMEDIAWS_LISTAR_CENTRO";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
@@ -113,8 +115,6 @@ export class ReporteVentasCoralesIntermediaws {
                 const url = nuevaSerUrl + nuevaWsUrl;
                 const paginationInfo = {
                     count: true,
-                    pagesize: rowsPerPage,
-                    first: currentPage,
                     sortBy: {},
                     filterBy: {}
                   };

@@ -108,6 +108,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
                     currentPageReportTemplate={`Registros ${startRecord} - ${endRecord} de {totalRecords}`}
                 >
+                    <Column header="#" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
                     <Column selectionMode="multiple" headerStyle={{ minWidth: '50px' }}></Column>
                     <Column field="codigo" style={{ minWidth: '50px' }}header="Código" />
                     <Column field="descripcion" style={{ minWidth: '300px' }} header="Descripción" />
