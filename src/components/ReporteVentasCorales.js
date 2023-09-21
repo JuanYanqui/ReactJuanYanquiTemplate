@@ -587,7 +587,34 @@ const ReporteVentasCorales = () => {
     const listaDescripcionYCodigoFormateada = listalogistica.map(item => ({
         ...item,
         label: `${item.descripcionCentro} (${item.codigoCentro})`
-      }));
+    }));
+
+    const listaCiudades = [
+        { id: 1, nombre: 'Nueva York', codigoPostal: '10001', pais: 'Estados Unidos' },
+        { id: 2, nombre: 'Londres', codigoPostal: 'SW1A 1AA', pais: 'Reino Unido' },
+        { id: 3, nombre: 'París', codigoPostal: '75000', pais: 'Francia' },
+        { id: 4, nombre: 'Tokio', codigoPostal: '100-0001', pais: 'Japón' },
+    ];
+
+    const handleSelectChange2 = (e) => {
+        setCiudadSeleccionada(e.value);
+    };
+    const [filtroCiudades, setFiltroCiudades] = useState([]);
+    const [busqueda, setBusqueda] = useState('');
+
+    useEffect(() => {
+        const ciudadesFiltradas = listaCiudades.filter((ciudad) =>
+            ciudad.nombre.toLowerCase().includes(busqueda.toLowerCase())
+        );
+        setFiltroCiudades(ciudadesFiltradas);
+    }, [busqueda]);
+
+    const handleInputChange3 = (e) => {
+        setBusqueda(e.target.value);
+    };
+
+
+    const [ciudadSeleccionada, setCiudadSeleccionada] = useState(null);
     return (
         <div className='layout-wrapper menu-layout-overlay'>
             <div style={{ height: '15px' }}></div>
@@ -626,14 +653,23 @@ const ReporteVentasCorales = () => {
                                     autoComplete="off"
                                     aria-hidden="true"
                                     className="w-full md:w-12rem"
-                                    optionLabel="name" placeholder="Seleccione"
+                                    placeholder="Seleccione"
                                     id="mySelect"
                                     style={{ backgroundColor: "#ffffff", height: "36px" }}
-                                    onChange={handleSelectChange}
-                                    value={centroSeleccionado}
-                                    options={listaDescripcionYCodigoFormateada}
-                                >
-                                </Dropdown>
+                                    optionLabel="nombre" // Mostrar solo el nombre en el Dropdown
+                                    value={ciudadSeleccionada}
+                                    options={listaCiudades}
+                                    onChange={handleSelectChange2}
+                                    filter onInputChange={handleInputChange3} 
+                                />
+                                {ciudadSeleccionada && (
+                                    <div>
+                                        <h2>Detalles de la ciudad seleccionada:</h2>
+                                        <p>Nombre: {ciudadSeleccionada.nombre}</p>
+                                        <p>Código Postal: {ciudadSeleccionada.codigoPostal}</p>
+                                        <p>País: {ciudadSeleccionada.pais}</p>
+                                    </div>
+                                )}
                             </span>
 
 
