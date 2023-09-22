@@ -21,13 +21,10 @@ const ControlArticulos = ({ usuarioUppercase }) => {
     const [descripcionArticulo, setDescripcionArticulo] = useState("");
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedLevel, setSelectedLevel] = useState(null);
-
     const [DataCategoria, setDataCategoria] = useState([]);
     const categoriasdata = new CategoriasCoralIntermediaws();
-
     const [DataArticulos, setDataArticulos] = useState([]);
     const articulosdata = new ArticulosIntermediaws();
-
     const [totalRecords, setTotalRecords] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -37,12 +34,17 @@ const ControlArticulos = ({ usuarioUppercase }) => {
     const [selectedCode, setSelectedCode] = useState(null);
     const [error, setError] = useState(null);
     const [dialogVisibleError, setDialogVisibleError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
+
+    //Almacena la fila Seleccionada
     const handleSelectionChange = (e) => {
         setSelectedItems(e.value);
     };
 
-    /*useEffect(() => {
+
+    //Carga al empesar la pagina los datos y los contiene en costante ejecucion con paginacion. 
+    useEffect(() => {
         const fetchData = async () => {
             const soloPendientesParam = false
             const incluirBarrasParam = false
@@ -63,33 +65,34 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                 const totalPages = Math.ceil(totalCount / pageSize);
                 setTotalRecords(response.rowCount);
                 setTotalPages(totalPages);
-                ////console.log("Total Datos:", response.rowCount);
-                ////console.log("Numero de datos por Pagina:", pageSize);
-                ////console.log("Total Paginas:", totalPages);
                 setLoading(false);
             }
             categoriasdata.listarCategoriasCoralVista(codigoCategoria, descripcionCategoria, selectedCity).then((data) => {
-                // //console.log("coraldataaa", data)
                 setDataCategoria(data);
                 setLoading(false);
             });
         };
         fetchData();
-    }, [currentPage, rowsPerPage]);*/
+    }, [currentPage, rowsPerPage]);
 
+
+    //Para el cambio de pagina.
     const onPageChange = (event) => {
         const newPage = Math.floor(event.first / event.rows);
         setLoading(true);
         setRowsPerPage(event.rows);
         setCurrentPage(newPage);
-        handleCargaDatos();
     };
 
-    
+
+    //Incono Para Tabla 
     const paginatorLeft = <i />;
     const paginatorRight = <i />;
     const startRecord = currentPage * rowsPerPage + 1;
     const endRecord = Math.min((currentPage + 1) * rowsPerPage, totalRecords);
+
+
+    //Creación Tabla de Datos lista Articulos
     const DataTablaar = ({ dataar }) => {
         return (
             <div>
@@ -110,20 +113,21 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                 >
                     <Column header="#" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
                     <Column selectionMode="multiple" headerStyle={{ minWidth: '50px' }}></Column>
-                    <Column field="codigo" style={{ minWidth: '50px' }}header="Código" />
+                    <Column field="codigo" style={{ minWidth: '50px' }} header="Código" />
                     <Column field="descripcion" style={{ minWidth: '300px' }} header="Descripción" />
                     <Column field="precio" style={{ minWidth: '100px' }} header="Precio" />
                     <Column field="unidadPedido" style={{ minWidth: '50px' }} header="Unidad de Pedido" />
                     <Column field="texto2" style={{ minWidth: '100px' }} header="Categoria Anterior" />
                     <Column field="texto3" style={{ minWidth: '100px' }} header="Nivel 1" />
-                    <Column field="texto4" style={{ minWidth: '100px' }}header="Nivel 2" />
-                    <Column field="texto5" style={{ minWidth: '100px' }}header="Nivel 3" />
-                    <Column field="texto6" style={{ minWidth: '100px' }}header="Nivel 4" />
+                    <Column field="texto4" style={{ minWidth: '100px' }} header="Nivel 2" />
+                    <Column field="texto5" style={{ minWidth: '100px' }} header="Nivel 3" />
+                    <Column field="texto6" style={{ minWidth: '100px' }} header="Nivel 4" />
                 </DataTable>
             </div>
         );
     };
 
+    //Creación Tabla de Datos Categoria
     const CustomDataTable3 = ({ data3 }) => {
         if (!data3) {
             return <p>No hay datos disponibles.</p>;
@@ -141,22 +145,29 @@ const ControlArticulos = ({ usuarioUppercase }) => {
         );
     };
 
+
+    //Almacena el id de la categoria selecionada
     const handleIconClick = (rowData) => {
         setSelectedCode(rowData[0]);
         setVisible(true);
     };
 
+
+    //Abre el dialogo Categoria
     const openNew = (position) => {
         setPosition(position);
         setDialogVisible(true);
     };
 
+
+    //Cierra el dialog Categoria y limpia los articulos selecionados
     const hideDialog = () => {
         setDialogVisible(false);
         setSelectedItems([]);
     };
 
 
+    //Carga el icono en la tabla de agregado y manda al metodo que captura los id
     const ingresoidividual = (rowData) => {
         return (
             <div className="flex flex-wrap gap-2">
@@ -166,6 +177,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
     };
 
 
+    //Mensajes Mostrar
     const showSuccess = () => {
         toast.current.show({ severity: 'success', summary: 'Success Message', detail: 'Operación Completada.' });
     };
@@ -182,6 +194,8 @@ const ControlArticulos = ({ usuarioUppercase }) => {
         toast.current.show({ severity: 'warn', summary: 'Warning', detail: 'La Categoria debe pertencer a Nivel 4.', life: 3000 });
     }
 
+
+    //Opcion del dialogo yes metodo para el cambio de categoria
     const handleYesClick = () => {
         if (selectedItems.length === 0) {
             setVisible(false);
@@ -204,20 +218,14 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                 categoriasdata.guardarCambiosCategoria(cambiosData, usuarioParam)
                     .then((response) => {
                         if (response.data.status === 0) {
-                            ////console.log(response.data.message);
                             setError(response.data.message);
                             setPosition('top');
                             setDialogVisibleError(true);
                             return response.data.message;
                         } else {
-
-                            //console.log(response.data.status);
                             const objectData = JSON.parse(response.data.object);
                             setSelectedItems([]);
                             setDialogVisible(false);
-                            ////console.log("cambios", cambiosData)
-                            ////console.log("usuarioParam", usuarioParam)
-                            ////console.log(objectData);
                             setVisible(false);
                             showSuccess();
                             return objectData;
@@ -225,7 +233,6 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                         }
                     });
 
-                ////console.log(selectedItems);
             } else {
                 setVisible(false);
                 showErrorNivel();
@@ -234,11 +241,14 @@ const ControlArticulos = ({ usuarioUppercase }) => {
     };
 
 
+    //Opcion del dialogo no metodo para cerrar el dialogo y terminar proceso
     const handleNoClick = () => {
         setVisible(false);
         showErrorcancel();
     };
 
+
+    //Footer del dilogo de opciones si y no 
     const footerContent = (
         <div>
             <Button label="No" icon="pi pi-times" onClick={handleNoClick} className="p-button-text" />
@@ -247,6 +257,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
     );
 
 
+    //Los niveles que se va a mostrar en Categoria
     const cities = [
         { label: 'Seleccionar', value: null },
         { label: 'Nivel 1', value: 1 },
@@ -256,14 +267,17 @@ const ControlArticulos = ({ usuarioUppercase }) => {
         { label: 'Nivel 5', value: 5 },
         { label: 'Nivel 6', value: 6 },
     ];
+
+
+    //Evento captura el nivel selecionado
     const handleCityChange = (e) => {
         setSelectedCity(e.value);
         setSelectedLevel(e.value);
     };
 
 
+    //Filtro de busqueda de la tabla Categoria 
     const handleFilterClick = () => {
-
         setLoading(true);
         categoriasdata.listarCategoriasCoralVista(codigoCategoria, descripcionCategoria, selectedCity).then((data) => {
             setDataCategoria(data);
@@ -272,10 +286,10 @@ const ControlArticulos = ({ usuarioUppercase }) => {
     };
 
 
-    const [loading, setLoading] = useState(false);
+    //Filtro para la carga de articulos con ingreso de filtros.
     const handleCargaDatos = async () => {
         setLoading(true);
-    
+
         const soloPendientesParam = false;
         const incluirBarrasParam = false;
         const soloSinRentasParam = false;
@@ -286,77 +300,74 @@ const ControlArticulos = ({ usuarioUppercase }) => {
         const proveedorParam = "";
         const barraParam = "";
         const jerarquiaParam = "";
-    
-            const response1 = await articulosdata.listarArticulosListaFull(
-                codigoArticulo,
-                presentacionParam,
-                descripcionArticulo,
-                proveedorParam,
-                barraParam,
-                checked,
-                soloPendientesParam,
-                incluirBarrasParam,
-                soloSinRentasParam,
-                soloSinPreciosParam,
-                soloCompraParam,
-                soloVentaRetailParam,
-                jerarquiaParam,
-                currentPage,
-                rowsPerPage
-            );
-    
-            const response = await articulosdata.PaginacionlistarArticulosListaFull(
-                codigoArticulo,
-                presentacionParam,
-                descripcionArticulo,
-                proveedorParam,
-                barraParam,
-                checked,
-                soloPendientesParam,
-                incluirBarrasParam,
-                soloSinRentasParam,
-                soloSinPreciosParam,
-                soloCompraParam,
-                soloVentaRetailParam,
-                jerarquiaParam,currentPage,
-                rowsPerPage
-            );
-    
-            if (response1) {
-                if(response1){
-                    setDataArticulos(response1);
-                    //console.log(response1);
-                    const pageSize = rowsPerPage;
-                    const totalCount = response.rowCount;
-                    const totalPages = Math.ceil(totalCount / pageSize);
-                    setTotalRecords(response.rowCount);
-                    setTotalPages(totalPages);
-                    setLoading(false);
-                }else{
-                    setLoading(false);
-                    setError(response1.data.message);
-                    //console.log(response1.data.message);
-                    setPosition('top');
-                    setDialogVisibleError(true);
-                    return response1.data.message;
-                }
-                
-            }
-    
-            categoriasdata.listarCategoriasCoralVista(codigoCategoria, descripcionCategoria, selectedCity).then((data) => {
-                setDataCategoria(data);
-                setLoading(false);
-            });
 
+        const response1 = await articulosdata.listarArticulosListaFull(
+            codigoArticulo,
+            presentacionParam,
+            descripcionArticulo,
+            proveedorParam,
+            barraParam,
+            checked,
+            soloPendientesParam,
+            incluirBarrasParam,
+            soloSinRentasParam,
+            soloSinPreciosParam,
+            soloCompraParam,
+            soloVentaRetailParam,
+            jerarquiaParam,
+            currentPage,
+            rowsPerPage
+        );
+
+        const response = await articulosdata.PaginacionlistarArticulosListaFull(
+            codigoArticulo,
+            presentacionParam,
+            descripcionArticulo,
+            proveedorParam,
+            barraParam,
+            checked,
+            soloPendientesParam,
+            incluirBarrasParam,
+            soloSinRentasParam,
+            soloSinPreciosParam,
+            soloCompraParam,
+            soloVentaRetailParam,
+            jerarquiaParam, currentPage,
+            rowsPerPage
+        );
+
+        if (response1) {
+            if (response1) {
+                setDataArticulos(response1);
+                const pageSize = rowsPerPage;
+                const totalCount = response.rowCount;
+                const totalPages = Math.ceil(totalCount / pageSize);
+                setTotalRecords(response.rowCount);
+                setTotalPages(totalPages);
+                setLoading(false);
+            } else {
+                setLoading(false);
+                setError(response1.data.message);
+                setPosition('top');
+                setDialogVisibleError(true);
+                return response1.data.message;
+            }
+
+        }
+        categoriasdata.listarCategoriasCoralVista(codigoCategoria, descripcionCategoria, selectedCity).then((data) => {
+            setDataCategoria(data);
+            setLoading(false);
+        });
     };
 
 
-    const handleInputChange = (event) => {
+    //Inputs y Varibles de entrada Para Busquea
+    const handleInputCodigoAr = (event) => {
         setCodigoArticulo(event.target.value);
 
     };
 
-    const handleInputChange2 = (event) => {
+    const handleInputDescriArti = (event) => {
         setDescripcionArticulo(event.target.value);
 
     };
@@ -372,6 +383,8 @@ const ControlArticulos = ({ usuarioUppercase }) => {
     };
 
 
+
+    //Lo que se va  mostrar
     return (
         <div className='layout-wrapper menu-layout-overlay'>
             <div style={{ height: '15px' }}></div>
@@ -387,7 +400,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                                         id="inputcodigo"
                                         className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${codigoArticulo ? 'ui-state-filled' : ''}`}
                                         value={codigoArticulo}
-                                        onChange={handleInputChange}
+                                        onChange={handleInputCodigoAr}
                                         style={{ width: '100%' }}
                                     />
                                     <label className={codigoArticulo ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Código</label>
@@ -401,7 +414,7 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                                         id="inputdescripcion"
                                         className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${descripcionArticulo ? 'ui-state-filled' : ''}`}
                                         value={descripcionArticulo}
-                                        onChange={handleInputChange2}
+                                        onChange={handleInputDescriArti}
                                         style={{ width: '100%' }}
                                     />
                                     <label className={descripcionArticulo ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Descripción</label>
@@ -538,9 +551,9 @@ const ControlArticulos = ({ usuarioUppercase }) => {
                     </div>
                 </Dialog>
 
-                <Dialog header="Error" visible={dialogVisibleError} position={position}  style={{ width: '40vw' }} onHide={() => setDialogVisibleError(false)}>
+                <Dialog header="Error" visible={dialogVisibleError} position={position} style={{ width: '40vw' }} onHide={() => setDialogVisibleError(false)}>
                     <p className="m-0">
-                       {error}
+                        {error}
                     </p>
                 </Dialog>
 

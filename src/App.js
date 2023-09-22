@@ -1,15 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { classNames } from 'primereact/utils';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-
 import AppTopbar from './AppTopbar';
-import AppBreadcrumb from './AppBreadcrumb';
 import AppInlineMenu from './AppInlineMenu';
-import AppFooter from './AppFooter';
 import AppMenu from './AppMenu';
-import AppConfig from './AppConfig';
 import AppRightMenu from './AppRightMenu';
-import MessagesDemo from './components/MessagesDemo';
 import PrimeReact from 'primereact/api';
 import { Tooltip } from 'primereact/tooltip';
 import EstadosCuenta from './components/EstadosCuenta';
@@ -20,7 +15,6 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 import './App.scss';
-import Documentation from './components/Documentation';
 import { UsuarioService } from './service/UsuarioService';
 import '@fortawesome/fontawesome-free/css/all.css';
 import ReporteVentasCorales from './components/ReporteVentasCorales';
@@ -46,38 +40,37 @@ const App = ({ userData, usuarioUppercase }) => {
     const [inlineMenuActive, setInlineMenuActive] = useState({});
     const [newThemeLoaded, setNewThemeLoaded] = useState(false);
     const [searchActive, setSearchActive] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const copyTooltipRef = useRef();
     let currentInlineMenuKey = useRef(null);
     const location = useLocation();
-
     PrimeReact.ripple = true;
-
     let searchClick;
     let topbarItemClick;
     let menuClick;
     let inlineMenuClick;
-
     const usuarioservice = new UsuarioService();
 
+
+
+    //Redireccion de pagina hacia afuera de mi proyecto.
     const navigate = useNavigate();
     const redirectToExternalUrl = (url) => {
         if (url) {
             if (url.startsWith('http://') || url.startsWith('https://')) {
-                // Abre la URL en una nueva ventana
                 window.open(url, '_blank');
             } else {
-                //console.log('Internal URL:', url);
                 navigate(url);
             }
         }
     };
 
 
+    //Generar el menu segun la dataque se trae
     const generateMenuFromUserData = (userData) => {
         if (!userData || !userData.object) {
             return [];
         }
-
         const menuItems = [];
 
         userData.object.forEach((item) => {
@@ -110,11 +103,12 @@ const App = ({ userData, usuarioUppercase }) => {
         return menuItems;
     };
 
+
+    //Genera las rutas para los menus.
     const generateRoutesFromUserData = (userData) => {
         if (!userData || !userData.object) {
             return [];
         }
-
         return userData.object.map((item) => {
             if (item.external) {
                 return {
@@ -130,26 +124,23 @@ const App = ({ userData, usuarioUppercase }) => {
                 };
             }
         });
-
-
     }
 
-       const menu = generateMenuFromUserData(userData);
+    //Declaracion de variables 
+    const menu = generateMenuFromUserData(userData);
     const routes = generateRoutesFromUserData(userData);
 
+
+    //Ingreso a los menus 
     const onMenuItemClick = (event, item) => {
         if (!item.items) {
-
-            //console.log('Clicked menu item:', item.to);
             hideOverlayMenu();
         } else {
             event.preventDefault();
         }
 
-
         if (item.to) {
             const url = item.to;
-            //console.log('URL:', url);
             const url2 = url.trim();
             if (url2.includes("/rsap")) {
                 usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datan) => {
@@ -174,17 +165,18 @@ const App = ({ userData, usuarioUppercase }) => {
             } else {
                 redirectToExternalUrl(url);
             }
-
-
         }
     };
 
 
 
+    //Carga al inciar la pagina los locacion.
     useEffect(() => {
         copyTooltipRef && copyTooltipRef.current && copyTooltipRef.current.updateTargetEvents();
     }, [location]);
 
+
+    //Carga al inciar la pagina los estilos menu.
     useEffect(() => {
         if (menuMode === 'overlay') {
             hideOverlayMenu();
@@ -194,6 +186,8 @@ const App = ({ userData, usuarioUppercase }) => {
         }
     }, [menuMode]);
 
+
+    //Carga al inciar la pagina los estilos menu.
     useEffect(() => {
         onColorModeChange(colorMode);
     }, []);
@@ -207,6 +201,8 @@ const App = ({ userData, usuarioUppercase }) => {
         }
     }, [topbarTheme]);
 
+
+    //Carga al inciar la pagina los estilos menu.
     const onColorModeChange = (mode) => {
         setColorMode(mode);
         setIsInputBackgroundChanged(true);
@@ -242,6 +238,8 @@ const App = ({ userData, usuarioUppercase }) => {
     };
 
 
+
+    //Carga al inciar la pagina los estilos menu.
     const replaceLink = (linkElement, href, callback) => {
         if (isIE()) {
             linkElement.setAttribute('href', href);
@@ -271,12 +269,10 @@ const App = ({ userData, usuarioUppercase }) => {
         }
     };
 
-
-
+    //Acciones de ingreso para el top bar y menu
     const onMenuClick = (event) => {
         menuClick = true;
     };
-
     const onMenuButtonClick = (event) => {
         menuClick = true;
 
@@ -285,7 +281,6 @@ const App = ({ userData, usuarioUppercase }) => {
 
         event.preventDefault();
     };
-
     const onTopbarItemClick = (event) => {
         topbarItemClick = true;
         if (activeTopbarItem === event.item) setActiveTopbarItem(null);
@@ -295,15 +290,12 @@ const App = ({ userData, usuarioUppercase }) => {
 
         event.originalEvent.preventDefault();
     };
-
     const onSearch = (event) => {
         if (event) {
             searchClick = true;
             setSearchActive(event);
         }
     };
-
-
     const onRootMenuItemClick = (event) => {
         setMenuActive((prevState) => !prevState);
     };
@@ -406,11 +398,8 @@ const App = ({ userData, usuarioUppercase }) => {
         'layout-rtl': isRTL
     });
 
-    const [searchTerm, setSearchTerm] = useState('');
-    const [isSearching, setIsSearching] = useState(false);
-
-
-
+  
+    //Metodo de busqueda en el menu
     const [filteredMenu, setFilteredMenu] = useState([]);
     const filterMenuItems = () => {
         const filteredItems = menu.reduce((accumulator, item) => {
@@ -436,19 +425,13 @@ const App = ({ userData, usuarioUppercase }) => {
     };
 
 
+    //Metodo que se ejecuta al inciar de proteccion de rutas
     useEffect(() => {
         const verificarYRedirigir = async () => {
             const url = window.location.href;
-            //const parts = url.split('/');
-            //const lastPart = parts.pop();
-            //const valorurl = '/' + lastPart;
-            //console.log(url);
-            //menuextra();
-           usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
-                //console.log("entro");
+            usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
                 const datanueva = datas
-                //console.log(datanueva);
-                datas.object.forEach((item) => {
+                /*datas.object.forEach((item) => {
                     const existingUrls = datas.object.map(item => item.url);
                     const existingUrlsHijos = datas.object.flatMap(item => {
                         if (item.hijos && Array.isArray(item.hijos)) {
@@ -471,91 +454,60 @@ const App = ({ userData, usuarioUppercase }) => {
                          navigate("/rsap/access");
                         return;
                     }
-                });
+                });*/
             });
         };
 
         verificarYRedirigir();
-        //menuextra();
     }, [navigate, userData.object, usuarioUppercase]);
 
 
-
-    /*const menuextra = () => {
-        const newMenuItem = {
-            menId: 999,
-            nombre: "Cambio Categoria Articulo",
-            descripcion: "Descripción del nuevo menú",
-            url: "#",
-            icono: "fa fa-plus",
-            hijos: [
-                {
-                    menId: 1000,
-                    nombre: "Control de Artículos",
-                    descripcion: "Descripción del submenu 1",
-                    url: "http://localhost:3000/rsap/go/EstadosCuenta",
-                    icono: "fa fa-pencil"
-                },
-                {
-                    menId: 1001,
-                    nombre: "Aprobar Artículos",
-                    descripcion: "Descripción del submenu 2",
-                    url: "http://localhost:3000/rsap/go/VentasTarjeta",
-                    icono: "fa fa-check"
-                }
-            ]
-        };
-        userData.object.push(newMenuItem);
-
-    }*/
-
-
-
+    //Los Datos que se mostraran 
     return (
         <RTLContext.Provider value={isRTL}>
-        <div className={layoutContainerClassName} onClick={onDocumentClick}>
-            <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
-            <AppTopbar
-                horizontal={isHorizontal()}
-                activeTopbarItem={activeTopbarItem}
-                onMenuButtonClick={onMenuButtonClick}
-                onTopbarItemClick={onTopbarItemClick}
-                onRightMenuButtonClick={onRightMenuButtonClick}
-                onMobileTopbarButtonClick={onMobileTopbarButtonClick}
-                mobileTopbarActive={mobileTopbarActive}
-                searchActive={searchActive}
-                onSearch={onSearch}
-                usuarioUppercase={usuarioUppercase}
-            />
-            
+            <div className={layoutContainerClassName} onClick={onDocumentClick}>
+                <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
+                <AppTopbar
+                    horizontal={isHorizontal()}
+                    activeTopbarItem={activeTopbarItem}
+                    onMenuButtonClick={onMenuButtonClick}
+                    onTopbarItemClick={onTopbarItemClick}
+                    onRightMenuButtonClick={onRightMenuButtonClick}
+                    onMobileTopbarButtonClick={onMobileTopbarButtonClick}
+                    mobileTopbarActive={mobileTopbarActive}
+                    searchActive={searchActive}
+                    onSearch={onSearch}
+                    usuarioUppercase={usuarioUppercase}
+                />
 
 
-            <div className="menu-wrapper" onClick={onMenuClick} style={{ backgroundColor: '#2b3135' }}>
-                <div className="layout-menu-container" style={{ backgroundColor: '#2b3135' }}>
-                    < AppMenu model={filteredMenu.length > 0 ? filteredMenu : menu} onMenuItemClick={onMenuItemClick} onRootMenuItemClick={onRootMenuItemClick} menuMode={menuMode} active={menuActive} />
-                </div>
-            </div>
 
-
-            <div className="layout-main">
-
-                <div className="layout-content" >
-                    <Routes>
-                        <Route path="/ControlArticulos" element={<ControlArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
-                        <Route path="/AprobarArticulos" element={<AprobarArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
-                        <Route path="/EstadosCuenta" element={<EstadosCuenta colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
-                        <Route path="/VentasTarjeta" element={<VentasTargetas colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
-                        <Route path="/ReporteVentasCorales" element={<ReporteVentasCorales colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
-                       
-                    </Routes>
+                <div className="menu-wrapper" onClick={onMenuClick} style={{ backgroundColor: '#2b3135' }}>
+                    <div className="layout-menu-container" style={{ backgroundColor: '#2b3135' }}>
+                        < AppMenu model={filteredMenu.length > 0 ? filteredMenu : menu} onMenuItemClick={onMenuItemClick} onRootMenuItemClick={onRootMenuItemClick} menuMode={menuMode} active={menuActive} />
+                    </div>
                 </div>
 
 
-            </div>
-            <AppRightMenu rightMenuActive={rightMenuActive} onRightMenuButtonClick={onRightMenuButtonClick} />
+                <div className="layout-main">
 
-        </div>
-    </RTLContext.Provider>
+                    <div className="layout-content" >
+                        <Routes>
+                            <Route path="/ControlArticulos" element={<ControlArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route path="/AprobarArticulos" element={<AprobarArticulos usuarioUppercase={usuarioUppercase} colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route path="/EstadosCuenta" element={<EstadosCuenta colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route path="/VentasTarjeta" element={<VentasTargetas colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route path="/ReporteVentasCorales" element={<ReporteVentasCorales colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+
+                        </Routes>
+                    </div>
+
+
+                </div>
+                <AppRightMenu rightMenuActive={rightMenuActive} onRightMenuButtonClick={onRightMenuButtonClick} />
+
+            </div>
+        </RTLContext.Provider>
     );
 };
 

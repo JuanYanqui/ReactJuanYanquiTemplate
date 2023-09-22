@@ -5,21 +5,16 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
-import { Checkbox } from 'primereact/checkbox';
 import "../assets/theme/indigo/theme-light.css";
 import * as XLSX from 'xlsx';
-import { PDFDocument } from 'pdf-lib';
-import { VentasTargetasPosws } from '../servicePosws/VentasTargetasPosws';
 import { Calendar } from 'primereact/calendar';
 import { Dropdown } from 'primereact/dropdown';
 import { ReporteVentasCoralesIntermediaws } from '../serviceIntermedia/ReporteVentasCoralesIntermediaws';
 
 const ReporteVentasCorales = () => {
-    const [visible, setVisible] = useState(false);
     const [visibleEnviarCuenta, setvisibleEnviarCuenta] = useState(false);
     const [position, setPosition] = useState('center');
     const toast = useRef(null);
-    const [centro, setCentro] = useState("");
     const [numCaja, setNumCaja] = useState("");
     const fechaActual = new Date();
     fechaActual.setHours(0, 0, 0, 0);
@@ -27,38 +22,23 @@ const ReporteVentasCorales = () => {
     const [fechafin, setFechafin] = useState(fechaActual);
     const [fechamodiini, setFechamodini] = useState(null);
     const [fechamodifin, setFechamodfin] = useState(null);
-    const ventastarjetadata = new VentasTargetasPosws();
     const repoteventascorales = new ReporteVentasCoralesIntermediaws();
     const [listalogistica, setlistalogistica] = useState([]);
-    const [datoscompletos, setdatoscompletos] = useState([]);
     const [DataReporteventas, setReporteventas] = useState("");
     const [serverseleccionado, setServerseleccionado] = useState("");
     const [totalRecords, setTotalRecords] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [ultimodato, setultimodato] = useState(0);
+    const [currentPage, setCurrentPage] = useState(10);
     const [rowsPerPage, setRowsPerPage] = useState(100);
-    const [totalPages, setTotalPages] = useState(10);
-    const [selectedbp, setSelectedbp] = useState(null);
-    const [selectedsociedad, setSelectedsociedad] = useState(null);
-    const [estadoSelecionado, setestadoSelecionado] = useState(null);
+    const [totalPages, setTotalPages] = useState(0);
     const [error, setError] = useState(null);
     const [dialogVisibleError, setDialogVisibleError] = useState(false);
-    const [selectedCity, setSelectedCity] = useState(null);
-    const [selectedLevel, setSelectedLevel] = useState(null);
+    const [centroSeleccionado, setCentroSeleccionado] = useState('');
 
+
+    //Carga de Datos Automatica
     useEffect(() => {
         const fetchData = async () => {
             if (serverseleccionado == "") {
-
-            } else if (ultimodato) {
-                setLoading(true);
-                const lastPageRowCount = totalRecords % rowsPerPage;
-                repoteventascorales.loadVentas(numCaja, fechamodiini, fechamodifin, serverseleccionado, currentPage, lastPageRowCount).then((data) => {
-                    setReporteventas(data);
-                    setLoading(false);
-                });
-
-
 
             } else {
                 setLoading(true);
@@ -80,13 +60,17 @@ const ReporteVentasCorales = () => {
         fetchData();
     }, [currentPage, rowsPerPage]);
 
+
+    //Control Paginación
     const onPageChange = (event) => {
         const newPage = Math.floor(event.first / event.rows);
-        setCurrentPage(newPage);
+        setLoading(true);
         setRowsPerPage(event.rows);
-        const isLastPage = newPage === Math.floor(totalRecords / rowsPerPage);
-        setultimodato(isLastPage);
+        setCurrentPage(newPage);
+        cargaDatos();
     };
+
+    //Incono Para Tabla 
     const paginatorLeft = <i />;
     const paginatorRight = (
         <div>
@@ -97,21 +81,18 @@ const ReporteVentasCorales = () => {
                     style={{ width: '40px', height: '35px' }} onClick={() => cargarDatosexel()}
                 />
             </div>
-
-
-
         </div>
     );
 
+
+    //Creación Tabla de Datos
     const DataTablaar = ({ dataar }) => {
         const startRecord = currentPage * rowsPerPage + 1;
         const endRecord = Math.min((currentPage + 1) * rowsPerPage, totalRecords);
-
         return (
             <div>
                 <DataTable value={dataar}
-                    lazy
-                    paginator
+                    lazy paginator
                     totalRecords={totalRecords}
                     onPage={onPageChange}
                     rows={rowsPerPage}
@@ -128,69 +109,51 @@ const ReporteVentasCorales = () => {
                     <Column field="4" style={{ minWidth: '50px' }} header="Bin" />
                     <Column field="5" style={{ minWidth: '50px' }} header="Factura" />
                     <Column field="6" style={{ minWidth: '50px' }} header="Fecha" />
-                    <Column field="7" style={{ minWidth: '50px' }} header="Codigo/tipo/nombre" />
-                    <Column field="8" style={{ minWidth: '50px' }} header="Total" />
-                    <Column field="9" style={{ minWidth: '50px' }} header="Otros" />
-                    <Column field="10" style={{ minWidth: '50px' }} header="Iva" />
-                    <Column field="11" style={{ minWidth: '50px' }} header="Val Recap" />
-                    <Column field="12" style={{ minWidth: '50px' }} header="Descripción" />
-                    <Column field="13" style={{ minWidth: '50px' }} header="#Tarjeta" />
-                    <Column field="14" style={{ minWidth: '50px' }} header="Tipo pago" />
-                    <Column field="15" style={{ minWidth: '50px' }} header="Autorización" />
-                    <Column field="16" style={{ minWidth: '50px' }} header="Voucher" />
-                    <Column field="17" style={{ minWidth: '50px' }} header="Forma pago" />
-                    <Column field="18" style={{ minWidth: '50px' }} header="Tipo diferido" />
-                    <Column field="19" style={{ minWidth: '50px' }} header="Plazo" />
-                    <Column field="20" style={{ minWidth: '50px' }} header="Meses gracia" />
-                    <Column field="21" style={{ minWidth: '50px' }} header="Descripción" />
-                    <Column field="22" style={{ minWidth: '50px' }} header="Código Tcredito" />
-                    <Column field="23" style={{ minWidth: '50px' }} header="Nombre marca" />
-                    <Column field="24" style={{ minWidth: '50px' }} header="Tipo pago" />
-                    <Column field="25" style={{ minWidth: '50px' }} header="Red" />
-                    <Column field="26" style={{ minWidth: '50px' }} header="Respuesta" />
-                    <Column field="27" style={{ minWidth: '50px' }} header="Grupo tarjeta" />
+                    <Column field="13" style={{ minWidth: '50px' }} header="Codigo/tipo/nombre" />
+                    <Column field="9" style={{ minWidth: '50px' }} header="Total" />
+                    <Column field="10" style={{ minWidth: '50px' }} header="Otros" />
+                    <Column field="11" style={{ minWidth: '50px' }} header="Iva" />
+                    <Column field="12" style={{ minWidth: '50px' }} header="Val Recap" />
+                    <Column field="14" style={{ minWidth: '50px' }} header="Descripción" />
+                    <Column field="15" style={{ minWidth: '50px' }} header="#Tarjeta" />
+                    <Column field="16" style={{ minWidth: '50px' }} header="Tipo pago" />
+                    <Column field="17" style={{ minWidth: '50px' }} header="Autorización" />
+                    <Column field="19" style={{ minWidth: '50px' }} header="Voucher" />
+                    <Column field="20" style={{ minWidth: '50px' }} header="Forma pago" />
+                    <Column field="21" style={{ minWidth: '50px' }} header="Tipo diferido" />
+                    <Column field="22" style={{ minWidth: '50px' }} header="Plazo" />
+                    <Column field="23" style={{ minWidth: '50px' }} header="Meses gracia" />
+                    <Column field="24" style={{ minWidth: '50px' }} header="Descripción" />
+                    <Column field="25" style={{ minWidth: '50px' }} header="Código Tcredito" />
+                    <Column field="26" style={{ minWidth: '50px' }} header="Nombre marca" />
+                    <Column field="27" style={{ minWidth: '50px' }} header="Tipo pago" />
+                    <Column field="28" style={{ minWidth: '50px' }} header="Red" />
+                    <Column field="29" style={{ minWidth: '50px' }} header="Respuesta" />
+                    <Column field="30" style={{ minWidth: '50px' }} header="Grupo tarjeta" />
                 </DataTable>
             </div>
         );
     }
 
-
+    //Carga de Datos Paginados en Exel
     const cargarDatosexel = async () => {
         try {
             let allData = [];
-
-            for (let page = 1; page <= totalPages; page++) {
+            for (let page = 0; page < totalPages; page++) {
                 let response;
-            
-                // Verificar si estamos en la última página
-                if (page === totalPages) {
-                    const lastPageRowCount = totalRecords % rowsPerPage;
-                    response = await repoteventascorales.loadVentas(
-                        numCaja,
-                        fechamodiini,
-                        fechamodifin,
-                        serverseleccionado,
-                        page,
-                        lastPageRowCount // Cargar solo los registros restantes en la última página
-                    );
-                } else {
-                    response = await repoteventascorales.loadVentas(
-                        numCaja,
-                        fechamodiini,
-                        fechamodifin,
-                        serverseleccionado,
-                        page,
-                        rowsPerPage // Cargar la cantidad estándar de registros
-                    );
-                }
-            
+                response = await repoteventascorales.loadVentas(
+                    numCaja,
+                    fechamodiini,
+                    fechamodifin,
+                    serverseleccionado,
+                    page,
+                    rowsPerPage
+                );
                 if (response && response.data) {
-                    //console.log('Datos en la página', page, ':', response.data);
                     allData = [...allData, ...response.data];
                 } else {
                     throw new Error(response?.data?.message || 'Error desconocido');
                 }
-                //console.log('Registros cargados en la página', page, ':', response.data.length);
                 setLoading(true);
             }
 
@@ -234,18 +197,15 @@ const ReporteVentasCorales = () => {
                         item[4],
                         item[5],
                         item[6],
-                        item[7],
-                        item[8],
+                        item[13],
                         item[9],
                         item[10],
                         item[11],
                         item[12],
-                        item[13],
                         item[14],
                         item[15],
                         item[16],
                         item[17],
-                        item[18],
                         item[19],
                         item[20],
                         item[21],
@@ -255,11 +215,11 @@ const ReporteVentasCorales = () => {
                         item[25],
                         item[26],
                         item[27],
+                        item[28],
+                        item[29],
+                        item[30],
                     ]),
                 ]);
-
-                
-                
                 ws['A1'].s = { halign: 'center', valign: 'center' };
 
                 XLSX.utils.book_append_sheet(wb, ws, 'VentasdeTarjetas');
@@ -275,25 +235,7 @@ const ReporteVentasCorales = () => {
         }
     };
 
-
-
-    const handleNoClick = () => {
-        showErrorcancel();
-        setvisibleEnviarCuenta(false)
-    };
-
-
-    const footerContent = (
-        <div>
-            <Button label="No" icon="pi pi-times" onClick={handleNoClick} className="p-button-text" />
-        </div>
-    );
-
-
-    const showErrorcancel = () => {
-        toast.current.show({ severity: 'error', summary: 'Error', detail: 'Proceso Cancelado.', life: 3000 });
-    }
-
+    //Mensajes Mostrar
     const showWarnexe = () => {
         toast.current.show({ severity: 'warn', summary: 'Warn Message', detail: 'No hay datos existentes' })
     }
@@ -310,36 +252,27 @@ const ReporteVentasCorales = () => {
         toast.current.show({ severity: 'warn', summary: 'Warn Message', detail: 'A excedido el numero maximo de diferencia de 21 días.' })
     }
 
-
+    //Activador de Espera Dailog Recarga
     const [loading, setLoading] = useState(false);
 
 
+    //Metodo Para boton Filtro Trar Datos Filtrados
     const cargaDatos = async () => {
-        //console.log(fecha)
-
-        //console.log(fechaini);
-        //console.log(fechafin);
-
         if (serverseleccionado == "") {
             showrangocentro();
         } else if (fechaini == null || fechafin == null) {
             showrangofechas();
         } else {
-
-            const diasLimite = 21; // Cambia este valor según tus necesidades
+            const diasLimite = 21;
 
             const diferenciaDias = Math.abs((fechafin - fechaini) / (1000 * 60 * 60 * 24));
 
             if (diferenciaDias > diasLimite) {
-                // La diferencia es mayor a 21 días, realiza alguna acción de manejo de error
                 exccesofecha();
             } else {
                 setLoading(true);
-                //console.log(`Server Host del centro seleccionado: ${serverseleccionado}`);
                 const fechaFormateadaini = `${fechaini.getFullYear()}-${(fechaini.getMonth() + 1).toString().padStart(2, '0')}-${fechaini.getDate().toString().padStart(2, '0')} ${fechaini.getHours().toString().padStart(2, '0')}:${fechaini.getMinutes().toString().padStart(2, '0')}:${fechaini.getSeconds().toString().padStart(2, '0')}`;
                 const fechaFormateadafin = `${fechafin.getFullYear()}-${(fechafin.getMonth() + 1).toString().padStart(2, '0')}-${fechafin.getDate().toString().padStart(2, '0')} ${fechafin.getHours().toString().padStart(2, '0')}:${fechafin.getMinutes().toString().padStart(2, '0')}:${fechafin.getSeconds().toString().padStart(2, '0')}`;
-                //console.log(fechaFormateadaini);
-                //console.log(fechaFormateadafin);
                 setFechamodini(fechaFormateadaini);
                 setFechamodfin(fechaFormateadafin);
                 const response1 = await repoteventascorales.loadVentas(numCaja, fechaFormateadaini, fechaFormateadafin, serverseleccionado, currentPage, rowsPerPage);
@@ -351,18 +284,15 @@ const ReporteVentasCorales = () => {
 
                     if (response1) {
                         setReporteventas(response1);
-                        //console.log(response1);
                         const pageSize = rowsPerPage;
                         const totalCount = response.rowCount;
                         const totalPages = Math.ceil(totalCount / pageSize);
                         setTotalRecords(response.rowCount);
                         setTotalPages(totalPages);
                         setLoading(false);
-                        //console.log(response);
                     } else {
                         setLoading(false);
                         setError(response1.data.message);
-                        //console.log(response1.data.message);
                         setPosition('top');
                         setDialogVisibleError(true);
                         return response1.data.message;
@@ -375,46 +305,53 @@ const ReporteVentasCorales = () => {
 
     }
 
-
-
-    const handleInputChange2 = (event) => {
+    //Inputs y Varibles de entrada Para Busquea
+    const handleInputChangeCaja = (event) => {
         setNumCaja(event.target.value);
 
     };
-
-
-    const handleDateChange = (event) => {
+    const handleDateChangeFechaini = (event) => {
         setFechaini(event.value);
     };
-    const handleDateChange2 = (event) => {
+    const handleDateChangeFechafin = (event) => {
         setFechafin(event.value);
     };
-    const [isCalendarClicked, setIsCalendarClicked] = useState(false);
-    const calendarRef = useRef(null);
+    const [isCalendarClickedFechaini, setIsCalendarClickedFechaini] = useState(false);
+    const calendarRefFechaini = useRef(null);
 
-    const [isCalendarClicked2, setIsCalendarClicked2] = useState(false);
-    const calendarRef2 = useRef(null);
+    const [isSelecionarCliked, setIsSelecionarCliked] = useState(false);
+    const seleccionarRef = useRef(null);
 
-    const handleCalendarClick = () => {
-        setIsCalendarClicked(true);
+    const [isCalendarClickedFechafin, setIsCalendarClickedFechafin] = useState(false);
+    const calendarRefFechafin = useRef(null);
+
+    const handleCalendarClickFechaini = () => {
+        setIsCalendarClickedFechaini(true);
     };
 
-    const handleCalendarClick2 = () => {
-        setIsCalendarClicked2(true);
+    const handleCalendarClickFechafin = () => {
+        setIsCalendarClickedFechafin(true);
     };
 
-    const handleOutsideClick = (event) => {
-        if (calendarRef.current && !calendarRef.current.contains(event.target)) {
-            setIsCalendarClicked(false);
+    const handleOutsideClickFechaini = (event) => {
+        if (calendarRefFechaini.current && !calendarRefFechaini.current.contains(event.target)) {
+            setIsCalendarClickedFechaini(false);
         }
     };
 
-    const handleOutsideClick2 = (event) => {
-        if (calendarRef2.current && !calendarRef2.current.contains(event.target)) {
-            setIsCalendarClicked2(false);
+    const handleOutsideClickFechafin = (event) => {
+        if (calendarRefFechafin.current && !calendarRefFechafin.current.contains(event.target)) {
+            setIsCalendarClickedFechafin(false);
         }
     };
 
+    const handleOutsideClickSeleccionar = (event) => {
+        if (seleccionarRef.current && !seleccionarRef.current.contains(event.target)) {
+            setIsSelecionarCliked(false);
+        }
+    };
+
+    //Para Traer los Centro logisticos ni vien cargue la pagina
     useEffect(() => {
         const sucursal = "";
         const sociedad = "1000";
@@ -423,39 +360,35 @@ const ReporteVentasCorales = () => {
         const tipoCentro = "";
         const listaDescripcionYCodigo = [];
         repoteventascorales.centrologistico(sucursal, sociedad, centrol, nombreCentro, tipoCentro).then((data) => {
-            // console.log(data);
             for (const dato of data) {
                 if (dato.serverHost && dato.serverHost.includes("http://app")) {
                     const descripcionCentro = dato.descripcionCentro;
                     const codigoCentro = dato.id.codigoCentro;
                     const hostcentro = dato.serverHost;
-                    // Creamos un objeto con la descripciónCentro y el codigoCentro y lo agregamos a la lista.
                     listaDescripcionYCodigo.push({ descripcionCentro, codigoCentro, hostcentro });
                 }
             }
             setlistalogistica(listaDescripcionYCodigo);
-            //console.log(listaDescripcionYCodigo);
         })
 
 
-        window.addEventListener('click', handleOutsideClick);
-        window.addEventListener('click', handleOutsideClick2);
+        window.addEventListener('click', handleOutsideClickFechaini);
+        window.addEventListener('click', handleOutsideClickFechafin);
+        window.addEventListener('click', handleOutsideClickSeleccionar);
         return () => {
-            window.removeEventListener('click', handleOutsideClick);
-            window.removeEventListener('click', handleOutsideClick2);
+            window.removeEventListener('click', handleOutsideClickFechaini);
+            window.removeEventListener('click', handleOutsideClickFechafin);
+            window.removeEventListener('click', handleOutsideClickSeleccionar);
         };
     }, []);
 
-    const [centroSeleccionado, setCentroSeleccionado] = useState('');
 
-    // Manejador para el cambio en el select
+
+    //Manejador para el cambio en el select
     const handleSelectChange = (event) => {
         const selectedCentro = event.target.value;
         setCentroSeleccionado(selectedCentro);
-        //console.log(selectedCentro)
-        // Encuentra el serverHost correspondiente al centro seleccionado en listaDescripcionYCodigo
         const selectedCentroData = listalogistica.find(item => item.codigoCentro === selectedCentro.codigoCentro);
-
         if (selectedCentroData) {
             const serverHostSeleccionado = selectedCentroData.hostcentro;
             const serverHostSeleccionadoHttps = serverHostSeleccionado.replace("http:", "https:");
@@ -464,6 +397,8 @@ const ReporteVentasCorales = () => {
         }
     };
 
+    
+    //Lo que se va  mostrar
     return (
         <div className='layout-wrapper menu-layout-overlay'>
             <div style={{ height: '15px' }}></div>
@@ -488,18 +423,17 @@ const ReporteVentasCorales = () => {
                             <div style={{ height: '1px' }}></div>
                             <hr className="ui-separator ui-state-default ui-corner-all" />
 
-
-
-
                             <span style={{
                                 position: 'relative',
                                 display: 'inline-block',
                                 maxWidth: '250px',
-                                border: isCalendarClicked ? '2px solid black' : '1px solid #808080',
+                                border: isSelecionarCliked ? '2px solid black' : '1px solid #808080',
                                 borderRadius: '3px',
                                 top: '1px',
 
-                            }}>
+                            }}
+
+                            >
                                 <Dropdown
                                     autoComplete="off"
                                     aria-hidden="true"
@@ -507,11 +441,12 @@ const ReporteVentasCorales = () => {
                                     placeholder="Seleccione"
                                     id="mySelect"
                                     style={{ backgroundColor: "#ffffff", height: "36px" }}
-                                    optionLabel="descripcionCentro" // Mostrar solo el nombre en el Dropdown
+                                    optionLabel="descripcionCentro"
                                     value={centroSeleccionado}
                                     options={listalogistica}
                                     onChange={handleSelectChange}
                                     filter={true}
+
                                 />
                             </span>
 
@@ -523,7 +458,7 @@ const ReporteVentasCorales = () => {
                                     id="input1"
                                     className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${numCaja ? 'ui-state-filled' : ''}`}
                                     value={numCaja}
-                                    onChange={handleInputChange2}
+                                    onChange={handleInputChangeCaja}
                                     style={{ width: '100%' }}
 
                                 />
@@ -537,23 +472,23 @@ const ReporteVentasCorales = () => {
                                     position: 'relative',
                                     display: 'inline-block',
                                     maxWidth: '180px',
-                                    border: isCalendarClicked ? '2px solid black' : '1px solid #808080',
+                                    border: isCalendarClickedFechaini ? '2px solid black' : '1px solid #808080',
                                     borderRadius: '3px',
                                 }}
-                                ref={calendarRef}
+                                ref={calendarRefFechaini}
                             >
                                 <label
                                     style={{
                                         position: 'absolute',
-                                        top: isCalendarClicked ? '10px' : '-10px', // Ajusta la posición vertical
+                                        top: isCalendarClickedFechaini ? '10px' : '-10px', 
                                         left: '1px',
                                         backgroundColor: 'white',
                                         padding: '0 5px',
                                         display: 'block',
                                         opacity: 1,
-                                        transition: 'top 0.5s ease', // Agregar una transición suave
-                                        fontSize: '12px', // Ajusta el tamaño de la letra según tus necesidades
-                                        color: '#7f8990', // Cambia el color del texto a #7f8990
+                                        transition: 'top 0.5s ease', 
+                                        fontSize: '12px',
+                                        color: '#7f8990', 
                                         zIndex: 1,
 
                                     }}
@@ -563,11 +498,11 @@ const ReporteVentasCorales = () => {
                                 <Calendar
                                     id="calfechaini"
                                     value={fechaini}
-                                    onChange={handleDateChange}
+                                    onChange={handleDateChangeFechaini}
                                     dateFormat="yy-mm-dd"
                                     showIcon
-                                    className={`custom-calendar-style ${isCalendarClicked ? 'clicked' : ''}`}
-                                    onClick={handleCalendarClick}
+                                    className={`custom-calendar-style ${isCalendarClickedFechaini ? 'clicked' : ''}`}
+                                    onClick={handleCalendarClickFechaini}
                                 />
                             </span>
 
@@ -582,23 +517,23 @@ const ReporteVentasCorales = () => {
                                     position: 'relative',
                                     display: 'inline-block',
                                     maxWidth: '180px',
-                                    border: isCalendarClicked2 ? '2px solid black' : '1px solid #808080',
+                                    border: isCalendarClickedFechafin ? '2px solid black' : '1px solid #808080',
                                     borderRadius: '3px',
                                 }}
-                                ref={calendarRef2}
+                                ref={calendarRefFechafin}
                             >
                                 <label
                                     style={{
                                         position: 'absolute',
-                                        top: isCalendarClicked2 ? '10px' : '-10px', // Ajusta la posición vertical
+                                        top: isCalendarClickedFechafin ? '10px' : '-10px',
                                         left: '1px',
                                         backgroundColor: 'white',
                                         padding: '0 5px',
                                         display: 'block',
                                         opacity: 1,
-                                        transition: 'top 0.5s ease', // Agregar una transición suave
-                                        fontSize: '12px', // Ajusta el tamaño de la letra según tus necesidades
-                                        color: '#7f8990', // Cambia el color del texto a #7f8990
+                                        transition: 'top 0.5s ease',
+                                        fontSize: '12px',
+                                        color: '#7f8990',
                                         zIndex: 1,
 
                                     }}
@@ -608,11 +543,11 @@ const ReporteVentasCorales = () => {
                                 <Calendar
                                     id="calfechafin"
                                     value={fechafin}
-                                    onChange={handleDateChange2}
+                                    onChange={handleDateChangeFechafin}
                                     dateFormat="yy-mm-dd"
                                     showIcon
-                                    className={`custom-calendar-style ${isCalendarClicked2 ? 'clicked' : ''}`}
-                                    onClick={handleCalendarClick2}
+                                    className={`custom-calendar-style ${isCalendarClickedFechafin ? 'clicked' : ''}`}
+                                    onClick={handleCalendarClickFechafin}
                                 />
                             </span>
                             &nbsp;
@@ -629,13 +564,6 @@ const ReporteVentasCorales = () => {
                         <DataTablaar dataar={DataReporteventas.data} loading={loading} onPageChange={onPageChange} />
                     </div>
                 </form>
-
-
-
-
-                <Dialog header="Enviar Estados de Cuenta" visible={visibleEnviarCuenta} style={{ width: '400px', minWidth: '400px' }} onHide={() => setvisibleEnviarCuenta(false)} footer={footerContent} draggable={false} resizable={false} >
-
-                </Dialog>
 
 
                 <Toast ref={toast} />

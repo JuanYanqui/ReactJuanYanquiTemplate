@@ -13,7 +13,6 @@ import { VentasTargetasPosws } from '../servicePosws/VentasTargetasPosws';
 import { Calendar } from 'primereact/calendar';
 
 const VentasTargetas = () => {
-    const [visible, setVisible] = useState(false);
     const [visibleEnviarCuenta, setvisibleEnviarCuenta] = useState(false);
     const [position, setPosition] = useState('center');
     const toast = useRef(null);
@@ -23,18 +22,11 @@ const VentasTargetas = () => {
     const [fechafin, setFechafin] = useState(null);
     const ventastarjetadata = new VentasTargetasPosws();
     const [DataEstadoCuenta, setDataEstadoCuenta] = useState("");
-
     const [totalRecords, setTotalRecords] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [totalPages, setTotalPages] = useState(10);
-    const [selectedbp, setSelectedbp] = useState(null);
-    const [selectedsociedad, setSelectedsociedad] = useState(null);
-    const [estadoSelecionado, setestadoSelecionado] = useState(null);
-    const [error, setError] = useState(null);
-    const [dialogVisibleError, setDialogVisibleError] = useState(false);
 
-
+    //Cambiar de pagina
     const onPageChange = (event) => {
         const newPage = Math.floor(event.first / event.rows);
         setLoading(true);
@@ -42,36 +34,29 @@ const VentasTargetas = () => {
         setCurrentPage(newPage);
         cargaDatos();
     };
+    
 
+    //Incono Para Tabla
     const paginatorLeft = <i />;
     const paginatorRight = (
         <div>
-            <div className="flex flex-wrap gap-2" style={{display: 'inline-block'}}>
+            <div className="flex flex-wrap gap-2" style={{ display: 'inline-block' }}>
                 <img
                     src="../assets/layout/images/exelimg.png"
                     alt="Descripción de la imagen"
                     style={{ width: '40px', height: '35px' }} onClick={() => generarexelpeti()}
                 />
             </div>
-          
-             
-            
         </div>
     );
 
-    const DataTablaar = ({ dataar }) => {
-        const generarpdf = (rowData) => {
-            return (
-                <div className="flex flex-wrap gap-2">
-                    <i className="pi pi-file-pdf" style={{ fontSize: '1.5rem' }} onClick={() => generarpfdpeti(rowData[1])} ></i>
-                </div>
-            );
-        };
 
+    //Creación Tabla de Datos
+    const DataTablaar = ({ dataar }) => {
         const startRecord = currentPage * rowsPerPage + 1;
         return (
             <div>
-                <DataTable value={dataar} 
+                <DataTable value={dataar}
                     paginator
                     totalRecords={totalRecords}
                     onPage={onPageChange}
@@ -84,7 +69,7 @@ const VentasTargetas = () => {
                     currentPageReportTemplate={`Registros ${startRecord} -  de {totalRecords}`}
                 >
                     <Column field="1" style={{ minWidth: '50px' }} header="Centro" />
-                    <Column field="2" style={{ minWidth: '50px' }}header="Ptoemi" />
+                    <Column field="2" style={{ minWidth: '50px' }} header="Ptoemi" />
                     <Column field="3" style={{ minWidth: '50px' }} header="Comprobante" />
                     <Column field="4" style={{ minWidth: '250px' }} header="Descripción" />
                     <Column field="8" style={{ minWidth: '50px' }} header="Recap" />
@@ -92,10 +77,10 @@ const VentasTargetas = () => {
                     <Column field="5" style={{ minWidth: '50px' }} header="Bin" />
                     <Column field="7" style={{ minWidth: '50px' }} header="Autorización" />
                     <Column field="9" style={{ minWidth: '200px' }} header="Factura" />
-                    <Column field="10" style={{ minWidth: '200px' }}  header="Fecha E." />
+                    <Column field="10" style={{ minWidth: '200px' }} header="Fecha E." />
                     <Column field="11" style={{ minWidth: '100px' }} header="Identificación" />
-                    <Column field="12" style={{ minWidth: '300px' }} header="Cliente" />  
-                    <Column field="3" style={{ minWidth: '50px' }} header="#Tarjeta" />              
+                    <Column field="12" style={{ minWidth: '300px' }} header="Cliente" />
+                    <Column field="3" style={{ minWidth: '50px' }} header="#Tarjeta" />
                     <Column field="16" style={{ minWidth: '50px' }} header="Val Recap." />
                     <Column field="21" style={{ minWidth: '50px' }} header="Valor V." />
                 </DataTable>
@@ -103,39 +88,23 @@ const VentasTargetas = () => {
         );
     }
 
+
+    //Generar Pdf
     const generarpfdpeti = (centroingre) => {
-        //console.log(centroingre);
         ventastarjetadata.generateVouchersReport(centroingre).then((data) => {
-            //console.log(data);
-
-            // Convierte la cadena Base64 en una URL de archivo PDF
             const pdfURL = convertirBase64APDF(data);
-
-            // Crea un enlace de descarga
             const a = document.createElement('a');
             a.href = pdfURL;
             a.download = 'documento.pdf';
             a.textContent = 'Descargar PDF';
-
-            // Agrega el enlace de descarga al cuerpo del documento
             document.body.appendChild(a);
-
-            // Simula un clic en el enlace para iniciar la descarga
             a.click();
-
-            // Limpia el enlace después de la descarga
             document.body.removeChild(a);
         });
     }
 
 
-    /*
-                        <Column field="13" style={{ minWidth: '100px' }} header="Otros" />
-                    <Column field="14" style={{ minWidth: '100px' }} header="Iva" />
-                    <Column field="15" style={{ minWidth: '100px' }} header="Val Recap" />*/
-
-
-
+    //Convertir en pdf lo que viene en base64
     function convertirBase64APDF(base64Data) {
         const byteCharacters = atob(base64Data);
         const byteNumbers = new Array(byteCharacters.length);
@@ -150,11 +119,14 @@ const VentasTargetas = () => {
         return URL.createObjectURL(blob);
     }
 
+
+    //LLama a Generar Exel
     const generarexelpeti = () => {
         generarExcelpropio();
     }
 
 
+    //Generar Exel
     const generarExcelpropio = () => {
         if (DataEstadoCuenta == null || DataEstadoCuenta.length == 0) {
             showWarnexe();
@@ -223,48 +195,30 @@ const VentasTargetas = () => {
     };
 
 
-
-
-
-    const handleNoClick = () => {
-        showErrorcancel();
-        setvisibleEnviarCuenta(false)
-    };
-
-
-    const footerContent = (
-        <div>
-            <Button label="No" icon="pi pi-times" onClick={handleNoClick} className="p-button-text" />
-        </div>
-    );
-
-
-    const showErrorcancel = () => {
-        toast.current.show({ severity: 'error', summary: 'Error', detail: 'Proceso Cancelado.', life: 3000 });
-    }
-
+    //Mensajes de salida
     const showWarnexe = () => {
         toast.current.show({ severity: 'warn', summary: 'Warn Message', detail: 'No hay datos existentes' })
     }
 
 
+
+    //Activador de Espera Dailog Recarga
     const [loading, setLoading] = useState(false);
 
 
+
+    //Metodo Para boton Filtro Trar Datos Filtrados
     const cargaDatos = () => {
         setLoading(true);
-        //console.log(fecha)
-        if (fechaini == null||fechafin == null) {
-            ventastarjetadata.ventasTargetas(centro, fechaini, fechafin,ptoemi).then((data) => {
-                //console.log(data);
+        if (fechaini == null || fechafin == null) {
+            ventastarjetadata.ventasTargetas(centro, fechaini, fechafin, ptoemi).then((data) => {
                 setDataEstadoCuenta(data);
                 setLoading(false);
             });
         } else {
             const fechaFormateadaini = `${fechaini.getFullYear()}-${(fechaini.getMonth() + 1).toString().padStart(2, '0')}-${fechaini.getDate().toString().padStart(2, '0')} ${fechaini.getHours().toString().padStart(2, '0')}:${fechaini.getMinutes().toString().padStart(2, '0')}:${fechaini.getSeconds().toString().padStart(2, '0')}`;
             const fechaFormateadafin = `${fechafin.getFullYear()}-${(fechafin.getMonth() + 1).toString().padStart(2, '0')}-${fechafin.getDate().toString().padStart(2, '0')} ${fechafin.getHours().toString().padStart(2, '0')}:${fechafin.getMinutes().toString().padStart(2, '0')}:${fechafin.getSeconds().toString().padStart(2, '0')}`;
-            ventastarjetadata.ventasTargetas(centro, fechaFormateadaini, fechaFormateadafin,ptoemi).then((data) => {
-                //console.log(data);
+            ventastarjetadata.ventasTargetas(centro, fechaFormateadaini, fechaFormateadafin, ptoemi).then((data) => {
                 setDataEstadoCuenta(data);
                 setLoading(false);
             });
@@ -272,6 +226,8 @@ const VentasTargetas = () => {
 
     }
 
+
+    //Inputs y Varibles de entrada Para Busquea
     const handleInputChange = (event) => {
         setCentro(event.target.value);
 
@@ -324,6 +280,9 @@ const VentasTargetas = () => {
         };
     }, []);
 
+
+
+    //Lo que se va  mostrar
     return (
         <div className='layout-wrapper menu-layout-overlay'>
             <div style={{ height: '15px' }}></div>
@@ -362,7 +321,7 @@ const VentasTargetas = () => {
                             &nbsp;
                             &nbsp;
 
-                            
+
                             <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
                                 <input
                                     id="input1"
@@ -390,15 +349,15 @@ const VentasTargetas = () => {
                                 <label
                                     style={{
                                         position: 'absolute',
-                                        top: isCalendarClicked ? '10px' : '-10px', // Ajusta la posición vertical
+                                        top: isCalendarClicked ? '10px' : '-10px', 
                                         left: '1px',
                                         backgroundColor: 'white',
                                         padding: '0 5px',
                                         display: 'block',
                                         opacity: 1,
-                                        transition: 'top 0.5s ease', // Agregar una transición suave
-                                        fontSize: '12px', // Ajusta el tamaño de la letra según tus necesidades
-                                        color: '#7f8990', // Cambia el color del texto a #7f8990
+                                        transition: 'top 0.5s ease',
+                                        fontSize: '12px', 
+                                        color: '#7f8990', 
                                         zIndex: 1,
 
                                     }}
@@ -435,15 +394,15 @@ const VentasTargetas = () => {
                                 <label
                                     style={{
                                         position: 'absolute',
-                                        top: isCalendarClicked2 ? '10px' : '-10px', // Ajusta la posición vertical
+                                        top: isCalendarClicked2 ? '10px' : '-10px', 
                                         left: '1px',
                                         backgroundColor: 'white',
                                         padding: '0 5px',
                                         display: 'block',
                                         opacity: 1,
-                                        transition: 'top 0.5s ease', // Agregar una transición suave
-                                        fontSize: '12px', // Ajusta el tamaño de la letra según tus necesidades
-                                        color: '#7f8990', // Cambia el color del texto a #7f8990
+                                        transition: 'top 0.5s ease', 
+                                        fontSize: '12px', 
+                                        color: '#7f8990', 
                                         zIndex: 1,
 
                                     }}
@@ -474,13 +433,6 @@ const VentasTargetas = () => {
                         <DataTablaar dataar={DataEstadoCuenta} loading={loading} onPageChange={onPageChange} />
                     </div>
                 </form>
-
-
-
-
-                <Dialog header="Enviar Estados de Cuenta" visible={visibleEnviarCuenta} style={{ width: '400px', minWidth: '400px' }} onHide={() => setvisibleEnviarCuenta(false)} footer={footerContent} draggable={false} resizable={false} >
-
-                </Dialog>
 
 
                 <Toast ref={toast} />

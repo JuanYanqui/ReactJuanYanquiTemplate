@@ -177,7 +177,7 @@ export class CategoriasCoralIntermediaws {
                 const paginationInfo = {
                     count: false,
                     pagesize: rowsPerPage,
-                    first: currentPage,
+                    first: currentPage * rowsPerPage,
                     sortBy: {},
                     filterBy: {}
                 };
