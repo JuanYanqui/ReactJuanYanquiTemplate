@@ -145,105 +145,6 @@ const ReporteVentasCorales = () => {
             </div>
         </div>
     );
-
-    /* const DataTablaar = ({ dataar, dataar2 }) => {
-         const startRecord = currentPage * rowsPerPage + 1;
-         const endRecord = Math.min((currentPage + 1) * rowsPerPage, totalRecords);
- 
-         if (dataar) {
-             return (
-                 <div>
-                     <DataTable value={dataar}
-                         lazy paginator
-                         totalRecords={totalRecords}
-                         onPage={onPageChange}
-                         rows={rowsPerPage}
-                         first={currentPage * rowsPerPage}
-                         rowsPerPageOptions={[10, 50, 100]}
-                         paginatorPosition="both"
-                         paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
-                         paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
-                         currentPageReportTemplate={`Registros ${startRecord} - ${endRecord} de {totalRecords}`}
-                     >
-                         <Column header="#" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
-                         <Column field="2" style={{ minWidth: '50px' }} header="Recap" />
-                         <Column field="3" style={{ minWidth: '50px' }} header="Lote" />
-                         <Column field="4" style={{ minWidth: '50px' }} header="Bin" />
-                         <Column field="5" style={{ minWidth: '50px' }} header="Factura" />
-                         <Column field="6" style={{ minWidth: '50px' }} header="Fecha" />
-                         <Column field="13" style={{ minWidth: '50px' }} header="Codigo/tipo/nombre" />
-                         <Column field="9" style={{ minWidth: '50px' }} header="Total" />
-                         <Column field="10" style={{ minWidth: '50px' }} header="Otros" />
-                         <Column field="11" style={{ minWidth: '50px' }} header="Iva" />
-                         <Column field="12" style={{ minWidth: '50px' }} header="Val Recap" />
-                         <Column field="14" style={{ minWidth: '50px' }} header="Descripción" />
-                         <Column field="15" style={{ minWidth: '50px' }} header="#Tarjeta" />
-                         <Column field="16" style={{ minWidth: '50px' }} header="Tipo pago" />
-                         <Column field="17" style={{ minWidth: '50px' }} header="Autorización" />
-                         <Column field="19" style={{ minWidth: '50px' }} header="Voucher" />
-                         <Column field="20" style={{ minWidth: '50px' }} header="Forma pago" />
-                         <Column field="21" style={{ minWidth: '50px' }} header="Tipo diferido" />
-                         <Column field="22" style={{ minWidth: '50px' }} header="Plazo" />
-                         <Column field="23" style={{ minWidth: '50px' }} header="Meses gracia" />
-                         <Column field="24" style={{ minWidth: '50px' }} header="Descripción" />
-                         <Column field="25" style={{ minWidth: '50px' }} header="Código Tcredito" />
-                         <Column field="26" style={{ minWidth: '50px' }} header="Nombre marca" />
-                         <Column field="27" style={{ minWidth: '50px' }} header="Tipo pago" />
-                         <Column field="28" style={{ minWidth: '50px' }} header="Red" />
-                         <Column field="29" style={{ minWidth: '50px' }} header="Respuesta" />
-                         <Column field="30" style={{ minWidth: '50px' }} header="Grupo tarjeta" />
-                     </DataTable>
-                 </div>
-             );
-         } else if (dataar2) {
-             return (
-                 <div>
-                     <DataTable value={dataar2}
-                         totalRecords={totalRecords2}
-                         onPage={onPageChange2}
-                         rows={rowsPerPage2}
-                         first={currentPage2 * rowsPerPage2}
-                         rowsPerPageOptions={[5, 10, 25]}
-                         paginatorPosition="both"
-                         paginatorLeft={paginatorLeft}
-                         paginatorRight={paginatorRight}
-                         paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
-                         currentPageReportTemplate={`Registros ${startRecord} -  de {totalRecords}`}
-                     >
-                         <Column header="#" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
-                         <Column field="2" style={{ minWidth: '50px' }} header="Recap" />
-                         <Column field="3" style={{ minWidth: '50px' }} header="Lote" />
-                         <Column field="4" style={{ minWidth: '50px' }} header="Bin" />
-                         <Column field="5" style={{ minWidth: '50px' }} header="Factura" />
-                         <Column field="6" style={{ minWidth: '50px' }} header="Fecha" />
-                         <Column field="13" style={{ minWidth: '50px' }} header="Codigo/tipo/nombre" />
-                         <Column field="9" style={{ minWidth: '50px' }} header="Total" />
-                         <Column field="10" style={{ minWidth: '50px' }} header="Otros" />
-                         <Column field="11" style={{ minWidth: '50px' }} header="Iva" />
-                         <Column field="12" style={{ minWidth: '50px' }} header="Val Recap" />
-                         <Column field="14" style={{ minWidth: '50px' }} header="Descripción" />
-                         <Column field="15" style={{ minWidth: '50px' }} header="#Tarjeta" />
-                         <Column field="16" style={{ minWidth: '50px' }} header="Tipo pago" />
-                         <Column field="17" style={{ minWidth: '50px' }} header="Autorización" />
-                         <Column field="19" style={{ minWidth: '50px' }} header="Voucher" />
-                         <Column field="20" style={{ minWidth: '50px' }} header="Forma pago" />
-                         <Column field="21" style={{ minWidth: '50px' }} header="Tipo diferido" />
-                         <Column field="22" style={{ minWidth: '50px' }} header="Plazo" />
-                         <Column field="23" style={{ minWidth: '50px' }} header="Meses gracia" />
-                         <Column field="24" style={{ minWidth: '50px' }} header="Descripción" />
-                         <Column field="25" style={{ minWidth: '50px' }} header="Código Tcredito" />
-                         <Column field="26" style={{ minWidth: '50px' }} header="Nombre marca" />
-                         <Column field="27" style={{ minWidth: '50px' }} header="Tipo pago" />
-                         <Column field="28" style={{ minWidth: '50px' }} header="Red" />
-                         <Column field="29" style={{ minWidth: '50px' }} header="Respuesta" />
-                         <Column field="30" style={{ minWidth: '50px' }} header="Grupo tarjeta" />
-                     </DataTable>
-                 </div>
-             );
- 
-         }
- 
-     }*/
     //Creación Tabla de Datos
     const DataTablaar = ({ dataar }) => {
         const startRecord = currentPage * rowsPerPage + 1;
@@ -323,7 +224,7 @@ const ReporteVentasCorales = () => {
                     paginatorPosition="both"
                     paginatorLeft={paginatorLeft2} paginatorRight={paginatorRight2}
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
-                    currentPageReportTemplate={`Registros ${startRecord} - ${endRecord} de {totalRecords}`}
+                    currentPageReportTemplate={`Registros ${startRecord} de {totalRecords}`}
                 >
                     <Column header="#" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
                     <Column field="2" style={{ minWidth: '50px' }} header="Recap" />
@@ -491,8 +392,8 @@ const ReporteVentasCorales = () => {
                 ]);
                 ws['A1'].s = { halign: 'center', valign: 'center' };
 
-                XLSX.utils.book_append_sheet(wb, ws, 'VentasdeTarjetas');
-                XLSX.writeFile(wb, 'VentasdeTarjetas.xlsx');
+                XLSX.utils.book_append_sheet(wb, ws, 'ReporteVentas');
+                XLSX.writeFile(wb, 'ReporteVentas.xlsx');
                 exelcreado();
             }
 
@@ -506,79 +407,82 @@ const ReporteVentasCorales = () => {
     };
 
 
-    const generarExcelpropio = () => {
-        setLoading(true);
-        if (DataReporteventasCentros == null || DataReporteventasCentros.length == 0) {
-            showWarnexe();
-        } else {
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.aoa_to_sheet([
-                [
-                    "Recap",
-                    "Lote",
-                    "Bin",
-                    "Factura",
-                    "Fecha",
-                    "Codigo/tipo/nombre",
-                    "Total",
-                    "Otros",
-                    "Iva",
-                    "Val Recap",
-                    "Descripción",
-                    "#Tarjeta",
-                    "Tipo pago",
-                    "Autorización",
-                    "Voucher",
-                    "Forma pago",
-                    "Tipo diferido",
-                    "Plazo",
-                    "Meses gracia",
-                    "Descripción",
-                    "Código Tcredito",
-                    "Nombre marca",
-                    "Tipo pago",
-                    "Red",
-                    "Respuesta",
-                    "Grupo tarjeta"
-                ],
-                ...DataReporteventasCentros.map(item => [
-                    item[2],
-                    item[3],
-                    item[4],
-                    item[5],
-                    item[6],
-                    item[13],
-                    item[9],
-                    item[10],
-                    item[11],
-                    item[12],
-                    item[14],
-                    item[15],
-                    item[16],
-                    item[17],
-                    item[19],
-                    item[20],
-                    item[21],
-                    item[22],
-                    item[23],
-                    item[24],
-                    item[25],
-                    item[26],
-                    item[27],
-                    item[28],
-                    item[29],
-                    item[30],
-                ]),
-            ]);
-
-            ws['A1'].s = { halign: 'center', valign: 'center' };
-
-            XLSX.utils.book_append_sheet(wb, ws, 'EstadosdeCuentas');
-            XLSX.writeFile(wb, 'EstadosdeCuentas.xlsx');
-            setLoading(false);
-        }
-
-    };
+        const generarExcelpropio = () => {
+            setLoading(true);
+            
+            setTimeout(() => {
+                if (DataReporteventasCentros == null || DataReporteventasCentros.length == 0) {
+                    showWarnexe();
+                } else {
+                    const wb = XLSX.utils.book_new();
+                    const ws = XLSX.utils.aoa_to_sheet([
+                        [
+                            "Recap",
+                            "Lote",
+                            "Bin",
+                            "Factura",
+                            "Fecha",
+                            "Codigo/tipo/nombre",
+                            "Total",
+                            "Otros",
+                            "Iva",
+                            "Val Recap",
+                            "Descripción",
+                            "#Tarjeta",
+                            "Tipo pago",
+                            "Autorización",
+                            "Voucher",
+                            "Forma pago",
+                            "Tipo diferido",
+                            "Plazo",
+                            "Meses gracia",
+                            "Descripción",
+                            "Código Tcredito",
+                            "Nombre marca",
+                            "Tipo pago",
+                            "Red",
+                            "Respuesta",
+                            "Grupo tarjeta"
+                        ],
+                        ...DataReporteventasCentros.map(item => [
+                            item[2],
+                            item[3],
+                            item[4],
+                            item[5],
+                            item[6],
+                            item[13],
+                            item[9],
+                            item[10],
+                            item[11],
+                            item[12],
+                            item[14],
+                            item[15],
+                            item[16],
+                            item[17],
+                            item[19],
+                            item[20],
+                            item[21],
+                            item[22],
+                            item[23],
+                            item[24],
+                            item[25],
+                            item[26],
+                            item[27],
+                            item[28],
+                            item[29],
+                            item[30],
+                        ]),
+                    ]);
+        
+                    ws['A1'].s = { halign: 'center', valign: 'center' };
+        
+                    XLSX.utils.book_append_sheet(wb, ws, 'ReporteVentas');
+                    XLSX.writeFile(wb, 'ReporteVentas.xlsx');
+                    setLoading(false);
+                    exelcreado();
+                }
+            }, 2000); 
+        };
 
     //Mensajes Mostrar
     const showWarnexe = () => {
@@ -609,7 +513,6 @@ const ReporteVentasCorales = () => {
     const cargaDatos = async () => {
         setReporteventasCentros("");
         setReporteventas("");
-        //console.log(serverseleccionadolista);
         if (serverseleccionado === "" && serverseleccionadolista.length === 0) {
             showrangocentro();
         } else if (fechaini == null || fechafin == null) {
@@ -659,8 +562,6 @@ const ReporteVentasCorales = () => {
                     }));
 
                     setLoading(false);
-                    //console.log(totalRowCount);
-                    //console.log(allData);
                     setReporteventasCentros(allData);
                 } else {
                     setLoading(true);
@@ -763,8 +664,13 @@ const ReporteVentasCorales = () => {
                     const descripcionCentro = dato.descripcionCentro;
                     const codigoCentro = dato.id.codigoCentro;
                     const hostcentro = dato.serverHost;
-                    listaDescripcionYCodigo.push({ descripcionCentro, codigoCentro, hostcentro });
-                    todoscentros.push(hostcentro);
+                    const existingItem = listaDescripcionYCodigo.find(item => item.hostcentro=== hostcentro);
+
+                    if (!existingItem) {
+                        listaDescripcionYCodigo.push({ descripcionCentro, codigoCentro, hostcentro });
+                        todoscentros.push(hostcentro);
+                        //(todoscentros);
+                    }
                 }
             }
 
@@ -788,16 +694,16 @@ const ReporteVentasCorales = () => {
         const selectedCentro = event.target.value;
         setCentroSeleccionado(selectedCentro);
         if (selectedCentro.descripcionCentro === "<<TODOS LOS CENTROS>>") {
-            //"entro")
+    
             const selectedCentroDataArray = listalogistica.filter(item => item.codigoCentro === selectedCentro.codigoCentro);
 
             if (selectedCentroDataArray.length > 0) {
-                // Definir serverHostSeleccionadoHttpsArray dentro de este bloqu
+   
                 const serverHostSeleccionado = selectedCentroDataArray[0].hostcentro;
 
-                //console.log("serverHostSeleccionado:", serverHostSeleccionado);
+   
                 const newArray = serverHostSeleccionado.map(url => url.replace("http:", "https:"));
-                //console.log("serverHostSeleccionadohttps:", newArray);
+               
                 setServerseleccionadolista(newArray);
 
             }
@@ -806,18 +712,19 @@ const ReporteVentasCorales = () => {
             const selectedCentroData = listalogistica.find(item => item.codigoCentro === selectedCentro.codigoCentro);
             if (selectedCentroData) {
                 const serverHostSeleccionado = selectedCentroData.hostcentro;
-                //console.log("serverHostSeleccionado:", serverHostSeleccionado);
+              
                 const serverHostSeleccionadoHttps = serverHostSeleccionado.replace("http:", "https:");
 
                 setServerseleccionado(serverHostSeleccionadoHttps);
-                //console.log(serverHostSeleccionadoHttps);
+                //(serverHostSeleccionadoHttps);
+          
             }
             setNombrecentro("");
         }
 
     };
 
-    //console.log(Nombrecentro);
+  
 
 
     //Lo que se va  mostrar
