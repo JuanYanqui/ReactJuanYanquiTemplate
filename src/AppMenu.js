@@ -12,6 +12,7 @@ const AppMenu = ({ model, onMenuItemClick }) => {
   const onSubMenuClick = (index) => {
     setActiveMenuIndex((prevActiveIndex) => (prevActiveIndex === index ? null : index));
   };
+  
 
   const handleSearchInputChange = (event) => {
     setSearchTerm(event.target.value);
@@ -30,6 +31,7 @@ const AppMenu = ({ model, onMenuItemClick }) => {
     color: "#ffffff",
   };
 
+  
   const renderMenuItem = (item, index, isMainItem) => {
     const isActive = isSubMenuActive(index);
     return (
@@ -51,6 +53,21 @@ const AppMenu = ({ model, onMenuItemClick }) => {
                   <a onClick={(e) => onMenuItemClick(e, subItem)}>
                     <i className={classNames('layout-menuitem-icon', subItem.icon)}></i>
                     <span className="layout-menuitem-text" style={{ fontWeight: 'normal', fontSize: '13px', color: 'white', textShadow: '0 0 10px rgba(255, 255, 255, 0.10)' }}>{subItem.label}</span>
+                    {subItem.items && ( // Agregar este bloque para sub-subítems
+                      <i className={`pi pi-fw ${subItem.isActive ? 'pi-angle-up' : 'pi-angle-down'} layout-submenu-toggler`} onClick={(e) => onSubMenuClick(subIndex)}></i>
+                    )}
+                    {subItem.items && subItem.isActive && (
+                      <ul className={classNames({ 'layout-submenu': true, 'expanded': subItem.isActive })}>
+                        {subItem.items.map((subSubItem, subSubIndex) => (
+                          <li key={subSubItem.label || subSubIndex} className={classNames({ 'active-menuitem': subSubItem.active })}>
+                            <a onClick={(e) => onMenuItemClick(e, subSubItem)}>
+                              <i className={classNames('layout-menuitem-icon', subSubItem.icon)}></i>
+                              <span className="layout-menuitem-text" style={{ fontWeight: 'normal', fontSize: '13px', color: 'white', textShadow: '0 0 10px rgba(255, 255, 255, 0.10)' }}>{subSubItem.label}</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </a>
                 </li>
               ))}
@@ -59,6 +76,8 @@ const AppMenu = ({ model, onMenuItemClick }) => {
       </li>
     );
   };
+  
+  
 
   return (
     <div className="menu-container">

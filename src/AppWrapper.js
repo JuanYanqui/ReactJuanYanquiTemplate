@@ -11,6 +11,7 @@ import AprobarArticulos from './components/AprobarArticulos';
 import EstadosCuenta from './components/EstadosCuenta';
 import VentasTargetas from './components/VentasTargetas';
 import ReporteVentasCorales from './components/ReporteVentasCorales';
+import MantenimientoPlus from './components/MantenimientoPlus';
 
 const AppWrapper = ({ userData, usuarioUppercase }) => {
     let location = useLocation();
@@ -46,6 +47,7 @@ const AppWrapper = ({ userData, usuarioUppercase }) => {
                     <Route path="EstadosCuenta" element={<EstadosCuenta />} />
                     <Route path="VentasTarjeta" element={<VentasTargetas />} />
                     <Route path="ReporteVentasCorales" element={<ReporteVentasCorales />} />
+                    <Route path="MantenimientoAbcPlus" element={<MantenimientoPlus />} />
                 </Route>
             </Route>
         </Routes>

@@ -10,8 +10,10 @@ import * as XLSX from 'xlsx';
 import { Calendar } from 'primereact/calendar';
 import { Dropdown } from 'primereact/dropdown';
 import { ReporteVentasCoralesIntermediaws } from '../serviceIntermedia/ReporteVentasCoralesIntermediaws';
+import { ListBox } from 'primereact/listbox';
+import { Card } from 'primereact/card';
 
-const ReporteVentasCorales = () => {
+const MantenimientoPlus = () => {
     const [position, setPosition] = useState('center');
     const toast = useRef(null);
     const [numCaja, setNumCaja] = useState("");
@@ -126,10 +128,10 @@ const ReporteVentasCorales = () => {
         loadingmetod();
     };
 
-    const loadingmetod = () =>{
+    const loadingmetod = () => {
         setTimeout(() => {
             setLoading(false);
-          }, 900);
+        }, 900);
     }
 
     //Incono Para Tabla 
@@ -164,38 +166,22 @@ const ReporteVentasCorales = () => {
                     currentPageReportTemplate={`Registros ${startRecord} - ${endRecord} de {totalRecords}`}
                 >
                     <Column header="#" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
-                    <Column field="2" style={{ minWidth: '50px' }} header="Recap" />
-                    <Column field="3" style={{ minWidth: '50px' }} header="Lote" />
-                    <Column field="4" style={{ minWidth: '50px' }} header="Bin" />
-                    <Column field="5" style={{ minWidth: '50px' }} header="Factura" />
-                    <Column field="6" style={{ minWidth: '50px' }} header="Fecha" />
-                    <Column field="13" style={{ minWidth: '50px' }} header="Codigo/tipo/nombre" />
-                    <Column field="9" style={{ minWidth: '50px' }} header="Total" />
-                    <Column field="10" style={{ minWidth: '50px' }} header="Otros" />
-                    <Column field="11" style={{ minWidth: '50px' }} header="Iva" />
-                    <Column field="12" style={{ minWidth: '50px' }} header="Val Recap" />
-                    <Column field="14" style={{ minWidth: '50px' }} header="Descripción" />
-                    <Column field="15" style={{ minWidth: '50px' }} header="#Tarjeta" />
-                    <Column field="16" style={{ minWidth: '50px' }} header="Tipo pago" />
-                    <Column field="17" style={{ minWidth: '50px' }} header="Autorización" />
-                    <Column field="19" style={{ minWidth: '50px' }} header="Voucher" />
-                    <Column field="20" style={{ minWidth: '50px' }} header="Forma pago" />
-                    <Column field="21" style={{ minWidth: '50px' }} header="Tipo diferido" />
-                    <Column field="22" style={{ minWidth: '50px' }} header="Plazo" />
-                    <Column field="23" style={{ minWidth: '50px' }} header="Meses gracia" />
-                    <Column field="24" style={{ minWidth: '50px' }} header="Descripción" />
-                    <Column field="25" style={{ minWidth: '50px' }} header="Código Tcredito" />
-                    <Column field="26" style={{ minWidth: '50px' }} header="Nombre marca" />
-                    <Column field="27" style={{ minWidth: '50px' }} header="Tipo pago" />
-                    <Column field="28" style={{ minWidth: '50px' }} header="Red" />
-                    <Column field="29" style={{ minWidth: '50px' }} header="Respuesta" />
-                    <Column field="30" style={{ minWidth: '50px' }} header="Grupo tarjeta" />
+                    <Column field="2" style={{ minWidth: '50px' }} header="Alm." />
+                    <Column field="3" style={{ minWidth: '50px' }} header="N_Plu" />
+                    <Column field="4" style={{ minWidth: '50px' }} header="Descripción" />
+                    <Column field="5" style={{ minWidth: '50px' }} header="Precio Etiqueta" />
+                    <Column field="6" style={{ minWidth: '50px' }} header="Precio Ant." />
+                    <Column field="13" style={{ minWidth: '50px' }} header="Barra" />
+                    <Column field="9" style={{ minWidth: '50px' }} header="Código" />
+                    <Column field="10" style={{ minWidth: '50px' }} header="Estado" />
+                    <Column field="11" style={{ minWidth: '50px' }} header="Update" />
+
                 </DataTable>
             </div>
         );
     }
 
-    
+
 
     const paginatorLeft2 = <i />;
     const paginatorRight2 = (
@@ -216,43 +202,26 @@ const ReporteVentasCorales = () => {
             <div>
                 <DataTable value={dataar2}
                     paginator
-                    
+
                     onPage={onPageChange2}
                     rows={rowsPerPage2}
-                    first={currentPage2*rowsPerPage2}
+                    first={currentPage2 * rowsPerPage2}
                     rowsPerPageOptions={[10, 50, 100]}
                     paginatorPosition="both"
                     paginatorLeft={paginatorLeft2} paginatorRight={paginatorRight2}
                     paginatorTemplate={`CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown`}
                     currentPageReportTemplate={`Registros ${startRecord} de {totalRecords}`}
                 >
-                    <Column header="#" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
-                    <Column field="2" style={{ minWidth: '50px' }} header="Recap" />
-                    <Column field="3" style={{ minWidth: '50px' }} header="Lote" />
-                    <Column field="4" style={{ minWidth: '50px' }} header="Bin" />
-                    <Column field="5" style={{ minWidth: '50px' }} header="Factura" />
-                    <Column field="6" style={{ minWidth: '50px' }} header="Fecha" />
-                    <Column field="13" style={{ minWidth: '50px' }} header="Codigo/tipo/nombre" />
-                    <Column field="9" style={{ minWidth: '50px' }} header="Total" />
-                    <Column field="10" style={{ minWidth: '50px' }} header="Otros" />
-                    <Column field="11" style={{ minWidth: '50px' }} header="Iva" />
-                    <Column field="12" style={{ minWidth: '50px' }} header="Val Recap" />
-                    <Column field="14" style={{ minWidth: '50px' }} header="Descripción" />
-                    <Column field="15" style={{ minWidth: '50px' }} header="#Tarjeta" />
-                    <Column field="16" style={{ minWidth: '50px' }} header="Tipo pago" />
-                    <Column field="17" style={{ minWidth: '50px' }} header="Autorización" />
-                    <Column field="19" style={{ minWidth: '50px' }} header="Voucher" />
-                    <Column field="20" style={{ minWidth: '50px' }} header="Forma pago" />
-                    <Column field="21" style={{ minWidth: '50px' }} header="Tipo diferido" />
-                    <Column field="22" style={{ minWidth: '50px' }} header="Plazo" />
-                    <Column field="23" style={{ minWidth: '50px' }} header="Meses gracia" />
-                    <Column field="24" style={{ minWidth: '50px' }} header="Descripción" />
-                    <Column field="25" style={{ minWidth: '50px' }} header="Código Tcredito" />
-                    <Column field="26" style={{ minWidth: '50px' }} header="Nombre marca" />
-                    <Column field="27" style={{ minWidth: '50px' }} header="Tipo pago" />
-                    <Column field="28" style={{ minWidth: '50px' }} header="Red" />
-                    <Column field="29" style={{ minWidth: '50px' }} header="Respuesta" />
-                    <Column field="30" style={{ minWidth: '50px' }} header="Grupo tarjeta" />
+                      <Column header="#" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
+                    <Column field="2" style={{ minWidth: '50px' }} header="Alm." />
+                    <Column field="3" style={{ minWidth: '50px' }} header="N_Plu" />
+                    <Column field="4" style={{ minWidth: '50px' }} header="Descripción" />
+                    <Column field="5" style={{ minWidth: '50px' }} header="Precio Etiqueta" />
+                    <Column field="6" style={{ minWidth: '50px' }} header="Precio Ant." />
+                    <Column field="13" style={{ minWidth: '50px' }} header="Barra" />
+                    <Column field="9" style={{ minWidth: '50px' }} header="Código" />
+                    <Column field="10" style={{ minWidth: '50px' }} header="Estado" />
+                    <Column field="11" style={{ minWidth: '50px' }} header="Update" />
                 </DataTable>
             </div>
         );
@@ -263,11 +232,11 @@ const ReporteVentasCorales = () => {
         const endRecord = Math.min((currentPage2 + 1) * rowsPerPage2, totalRecords2);
         return (
             <div>
-                <DataTable 
+                <DataTable
                     paginator
                     onPage={onPageChange2}
                     rows={rowsPerPage2}
-                    first={currentPage2*rowsPerPage2}
+                    first={currentPage2 * rowsPerPage2}
                     rowsPerPageOptions={[10, 50, 100]}
                     paginatorPosition="both"
                     paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
@@ -275,32 +244,15 @@ const ReporteVentasCorales = () => {
                     currentPageReportTemplate={`Registros ${0} - ${0}`}
                 >
                     <Column header="#" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
-                    <Column field="2" style={{ minWidth: '50px' }} header="Recap" />
-                    <Column field="3" style={{ minWidth: '50px' }} header="Lote" />
-                    <Column field="4" style={{ minWidth: '50px' }} header="Bin" />
-                    <Column field="5" style={{ minWidth: '50px' }} header="Factura" />
-                    <Column field="6" style={{ minWidth: '50px' }} header="Fecha" />
-                    <Column field="13" style={{ minWidth: '50px' }} header="Codigo/tipo/nombre" />
-                    <Column field="9" style={{ minWidth: '50px' }} header="Total" />
-                    <Column field="10" style={{ minWidth: '50px' }} header="Otros" />
-                    <Column field="11" style={{ minWidth: '50px' }} header="Iva" />
-                    <Column field="12" style={{ minWidth: '50px' }} header="Val Recap" />
-                    <Column field="14" style={{ minWidth: '50px' }} header="Descripción" />
-                    <Column field="15" style={{ minWidth: '50px' }} header="#Tarjeta" />
-                    <Column field="16" style={{ minWidth: '50px' }} header="Tipo pago" />
-                    <Column field="17" style={{ minWidth: '50px' }} header="Autorización" />
-                    <Column field="19" style={{ minWidth: '50px' }} header="Voucher" />
-                    <Column field="20" style={{ minWidth: '50px' }} header="Forma pago" />
-                    <Column field="21" style={{ minWidth: '50px' }} header="Tipo diferido" />
-                    <Column field="22" style={{ minWidth: '50px' }} header="Plazo" />
-                    <Column field="23" style={{ minWidth: '50px' }} header="Meses gracia" />
-                    <Column field="24" style={{ minWidth: '50px' }} header="Descripción" />
-                    <Column field="25" style={{ minWidth: '50px' }} header="Código Tcredito" />
-                    <Column field="26" style={{ minWidth: '50px' }} header="Nombre marca" />
-                    <Column field="27" style={{ minWidth: '50px' }} header="Tipo pago" />
-                    <Column field="28" style={{ minWidth: '50px' }} header="Red" />
-                    <Column field="29" style={{ minWidth: '50px' }} header="Respuesta" />
-                    <Column field="30" style={{ minWidth: '50px' }} header="Grupo tarjeta" />
+                    <Column field="2" style={{ minWidth: '50px' }} header="Alm." />
+                    <Column field="3" style={{ minWidth: '50px' }} header="N_Plu" />
+                    <Column field="4" style={{ minWidth: '50px' }} header="Descripción" />
+                    <Column field="5" style={{ minWidth: '50px' }} header="Precio Etiqueta" />
+                    <Column field="6" style={{ minWidth: '50px' }} header="Precio Ant." />
+                    <Column field="13" style={{ minWidth: '50px' }} header="Barra" />
+                    <Column field="9" style={{ minWidth: '50px' }} header="Código" />
+                    <Column field="10" style={{ minWidth: '50px' }} header="Estado" />
+                    <Column field="11" style={{ minWidth: '50px' }} header="Update" />
                 </DataTable>
             </div>
         );
@@ -407,82 +359,82 @@ const ReporteVentasCorales = () => {
     };
 
 
-        const generarExcelpropio = () => {
-            setLoading(true);
-            
-            setTimeout(() => {
-                if (DataReporteventasCentros == null || DataReporteventasCentros.length == 0) {
-                    showWarnexe();
-                } else {
-                    const wb = XLSX.utils.book_new();
-                    const ws = XLSX.utils.aoa_to_sheet([
-                        [
-                            "Recap",
-                            "Lote",
-                            "Bin",
-                            "Factura",
-                            "Fecha",
-                            "Codigo/tipo/nombre",
-                            "Total",
-                            "Otros",
-                            "Iva",
-                            "Val Recap",
-                            "Descripción",
-                            "#Tarjeta",
-                            "Tipo pago",
-                            "Autorización",
-                            "Voucher",
-                            "Forma pago",
-                            "Tipo diferido",
-                            "Plazo",
-                            "Meses gracia",
-                            "Descripción",
-                            "Código Tcredito",
-                            "Nombre marca",
-                            "Tipo pago",
-                            "Red",
-                            "Respuesta",
-                            "Grupo tarjeta"
-                        ],
-                        ...DataReporteventasCentros.map(item => [
-                            item[2],
-                            item[3],
-                            item[4],
-                            item[5],
-                            item[6],
-                            item[13],
-                            item[9],
-                            item[10],
-                            item[11],
-                            item[12],
-                            item[14],
-                            item[15],
-                            item[16],
-                            item[17],
-                            item[19],
-                            item[20],
-                            item[21],
-                            item[22],
-                            item[23],
-                            item[24],
-                            item[25],
-                            item[26],
-                            item[27],
-                            item[28],
-                            item[29],
-                            item[30],
-                        ]),
-                    ]);
-        
-                    ws['A1'].s = { halign: 'center', valign: 'center' };
-        
-                    XLSX.utils.book_append_sheet(wb, ws, 'ReporteVentas');
-                    XLSX.writeFile(wb, 'ReporteVentas.xlsx');
-                    setLoading(false);
-                    exelcreado();
-                }
-            }, 2000); 
-        };
+    const generarExcelpropio = () => {
+        setLoading(true);
+
+        setTimeout(() => {
+            if (DataReporteventasCentros == null || DataReporteventasCentros.length == 0) {
+                showWarnexe();
+            } else {
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet([
+                    [
+                        "Recap",
+                        "Lote",
+                        "Bin",
+                        "Factura",
+                        "Fecha",
+                        "Codigo/tipo/nombre",
+                        "Total",
+                        "Otros",
+                        "Iva",
+                        "Val Recap",
+                        "Descripción",
+                        "#Tarjeta",
+                        "Tipo pago",
+                        "Autorización",
+                        "Voucher",
+                        "Forma pago",
+                        "Tipo diferido",
+                        "Plazo",
+                        "Meses gracia",
+                        "Descripción",
+                        "Código Tcredito",
+                        "Nombre marca",
+                        "Tipo pago",
+                        "Red",
+                        "Respuesta",
+                        "Grupo tarjeta"
+                    ],
+                    ...DataReporteventasCentros.map(item => [
+                        item[2],
+                        item[3],
+                        item[4],
+                        item[5],
+                        item[6],
+                        item[13],
+                        item[9],
+                        item[10],
+                        item[11],
+                        item[12],
+                        item[14],
+                        item[15],
+                        item[16],
+                        item[17],
+                        item[19],
+                        item[20],
+                        item[21],
+                        item[22],
+                        item[23],
+                        item[24],
+                        item[25],
+                        item[26],
+                        item[27],
+                        item[28],
+                        item[29],
+                        item[30],
+                    ]),
+                ]);
+
+                ws['A1'].s = { halign: 'center', valign: 'center' };
+
+                XLSX.utils.book_append_sheet(wb, ws, 'ReporteVentas');
+                XLSX.writeFile(wb, 'ReporteVentas.xlsx');
+                setLoading(false);
+                exelcreado();
+            }
+        }, 2000);
+    };
 
     //Mensajes Mostrar
     const showWarnexe = () => {
@@ -533,7 +485,7 @@ const ReporteVentasCorales = () => {
                     setFechamodfin(fechaFormateadafin);
 
                     let allData = [];
-                    let totalRowCount = 0; 
+                    let totalRowCount = 0;
 
                     await Promise.all(serverseleccionadolista.map(async (servidor) => {
                         try {
@@ -541,8 +493,8 @@ const ReporteVentasCorales = () => {
                             //console.log(data2);
 
                             const pageSize = rowsPerPage;
-                            const rowCount = data2.rowCount; 
-                            totalRowCount += rowCount; 
+                            const rowCount = data2.rowCount;
+                            totalRowCount += rowCount;
 
                             const totalPages = Math.ceil(rowCount / pageSize);
 
@@ -664,7 +616,7 @@ const ReporteVentasCorales = () => {
                     const descripcionCentro = dato.descripcionCentro;
                     const codigoCentro = dato.id.codigoCentro;
                     const hostcentro = dato.serverHost;
-                    const existingItem = listaDescripcionYCodigo.find(item => item.hostcentro=== hostcentro);
+                    const existingItem = listaDescripcionYCodigo.find(item => item.hostcentro === hostcentro);
 
                     if (!existingItem) {
                         listaDescripcionYCodigo.push({ descripcionCentro, codigoCentro, hostcentro });
@@ -694,16 +646,16 @@ const ReporteVentasCorales = () => {
         const selectedCentro = event.target.value;
         setCentroSeleccionado(selectedCentro);
         if (selectedCentro.descripcionCentro === "<<TODOS LOS CENTROS>>") {
-    
+
             const selectedCentroDataArray = listalogistica.filter(item => item.codigoCentro === selectedCentro.codigoCentro);
 
             if (selectedCentroDataArray.length > 0) {
-   
+
                 const serverHostSeleccionado = selectedCentroDataArray[0].hostcentro;
 
-   
+
                 const newArray = serverHostSeleccionado.map(url => url.replace("http:", "https:"));
-               
+
                 setServerseleccionadolista(newArray);
 
             }
@@ -712,19 +664,22 @@ const ReporteVentasCorales = () => {
             const selectedCentroData = listalogistica.find(item => item.codigoCentro === selectedCentro.codigoCentro);
             if (selectedCentroData) {
                 const serverHostSeleccionado = selectedCentroData.hostcentro;
-              
+
                 const serverHostSeleccionadoHttps = serverHostSeleccionado.replace("http:", "https:");
 
                 setServerseleccionado(serverHostSeleccionadoHttps);
-                console.log(serverHostSeleccionadoHttps);
-          
+                //(serverHostSeleccionadoHttps);
+
             }
             setNombrecentro("");
         }
 
     };
 
-  
+    const cities = [
+        { name: 'Precios x Act.:', code: 'RM' },
+        { name: 'Cod. Bar.x Act.:', code: 'NY' },
+    ];
 
 
     //Lo que se va  mostrar
@@ -736,18 +691,8 @@ const ReporteVentasCorales = () => {
                     <div className="p-col-12">
                         <div >
                             <div >
-                                <span className="Fs20 FontBold">Reporte Ventas Corales</span>
-                                <button
-                                    id="FiltrarReporteEstadoCuenta"
-                                    className="ui-buttonleft ui-widget ui-state-default ui-corner-all ui-button-text-icon-right p-mr-2"
-                                    disabled={loading}
-                                    type="button"
-                                    onClick={cargaDatos}
-                                    role="button"
-                                    aria-disabled="false"
-                                >
-                                    <span className="ui-button-textright ui-c"><i className="ui-button-icon-right ui-icon ui-c pi pi-refresh" /> &nbsp;Filtrar</span>
-                                </button>
+                                <span className="Fs20 FontBold">Mantenimiento de Plus</span>
+            
                             </div>
                             <div style={{ height: '1px' }}></div>
                             <hr className="ui-separator ui-state-default ui-corner-all" />
@@ -755,10 +700,10 @@ const ReporteVentasCorales = () => {
                             <span style={{
                                 position: 'relative',
                                 display: 'inline-block',
-                                maxWidth: '250px',
+                                maxWidth: '202px',
                                 border: isSelecionarCliked ? '2px solid black' : '1px solid #808080',
                                 borderRadius: '3px',
-                                top: '1px',
+                                top: '-3px',
 
                             }}
 
@@ -766,10 +711,9 @@ const ReporteVentasCorales = () => {
                                 <Dropdown
                                     autoComplete="off"
                                     aria-hidden="true"
-                                    className="w-full md:w-60rem"
                                     placeholder="Seleccione"
                                     id="mySelect"
-                                    style={{ backgroundColor: "#ffffff", height: "36px" }}
+                                    style={{ backgroundColor: "#ffffff", height: "36px", width: "200px" }}
                                     optionLabel="descripcionCentro"
                                     value={centroSeleccionado}
                                     options={listalogistica}
@@ -780,117 +724,53 @@ const ReporteVentasCorales = () => {
                             </span>
 
                             &nbsp;
-                            &nbsp;
-
-                            <span className="p-float-label" style={{ position: 'relative', display: 'inline-block', maxWidth: '120px' }}>
-                                <input
-                                    id="input1"
-                                    className={`ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all MarRight10 ${numCaja ? 'ui-state-filled' : ''}`}
-                                    value={numCaja}
-                                    onChange={handleInputChangeCaja}
-                                    style={{ width: '100%' }}
-
-                                />
-                                <label className={numCaja ? 'ui-label-floated' : ''} style={{ color: '#6c747c', fontSize: '16px', background: '#fff' }}>Caja</label>
-                            </span>
-
-                            &nbsp;
-                            &nbsp;
-                            <span
-                                style={{
-                                    position: 'relative',
-                                    display: 'inline-block',
-                                    maxWidth: '180px',
-                                    border: isCalendarClickedFechaini ? '2px solid black' : '1px solid #808080',
-                                    borderRadius: '3px',
-                                }}
-                                ref={calendarRefFechaini}
-                            >
-                                <label
-                                    style={{
-                                        position: 'absolute',
-                                        top: isCalendarClickedFechaini ? '10px' : '-10px',
-                                        left: '1px',
-                                        backgroundColor: 'white',
-                                        padding: '0 5px',
-                                        display: 'block',
-                                        opacity: 1,
-                                        transition: 'top 0.5s ease',
-                                        fontSize: '12px',
-                                        color: '#7f8990',
-                                        zIndex: 1,
-
-                                    }}
+                            <button style={{ position: 'relative',top: '-5px'}}
+                                    id="FiltrarControl"
+                                    className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left MarRight10 ui-button-warn"
+                                    onClick={cargaDatos}
+                                    disabled={loading}
+                                    type="button"
+                                    role="button"
+                                    aria-disabled="false"
                                 >
-                                    Fecha Inicial
-                                </label>
-                                <Calendar
-                                    id="calfechaini"
-                                    value={fechaini}
-                                    onChange={handleDateChangeFechaini}
-                                    dateFormat="yy-mm-dd"
-                                    showIcon
-                                    className={`custom-calendar-style ${isCalendarClickedFechaini ? 'clicked' : ''}`}
-                                    onClick={handleCalendarClickFechaini}
-                                />
-                            </span>
+                                    <span className="ui-button-text ui-c"><i className="ui-button-icon-left ui-icon ui-c pi pi-search" /> &nbsp;Buscar</span>
+                                </button>
 
+                            <span style={{ float: "right", position: 'relative',top: '-11px'}}>
+                                <button
+                                    id="FiltrarControl"
+                                    className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left MarRight10 ui-button-success"
 
-
-
-                            &nbsp;
-                            &nbsp;
-
-                            <span
-                                style={{
-                                    position: 'relative',
-                                    display: 'inline-block',
-                                    maxWidth: '180px',
-                                    border: isCalendarClickedFechafin ? '2px solid black' : '1px solid #808080',
-                                    borderRadius: '3px',
-                                }}
-                                ref={calendarRefFechafin}
-                            >
-                                <label
-                                    style={{
-                                        position: 'absolute',
-                                        top: isCalendarClickedFechafin ? '10px' : '-10px',
-                                        left: '1px',
-                                        backgroundColor: 'white',
-                                        padding: '0 5px',
-                                        display: 'block',
-                                        opacity: 1,
-                                        transition: 'top 0.5s ease',
-                                        fontSize: '12px',
-                                        color: '#7f8990',
-                                        zIndex: 1,
-
-                                    }}
+                                    disabled={loading}
+                                    type="button"
+                                    role="button"
+                                    aria-disabled="false"
                                 >
-                                    Fecha Final
-                                </label>
-                                <Calendar
-                                    id="calfechafin"
-                                    value={fechafin}
-                                    onChange={handleDateChangeFechafin}
-                                    dateFormat="yy-mm-dd"
-                                    showIcon
-                                    className={`custom-calendar-style ${isCalendarClickedFechafin ? 'clicked' : ''}`}
-                                    onClick={handleCalendarClickFechafin}
-                                />
+                                    <span className="ui-button-text ui-c"><i className="fa-regular fa-pen-to-square" /> &nbsp;Actualizar Plus</span>
+                                </button>
+                                <span style={{display: 'inline-block', position: 'relative',top: '8px'}}>
+                                <p className="m-0" style={{ backgroundColor: '#4397ec'}}>
+                                    Precios x Act.: 0
+                                </p>
+                                <div style={{ height: '2px' }}></div>
+                                <p className="m-0" style={{   backgroundColor: '#8dc6f6'}}>
+                                    Cod. Bar.x Act.: 0
+                                </p>
+                                </span>
                             </span>
-                            &nbsp;
 
-                            &nbsp;
+                            <div style={{ height: '4px' }}></div>
+
+
 
                         </div>
 
                     </div>
-                    &nbsp;
+
 
                     &nbsp;
                     <div>
-                        {DataReporteventas != ""? (
+                        {DataReporteventas != "" ? (
                             // Si la base de datos 1 no está vacía, muestra la base de datos 1
                             <DataTablaar dataar={DataReporteventas.data} loading={loading} onPageChange={onPageChange} />
                         ) : (
@@ -899,7 +779,7 @@ const ReporteVentasCorales = () => {
                                 <DataTablaar2 dataar2={DataReporteventasCentros} loading={loading} onPageChange={onPageChange2} />
                             ) : (
                                 // Si ambas bases de datos están vacías, puedes mostrar un mensaje o tomar otra acción
-                                <DataTablaar3  />
+                                <DataTablaar3 />
                             )
                         )}
                     </div>
@@ -925,4 +805,4 @@ const ReporteVentasCorales = () => {
 
 };
 
-export default ReporteVentasCorales;
+export default MantenimientoPlus;

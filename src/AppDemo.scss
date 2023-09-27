@@ -324,6 +324,16 @@ body .ui-splitbutton.ui-button-success>.ui-button {
     border: 0 none;
 }
 
+
+
+body .ui-button.ui-button-warn,
+body .ui-splitbutton.ui-button-warn>.ui-button {
+    background: #3e464c;
+    color: #ffffff;
+    border: 0 none;
+}
+
+
 body .ui-button,
 body .ui-button.ui-linkbutton {
     font-weight: 500;
@@ -403,6 +413,11 @@ body .ui-buttonleft.ui-linkbutton {
     cursor: pointer;
     text-align: center;
     overflow: visible;
+}
+
+.p-field-checkbox2 {
+    display: inline-block;
+    text-align: center;
 }
 
 body .ui-inputfield {

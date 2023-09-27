@@ -18,6 +18,7 @@ import './App.scss';
 import { UsuarioService } from './service/UsuarioService';
 import '@fortawesome/fontawesome-free/css/all.css';
 import ReporteVentasCorales from './components/ReporteVentasCorales';
+import MantenimientoPlus from './components/MantenimientoPlus';
 export const RTLContext = React.createContext();
 
 const App = ({ userData, usuarioUppercase }) => {
@@ -69,39 +70,38 @@ const App = ({ userData, usuarioUppercase }) => {
     //Generar el menu segun la dataque se trae
     const generateMenuFromUserData = (userData) => {
         if (!userData || !userData.object) {
-            return [];
+          return [];
         }
         const menuItems = [];
-
+      
+        const processMenuItem = (item) => {
+          const menuItem = {
+            key: item.menId,
+            label: item.nombre,
+            icon: item.icono,
+            to: item.url,
+          };
+      
+          if (item.hijos && item.hijos.length > 0) {
+            menuItem.items = item.hijos.map((hijo) => processMenuItem(hijo));
+          }
+      
+          return menuItem;
+        };
+      
         userData.object.forEach((item) => {
-            if (item.nombre === 'Reportería' && menuItems.some(existingItem => existingItem.label === 'Reportería')) {
-                return;
-            }
-
-
-            if (item.nombre === 'Cambio Categoria Articulo' && menuItems.some(existingItem => existingItem.label === 'Cambio Categoria Articulo')) {
-                return;
-            }
-
-            const menuItem = {
-                key: item.menId,
-                label: item.nombre,
-                icon: item.icono,
-                to: item.url,
-                items: item.hijos && item.hijos.map((hijo) => ({
-                    key: hijo.menId,
-                    label: hijo.nombre,
-                    to: hijo.url,
-                    icon: hijo.icono
-                }))
-            };
-
-            menuItems.push(menuItem);
-
+          if (
+            (item.nombre === 'Reportería' && menuItems.some(existingItem => existingItem.label === 'Reportería')) ||
+            (item.nombre === 'Cambio Categoria Articulo' && menuItems.some(existingItem => existingItem.label === 'Cambio Categoria Articulo'))
+          ) {
+            return;
+          }
+      
+          menuItems.push(processMenuItem(item));
         });
-
+      
         return menuItems;
-    };
+      };
 
 
     //Genera las rutas para los menus.
@@ -498,6 +498,7 @@ const App = ({ userData, usuarioUppercase }) => {
                             <Route path="/EstadosCuenta" element={<EstadosCuenta colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                             <Route path="/VentasTarjeta" element={<VentasTargetas colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                             <Route path="/ReporteVentasCorales" element={<ReporteVentasCorales colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route path="/MantenimientoAbcPlus" element={<MantenimientoPlus colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
 
                         </Routes>
                     </div>
