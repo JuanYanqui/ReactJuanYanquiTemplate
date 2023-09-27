@@ -70,38 +70,38 @@ const App = ({ userData, usuarioUppercase }) => {
     //Generar el menu segun la dataque se trae
     const generateMenuFromUserData = (userData) => {
         if (!userData || !userData.object) {
-          return [];
+            return [];
         }
         const menuItems = [];
-      
+
         const processMenuItem = (item) => {
-          const menuItem = {
-            key: item.menId,
-            label: item.nombre,
-            icon: item.icono,
-            to: item.url,
-          };
-      
-          if (item.hijos && item.hijos.length > 0) {
-            menuItem.items = item.hijos.map((hijo) => processMenuItem(hijo));
-          }
-      
-          return menuItem;
+            const menuItem = {
+                key: item.menId,
+                label: item.nombre,
+                icon: item.icono,
+                to: item.url,
+            };
+
+            if (item.hijos && item.hijos.length > 0) {
+                menuItem.items = item.hijos.map((hijo) => processMenuItem(hijo));
+            }
+
+            return menuItem;
         };
-      
+
         userData.object.forEach((item) => {
-          if (
-            (item.nombre === 'Reportería' && menuItems.some(existingItem => existingItem.label === 'Reportería')) ||
-            (item.nombre === 'Cambio Categoria Articulo' && menuItems.some(existingItem => existingItem.label === 'Cambio Categoria Articulo'))
-          ) {
-            return;
-          }
-      
-          menuItems.push(processMenuItem(item));
+            if (
+                (item.nombre === 'Reportería' && menuItems.some(existingItem => existingItem.label === 'Reportería')) ||
+                (item.nombre === 'Cambio Categoria Articulo' && menuItems.some(existingItem => existingItem.label === 'Cambio Categoria Articulo'))
+            ) {
+                return;
+            }
+
+            menuItems.push(processMenuItem(item));
         });
-      
+
         return menuItems;
-      };
+    };
 
 
     //Genera las rutas para los menus.
@@ -133,40 +133,44 @@ const App = ({ userData, usuarioUppercase }) => {
 
     //Ingreso a los menus 
     const onMenuItemClick = (event, item) => {
+        if (!item) {
+          // Handle the case where 'item' is not defined or is falsy
+          return;
+        }
+      
         if (!item.items) {
-            hideOverlayMenu();
+          hideOverlayMenu();
         } else {
-            event.preventDefault();
+          event.preventDefault();
         }
-
+      
         if (item.to) {
-            const url = item.to;
-            const url2 = url.trim();
-            if (url2.includes("/rsap")) {
-                usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datan) => {
-                    datan.object.forEach((item) => {
-                        const currentUrl = url;
-                        const existingUrls = datan.object.map(item => item.url);
-                        const existingUrlsHijos = datan.object.flatMap(item => {
-                            if (item.hijos && Array.isArray(item.hijos)) {
-                                return item.hijos.map(hijo => hijo.url);
-                            }
-                            return [];
-                        });
-                        if (existingUrls.includes(url) || existingUrlsHijos.includes(url)) {
-                            redirectToExternalUrl(url);
-                        } else {
-
-                            navigate("/rsap/access");
-                        }
-
-                    });
+          const url = item.to;
+          const url2 = url.trim();
+          if (url2.includes("/rsap")) {
+            usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datan) => {
+              datan.object.forEach((item) => {
+                const currentUrl = url;
+                const existingUrls = datan.object.map((item) => item.url);
+                const existingUrlsHijos = datan.object.flatMap((item) => {
+                  if (item.hijos && Array.isArray(item.hijos)) {
+                    return item.hijos.map((hijo) => hijo.url);
+                  }
+                  return [];
                 });
-            } else {
-                redirectToExternalUrl(url);
-            }
+                if (existingUrls.includes(url) || existingUrlsHijos.includes(url)) {
+                  redirectToExternalUrl(url);
+                } else {
+                  navigate("/rsap/access");
+                }
+              });
+            });
+          } else {
+            redirectToExternalUrl(url);
+          }
         }
-    };
+      };
+      
 
 
 
@@ -398,7 +402,7 @@ const App = ({ userData, usuarioUppercase }) => {
         'layout-rtl': isRTL
     });
 
-  
+
     //Metodo de busqueda en el menu
     const [filteredMenu, setFilteredMenu] = useState([]);
     const filterMenuItems = () => {
