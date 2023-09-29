@@ -28,7 +28,9 @@ const ReporteVentasCorales = () => {
     const [Datamultiple, setDatamultiple] = useState("");
     const [Nombrecentro, setNombrecentro] = useState("");
     const [serverseleccionado, setServerseleccionado] = useState("");
+    const [tipocentroseleccionado, setTipocentroseleccionado] = useState("");
     const [serverseleccionadolista, setServerseleccionadolista] = useState([]);
+    const [tipocentroseleccionadolista, setTipocentroseleccionadolista] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
     const [currentPage, setCurrentPage] = useState(10);
     const [rowsPerPage, setRowsPerPage] = useState(100);
@@ -39,7 +41,7 @@ const ReporteVentasCorales = () => {
     const [dialogVisibleError, setDialogVisibleError] = useState(false);
     const [centroSeleccionado, setCentroSeleccionado] = useState('');
     const [totalRecords2, setTotalRecords2] = useState(0);
-
+    console.log(listalogistica);
 
     //Carga de Datos Automatica
     useEffect(() => {
@@ -657,18 +659,23 @@ const ReporteVentasCorales = () => {
         const listaDescripcionYCodigo = [];
         const listaDescripcionYCodigoCompleta = [];
         const todoscentros = [];
+        const todostipos = [];
         repoteventascorales.centrologistico(sucursal, sociedad, centrol, nombreCentro, tipoCentro).then((data) => {
-            listaDescripcionYCodigo.push({ descripcionCentro: "<<TODOS LOS CENTROS>>", codigoCentro: "99999999999", hostcentro: todoscentros });
+            
+            listaDescripcionYCodigo.push({ descripcionCentro: "<<TODOS LOS CENTROS>>", codigoCentro: "99999999999", hostcentro: todoscentros, tipoCentroLogistico:todostipos});
             for (const dato of data) {
-                if (dato.serverHost && dato.serverHost.includes("http://app") && !dato.serverHost.includes("shop")) {
+                if (dato.serverHost && dato.serverHost.includes("http://app")) {
                     const descripcionCentro = dato.descripcionCentro;
                     const codigoCentro = dato.id.codigoCentro;
                     const hostcentro = dato.serverHost;
-                    const existingItem = listaDescripcionYCodigo.find(item => item.hostcentro=== hostcentro);
+                    const tipoCentroLogistico = dato.tipoCentroLogistico;
+                    const existingItem = listaDescripcionYCodigo.some(item => item.tipoCentroLogistico === tipoCentroLogistico && item.hostcentro === hostcentro);
 
-                    if (!existingItem) {
-                        listaDescripcionYCodigo.push({ descripcionCentro, codigoCentro, hostcentro });
+
+                    if (!existingItem ) {
+                        listaDescripcionYCodigo.push({ descripcionCentro, codigoCentro, hostcentro, tipoCentroLogistico });
                         todoscentros.push(hostcentro);
+                        todostipos.push(tipoCentroLogistico);
                         //(todoscentros);
                     }
                 }
@@ -701,11 +708,15 @@ const ReporteVentasCorales = () => {
    
                 const serverHostSeleccionado = selectedCentroDataArray[0].hostcentro;
 
+                const tipocentroselecionado = selectedCentroDataArray[0].tipoCentroLogistico;
    
                 const newArray = serverHostSeleccionado.map(url => url.replace("http:", "https:"));
+
+                const newArray2 = tipocentroselecionado.map(nombre => nombre.replace("TI", "B"))
                
                 setServerseleccionadolista(newArray);
 
+                console.log(newArray2);
             }
             setNombrecentro(selectedCentro.descripcionCentro);
         } else {
@@ -713,10 +724,13 @@ const ReporteVentasCorales = () => {
             if (selectedCentroData) {
                 const serverHostSeleccionado = selectedCentroData.hostcentro;
               
+                const tipocentroselecionado = selectedCentroData.tipoCentroLogistico;
                 const serverHostSeleccionadoHttps = serverHostSeleccionado.replace("http:", "https:");
-
+                const tipocentroselecionadob = tipocentroselecionado.replace("TI", "B");
                 setServerseleccionado(serverHostSeleccionadoHttps);
+                setTipocentroseleccionado(tipocentroselecionadob);
                 console.log(serverHostSeleccionadoHttps);
+                console.log(tipocentroselecionadob);
           
             }
             setNombrecentro("");

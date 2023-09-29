@@ -37,6 +37,8 @@ const MantenimientoPlus = () => {
     const [currentPage2, setCurrentPage2] = useState(0);
     const [rowsPerPage2, setRowsPerPage2] = useState(100);
     const [totalPages, setTotalPages] = useState(0);
+    const [Preciosvalor, setPreciosvalor] = useState(0);
+    const [CodBarvalor, setCodBarvalor] = useState(0);
     const [error, setError] = useState(null);
     const [dialogVisibleError, setDialogVisibleError] = useState(false);
     const [centroSeleccionado, setCentroSeleccionado] = useState('');
@@ -676,11 +678,6 @@ const MantenimientoPlus = () => {
 
     };
 
-    const cities = [
-        { name: 'Precios x Act.:', code: 'RM' },
-        { name: 'Cod. Bar.x Act.:', code: 'NY' },
-    ];
-
 
     //Lo que se va  mostrar
     return (
@@ -750,11 +747,11 @@ const MantenimientoPlus = () => {
                                 </button>
                                 <span style={{display: 'inline-block', position: 'relative',top: '8px'}}>
                                 <p className="m-0" style={{ backgroundColor: '#4397ec'}}>
-                                    Precios x Act.: 0
+                                    Precios x Act.: {Preciosvalor}
                                 </p>
                                 <div style={{ height: '2px' }}></div>
                                 <p className="m-0" style={{   backgroundColor: '#8dc6f6'}}>
-                                    Cod. Bar.x Act.: 0
+                                    Cod. Bar.x Act.: {CodBarvalor}
                                 </p>
                                 </span>
                             </span>
