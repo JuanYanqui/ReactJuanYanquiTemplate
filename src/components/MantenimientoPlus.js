@@ -607,7 +607,7 @@ const MantenimientoPlus = () => {
         const sociedad = "1000";
         const centrol = "";
         const nombreCentro = "";
-        const tipoCentro = "";
+        const tipoCentro = "C";
         const listaDescripcionYCodigo = [];
         const listaDescripcionYCodigoCompleta = [];
         const todoscentros = [];
@@ -615,7 +615,9 @@ const MantenimientoPlus = () => {
             listaDescripcionYCodigo.push({ descripcionCentro: "<<TODOS LOS CENTROS>>", codigoCentro: "99999999999", hostcentro: todoscentros });
             for (const dato of data) {
                 if (dato.serverHost && dato.serverHost.includes("http://app") && !dato.serverHost.includes("shop")) {
-                    const descripcionCentro = dato.descripcionCentro;
+    
+                    let descripcionCentro = dato.descripcionCentro.split('/')[0].trim(); // Obtenemos la primera parte antes de '/'
+                descripcionCentro = descripcionCentro.replace("TIENDA", "").trim();
                     const codigoCentro = dato.id.codigoCentro;
                     const hostcentro = dato.serverHost;
                     const existingItem = listaDescripcionYCodigo.find(item => item.hostcentro === hostcentro);
@@ -670,7 +672,7 @@ const MantenimientoPlus = () => {
                 const serverHostSeleccionadoHttps = serverHostSeleccionado.replace("http:", "https:");
 
                 setServerseleccionado(serverHostSeleccionadoHttps);
-                //(serverHostSeleccionadoHttps);
+                console.log(serverHostSeleccionadoHttps);
 
             }
             setNombrecentro("");

@@ -56,8 +56,8 @@ export class ReporteVentasCoralesIntermediaws {
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
-                //const nuevaSerUrl = "http://192.168.56.167:8080";
-                const nuevaSerUrl = data.object.serCodigo.serUrl;
+                const nuevaSerUrl = "http://192.168.56.167:8080";
+                //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
                 //console.log(url);
                 const requestData = {
@@ -98,12 +98,13 @@ export class ReporteVentasCoralesIntermediaws {
             });
     }
 
-    loadVentas(numCaja, fechaInicio, fechaFin,serverseleccionado, currentPage,rowsPerPage) {
+    loadVentas(numCaja, fechaInicio, fechaFin,serverseleccionado,tipocentro, currentPage,rowsPerPage) {
         const ws_nombre = "INTERMEDIAWS_LISTAR_CENTRO";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 //const nuevaWsUrl = data.object.wsUrl;
                 //console.log(serverseleccionado)
+                //console.log(tipocentro)
                 const nuevaWsUrl = ":18443/retailws/ws/vouchers/loadVentas";
                 const nuevaSerUrl = serverseleccionado;
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
@@ -122,6 +123,7 @@ export class ReporteVentasCoralesIntermediaws {
                         numCaja: numCaja,
                         fechaInicio: fechaInicio,
                         fechaFin: fechaFin,
+                        tipocentro:tipocentro,
                         lazyInfo: JSON.stringify(paginationInfo)
                     }),
                     rowCount: 0,
@@ -152,7 +154,7 @@ export class ReporteVentasCoralesIntermediaws {
     }
 
 
-    loadVentasPaginacion(numCaja, fechaInicio, fechaFin,serverseleccionado) {
+    loadVentasPaginacion(numCaja, fechaInicio, fechaFin,serverseleccionado, tipocentro) {
         const ws_nombre = "INTERMEDIAWS_LISTAR_CENTRO";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
@@ -172,6 +174,7 @@ export class ReporteVentasCoralesIntermediaws {
                         numCaja: numCaja,
                         fechaInicio: fechaInicio,
                         fechaFin: fechaFin,
+                        tipocentro:tipocentro,
                         lazyInfo: JSON.stringify(paginationInfo)
                     }),
                     rowCount: 0,

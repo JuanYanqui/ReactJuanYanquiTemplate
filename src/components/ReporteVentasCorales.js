@@ -41,8 +41,8 @@ const ReporteVentasCorales = () => {
     const [dialogVisibleError, setDialogVisibleError] = useState(false);
     const [centroSeleccionado, setCentroSeleccionado] = useState('');
     const [totalRecords2, setTotalRecords2] = useState(0);
-    console.log(listalogistica);
-
+    //console.log(DataReporteventas);
+    //console.log(DataReporteventasCentros);
     //Carga de Datos Automatica
     useEffect(() => {
         const fetchData = async () => {
@@ -50,9 +50,17 @@ const ReporteVentasCorales = () => {
 
             } else if (DataReporteventas) {
                 setLoading(true);
-                const response1 = await repoteventascorales.loadVentas(numCaja, fechamodiini, fechamodifin, serverseleccionado, currentPage, rowsPerPage);
-                const response = await repoteventascorales.loadVentasPaginacion(numCaja, fechamodiini, fechamodifin, serverseleccionado, currentPage, rowsPerPage);
-                if (response) {
+                const response1 = await repoteventascorales.loadVentas(numCaja, fechamodiini, fechamodifin, serverseleccionado, tipocentroseleccionado, currentPage, rowsPerPage);
+                const response = await repoteventascorales.loadVentasPaginacion(numCaja, fechamodiini, fechamodifin, serverseleccionado, tipocentroseleccionado, currentPage, rowsPerPage);
+                if (response1) {
+                    response1.data = response1.data.map((dataArray) => {
+                        // Verificamos si la posición 31 es "B" y si la posición 14 contiene "CORAL"
+                        if (dataArray[31] === "B" && dataArray[14].includes("CORAL")) {
+                          // Reemplazamos "CORAL" con "BIKESHOP" manteniendo el resto del contenido
+                          dataArray[14] = dataArray[14].replace("CORAL", "BIKESHOP");
+                        }
+                        return dataArray;
+                      });
                     setReporteventas(response1);
                     const pageSize = rowsPerPage;
                     const totalCount = response.rowCount;
@@ -75,30 +83,40 @@ const ReporteVentasCorales = () => {
 
                 // Utiliza Promise.all para esperar a que todas las solicitudes se completen
                 await Promise.all(serverseleccionadolista.map(async (servidor) => {
-                    try {
-                        const data2 = await repoteventascorales.loadVentasPaginacion(numCaja, fechaFormateadaini, fechaFormateadafin, servidor, currentPage, rowsPerPage);
-                        //console.log(data2);
+                    await Promise.all(tipocentroseleccionadolista.map(async (tipocentro) => {
+                        try {
+                            const data2 = await repoteventascorales.loadVentasPaginacion(numCaja, fechaFormateadaini, fechaFormateadafin, servidor, tipocentro, currentPage, rowsPerPage);
+                            //console.log(data2);
 
-                        const pageSize = rowsPerPage;
-                        const rowCount = data2.rowCount; // Obtén el valor rowCount de data2
-                        totalRowCount += rowCount; // Suma el valor rowCount a totalRowCount
+                            const pageSize = rowsPerPage;
+                            const rowCount = data2.rowCount; // Obtén el valor rowCount de data2
+                            totalRowCount += rowCount; // Suma el valor rowCount a totalRowCount
 
-                        const totalPages = Math.ceil(rowCount / pageSize);
+                            const totalPages = Math.ceil(rowCount / pageSize);
 
-                        for (let page = 0; page < totalPages; page++) {
-                            const dataPage = await repoteventascorales.loadVentas(numCaja, fechaFormateadaini, fechaFormateadafin, servidor, page, rowsPerPage);
-                            //console.log(dataPage);
+                            for (let page = 0; page < totalPages; page++) {
+                                const dataPage = await repoteventascorales.loadVentas(numCaja, fechaFormateadaini, fechaFormateadafin, servidor, tipocentro, page, rowsPerPage);
+                                //console.log(dataPage);
 
-                            if (dataPage && dataPage.data) {
-                                allData = [...allData, ...dataPage.data];
-                            } else {
-                                throw new Error(dataPage?.data?.message || 'Error desconocido');
+                                if (dataPage && dataPage.data) {
+                                    allData = [...allData, ...dataPage.data];
+                                } else {
+                                    throw new Error(dataPage?.data?.message || 'Error desconocido');
+                                }
                             }
+                        } catch (error) {
+                            console.error('Error en la solicitud:', error);
                         }
-                    } catch (error) {
-                        console.error('Error en la solicitud:', error);
-                    }
+                    }));
                 }));
+                allData = allData.map((dataArray) => {
+                    // Verificamos si la posición 31 es "B" y si la posición 14 contiene "CORAL"
+                    if (dataArray[31] === "B" && dataArray[14].includes("CORAL")) {
+                        // Reemplazamos "CORAL" con "BIKESHOP" manteniendo el resto del contenido
+                        dataArray[14] = dataArray[14].replace("CORAL", "BIKESHOP");
+                    }
+                    return dataArray;
+                });
 
                 setLoading(false);
                 //console.log(totalRowCount); // Aquí tendrás la sumatoria de todos los rowCount
@@ -128,10 +146,10 @@ const ReporteVentasCorales = () => {
         loadingmetod();
     };
 
-    const loadingmetod = () =>{
+    const loadingmetod = () => {
         setTimeout(() => {
             setLoading(false);
-          }, 900);
+        }, 900);
     }
 
     //Incono Para Tabla 
@@ -197,7 +215,7 @@ const ReporteVentasCorales = () => {
         );
     }
 
-    
+
 
     const paginatorLeft2 = <i />;
     const paginatorRight2 = (
@@ -218,10 +236,10 @@ const ReporteVentasCorales = () => {
             <div>
                 <DataTable value={dataar2}
                     paginator
-                    
+
                     onPage={onPageChange2}
                     rows={rowsPerPage2}
-                    first={currentPage2*rowsPerPage2}
+                    first={currentPage2 * rowsPerPage2}
                     rowsPerPageOptions={[10, 50, 100]}
                     paginatorPosition="both"
                     paginatorLeft={paginatorLeft2} paginatorRight={paginatorRight2}
@@ -265,11 +283,11 @@ const ReporteVentasCorales = () => {
         const endRecord = Math.min((currentPage2 + 1) * rowsPerPage2, totalRecords2);
         return (
             <div>
-                <DataTable 
+                <DataTable
                     paginator
                     onPage={onPageChange2}
                     rows={rowsPerPage2}
-                    first={currentPage2*rowsPerPage2}
+                    first={currentPage2 * rowsPerPage2}
                     rowsPerPageOptions={[10, 50, 100]}
                     paginatorPosition="both"
                     paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
@@ -318,6 +336,7 @@ const ReporteVentasCorales = () => {
                     fechamodiini,
                     fechamodifin,
                     serverseleccionado,
+                    tipocentroseleccionado,
                     page,
                     rowsPerPage
                 );
@@ -328,10 +347,20 @@ const ReporteVentasCorales = () => {
                 }
                 setLoading(true);
             }
-
+    
             if (allData == null || allData.length == 0) {
                 showWarnexe();
             } else {
+                // Aplicar la modificación a los datos antes de crear el archivo Excel
+                allData = allData.map((dataArray) => {
+                    // Verificamos si la posición 31 es "B" y si la posición 14 contiene "CORAL"
+                    if (dataArray[31] === "B" && dataArray[14].includes("CORAL")) {
+                        // Reemplazamos "CORAL" con "BIKESHOP" manteniendo el resto del contenido
+                        dataArray[14] = dataArray[14].replace("CORAL", "BIKESHOP");
+                    }
+                    return dataArray;
+                });
+    
                 setLoading(false);
                 const wb = XLSX.utils.book_new();
                 const ws = XLSX.utils.aoa_to_sheet([
@@ -393,13 +422,11 @@ const ReporteVentasCorales = () => {
                     ]),
                 ]);
                 ws['A1'].s = { halign: 'center', valign: 'center' };
-
+    
                 XLSX.utils.book_append_sheet(wb, ws, 'ReporteVentas');
                 XLSX.writeFile(wb, 'ReporteVentas.xlsx');
                 exelcreado();
             }
-
-
         } catch (error) {
             setLoading(false);
             setError(error.message || 'Error desconocido');
@@ -407,84 +434,96 @@ const ReporteVentasCorales = () => {
             setDialogVisibleError(true);
         }
     };
+    
 
 
-        const generarExcelpropio = () => {
-            setLoading(true);
-            
-            setTimeout(() => {
-                if (DataReporteventasCentros == null || DataReporteventasCentros.length == 0) {
-                    showWarnexe();
-                } else {
-                    const wb = XLSX.utils.book_new();
-                    const ws = XLSX.utils.aoa_to_sheet([
-                        [
-                            "Recap",
-                            "Lote",
-                            "Bin",
-                            "Factura",
-                            "Fecha",
-                            "Codigo/tipo/nombre",
-                            "Total",
-                            "Otros",
-                            "Iva",
-                            "Val Recap",
-                            "Descripción",
-                            "#Tarjeta",
-                            "Tipo pago",
-                            "Autorización",
-                            "Voucher",
-                            "Forma pago",
-                            "Tipo diferido",
-                            "Plazo",
-                            "Meses gracia",
-                            "Descripción",
-                            "Código Tcredito",
-                            "Nombre marca",
-                            "Tipo pago",
-                            "Red",
-                            "Respuesta",
-                            "Grupo tarjeta"
-                        ],
-                        ...DataReporteventasCentros.map(item => [
-                            item[2],
-                            item[3],
-                            item[4],
-                            item[5],
-                            item[6],
-                            item[13],
-                            item[9],
-                            item[10],
-                            item[11],
-                            item[12],
-                            item[14],
-                            item[15],
-                            item[16],
-                            item[17],
-                            item[19],
-                            item[20],
-                            item[21],
-                            item[22],
-                            item[23],
-                            item[24],
-                            item[25],
-                            item[26],
-                            item[27],
-                            item[28],
-                            item[29],
-                            item[30],
-                        ]),
-                    ]);
-        
-                    ws['A1'].s = { halign: 'center', valign: 'center' };
-        
-                    XLSX.utils.book_append_sheet(wb, ws, 'ReporteVentas');
-                    XLSX.writeFile(wb, 'ReporteVentas.xlsx');
-                    setLoading(false);
-                    exelcreado();
-                }
-            }, 2000); 
-        };
+    const generarExcelpropio = () => {
+        setLoading(true);
+    
+        setTimeout(() => {
+            if (DataReporteventasCentros == null || DataReporteventasCentros.length == 0) {
+                showWarnexe();
+            } else {
+                let DataReporteventasCentrosmodi = DataReporteventasCentros;
+                DataReporteventasCentrosmodi = DataReporteventasCentrosmodi.map((dataArray) => {
+                    // Verificamos si la posición 31 es "B" y si la posición 14 contiene "CORAL"
+                    if (dataArray[31] === "B" && dataArray[14].includes("CORAL")) {
+                        // Reemplazamos "CORAL" con "BIKESHOP" manteniendo el resto del contenido
+                        dataArray[14] = dataArray[14].replace("CORAL", "BIKESHOP");
+                    }
+                    return dataArray;
+                });
+    
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet([
+                    [
+                        "Recap",
+                        "Lote",
+                        "Bin",
+                        "Factura",
+                        "Fecha",
+                        "Codigo/tipo/nombre",
+                        "Total",
+                        "Otros",
+                        "Iva",
+                        "Val Recap",
+                        "Descripción",
+                        "#Tarjeta",
+                        "Tipo pago",
+                        "Autorización",
+                        "Voucher",
+                        "Forma pago",
+                        "Tipo diferido",
+                        "Plazo",
+                        "Meses gracia",
+                        "Descripción",
+                        "Código Tcredito",
+                        "Nombre marca",
+                        "Tipo pago",
+                        "Red",
+                        "Respuesta",
+                        "Grupo tarjeta"
+                    ],
+                    ...DataReporteventasCentrosmodi.map(item => [
+                        item[2],
+                        item[3],
+                        item[4],
+                        item[5],
+                        item[6],
+                        item[13],
+                        item[9],
+                        item[10],
+                        item[11],
+                        item[12],
+                        item[14],
+                        item[15],
+                        item[16],
+                        item[17],
+                        item[19],
+                        item[20],
+                        item[21],
+                        item[22],
+                        item[23],
+                        item[24],
+                        item[25],
+                        item[26],
+                        item[27],
+                        item[28],
+                        item[29],
+                        item[30],
+                    ]),
+                ]);
+    
+                ws['A1'].s = { halign: 'center', valign: 'center' };
+    
+                XLSX.utils.book_append_sheet(wb, ws, 'ReporteVentas');
+                XLSX.writeFile(wb, 'ReporteVentas.xlsx');
+                setLoading(false);
+                exelcreado();
+            }
+        }, 2000);
+    };
+    
 
     //Mensajes Mostrar
     const showWarnexe = () => {
@@ -535,33 +574,44 @@ const ReporteVentasCorales = () => {
                     setFechamodfin(fechaFormateadafin);
 
                     let allData = [];
-                    let totalRowCount = 0; 
+                    let totalRowCount = 0;
 
                     await Promise.all(serverseleccionadolista.map(async (servidor) => {
-                        try {
-                            const data2 = await repoteventascorales.loadVentasPaginacion(numCaja, fechaFormateadaini, fechaFormateadafin, servidor, currentPage, rowsPerPage);
-                            //console.log(data2);
+                        await Promise.all(tipocentroseleccionadolista.map(async (tipo) => {
+                            try {
+                                const data2 = await repoteventascorales.loadVentasPaginacion(numCaja, fechaFormateadaini, fechaFormateadafin, servidor, tipo, currentPage, rowsPerPage);
+                                //console.log(data2);
 
-                            const pageSize = rowsPerPage;
-                            const rowCount = data2.rowCount; 
-                            totalRowCount += rowCount; 
+                                const pageSize = rowsPerPage;
+                                const rowCount = data2.rowCount;
+                                totalRowCount += rowCount;
 
-                            const totalPages = Math.ceil(rowCount / pageSize);
+                                const totalPages = Math.ceil(rowCount / pageSize);
 
-                            for (let page = 0; page < totalPages; page++) {
-                                const dataPage = await repoteventascorales.loadVentas(numCaja, fechaFormateadaini, fechaFormateadafin, servidor, page, rowsPerPage);
-                                //console.log(dataPage);
+                                for (let page = 0; page < totalPages; page++) {
+                                    const dataPage = await repoteventascorales.loadVentas(numCaja, fechaFormateadaini, fechaFormateadafin, servidor, tipo, page, rowsPerPage);
+                                    //console.log(dataPage);
 
-                                if (dataPage && dataPage.data) {
-                                    allData = [...allData, ...dataPage.data];
-                                } else {
-                                    throw new Error(dataPage?.data?.message || 'Error desconocido');
+                                    if (dataPage && dataPage.data) {
+                                        allData = [...allData, ...dataPage.data];
+                                    } else {
+                                        throw new Error(dataPage?.data?.message || 'Error desconocido');
+                                    }
                                 }
+                            } catch (error) {
+                                console.error('Error en la solicitud:', error);
                             }
-                        } catch (error) {
-                            console.error('Error en la solicitud:', error);
-                        }
+                        }));
                     }));
+
+                    allData = allData.map((dataArray) => {
+                        // Verificamos si la posición 31 es "B" y si la posición 14 contiene "CORAL"
+                        if (dataArray[31] === "B" && dataArray[14].includes("CORAL")) {
+                            // Reemplazamos "CORAL" con "BIKESHOP" manteniendo el resto del contenido
+                            dataArray[14] = dataArray[14].replace("CORAL", "BIKESHOP");
+                        }
+                        return dataArray;
+                    });
 
                     setLoading(false);
                     setReporteventasCentros(allData);
@@ -571,29 +621,35 @@ const ReporteVentasCorales = () => {
                     const fechaFormateadafin = `${fechafin.getFullYear()}-${(fechafin.getMonth() + 1).toString().padStart(2, '0')}-${fechafin.getDate().toString().padStart(2, '0')} ${fechafin.getHours().toString().padStart(2, '0')}:${fechafin.getMinutes().toString().padStart(2, '0')}:${fechafin.getSeconds().toString().padStart(2, '0')}`;
                     setFechamodini(fechaFormateadaini);
                     setFechamodfin(fechaFormateadafin);
-                    const response1 = await repoteventascorales.loadVentas(numCaja, fechaFormateadaini, fechaFormateadafin, serverseleccionado, currentPage, rowsPerPage);
+                    const response1 = await repoteventascorales.loadVentas(numCaja, fechaFormateadaini, fechaFormateadafin, serverseleccionado, tipocentroseleccionado, currentPage, rowsPerPage);
 
-                    const response = await repoteventascorales.loadVentasPaginacion(numCaja, fechaFormateadaini, fechaFormateadafin, serverseleccionado, currentPage, rowsPerPage
+                    const response = await repoteventascorales.loadVentasPaginacion(numCaja, fechaFormateadaini, fechaFormateadafin, serverseleccionado, tipocentroseleccionado, currentPage, rowsPerPage
                     );
 
                     if (response1) {
+                        response1.data = response1.data.map((dataArray) => {
+                            // Verificamos si la posición 31 es "B" y si la posición 14 contiene "CORAL"
+                            if (dataArray[31] === "B" && dataArray[14].includes("CORAL")) {
+                              // Reemplazamos "CORAL" con "BIKESHOP" manteniendo el resto del contenido
+                              dataArray[14] = dataArray[14].replace("CORAL", "BIKESHOP");
+                            }
+                            return dataArray;
+                          });
+                        setReporteventas(response1);
+                        const pageSize = rowsPerPage;
+                        const totalCount = response.rowCount;
+                        const totalPages = Math.ceil(totalCount / pageSize);
+                        setTotalRecords(response.rowCount);
+                        setTotalPages(totalPages);
+                        setLoading(false);
 
-                        if (response1) {
-                            setReporteventas(response1);
-                            const pageSize = rowsPerPage;
-                            const totalCount = response.rowCount;
-                            const totalPages = Math.ceil(totalCount / pageSize);
-                            setTotalRecords(response.rowCount);
-                            setTotalPages(totalPages);
-                            setLoading(false);
-                        } else {
-                            setLoading(false);
-                            setError(response1.data.message);
-                            setPosition('top');
-                            setDialogVisibleError(true);
-                            return response1.data.message;
-                        }
 
+                    } else {
+                        setLoading(false);
+                        setError(response1.data.message);
+                        setPosition('top');
+                        setDialogVisibleError(true);
+                        return response1.data.message;
                     }
                 }
 
@@ -660,30 +716,48 @@ const ReporteVentasCorales = () => {
         const listaDescripcionYCodigoCompleta = [];
         const todoscentros = [];
         const todostipos = [];
+
         repoteventascorales.centrologistico(sucursal, sociedad, centrol, nombreCentro, tipoCentro).then((data) => {
-            
-            listaDescripcionYCodigo.push({ descripcionCentro: "<<TODOS LOS CENTROS>>", codigoCentro: "99999999999", hostcentro: todoscentros, tipoCentroLogistico:todostipos});
+            listaDescripcionYCodigo.push({ descripcionCentro: "<<TODOS LOS CENTROS>>", codigoCentro: "99999999999", hostcentro: todoscentros, tipoCentroLogistico: todostipos });
+            //console.log(data);
+
+            const codigoCentroExcluido = "BIKESHOP RUMIÑAHUI";
+
             for (const dato of data) {
-                if (dato.serverHost && dato.serverHost.includes("http://app")) {
-                    const descripcionCentro = dato.descripcionCentro;
+                if (dato.serverHost && dato.serverHost.includes("http://app")&& !dato.serverHost.includes("shop")) {
+                    let descripcionCentro = dato.descripcionCentro.split('/')[0].trim(); // Obtenemos la primera parte antes de '/'
+                    descripcionCentro = descripcionCentro.replace("TIENDA", "").trim();
                     const codigoCentro = dato.id.codigoCentro;
                     const hostcentro = dato.serverHost;
                     const tipoCentroLogistico = dato.tipoCentroLogistico;
-                    const existingItem = listaDescripcionYCodigo.some(item => item.tipoCentroLogistico === tipoCentroLogistico && item.hostcentro === hostcentro);
 
 
-                    if (!existingItem ) {
+                    if (descripcionCentro === codigoCentroExcluido) {
+
                         listaDescripcionYCodigo.push({ descripcionCentro, codigoCentro, hostcentro, tipoCentroLogistico });
                         todoscentros.push(hostcentro);
                         todostipos.push(tipoCentroLogistico);
-                        //(todoscentros);
+                    } else {
+
+                        const existingItem = listaDescripcionYCodigo.some(item => item.tipoCentroLogistico === tipoCentroLogistico && item.hostcentro === hostcentro);
+
+                        if (!existingItem) {
+                            listaDescripcionYCodigo.push({ descripcionCentro, codigoCentro, hostcentro, tipoCentroLogistico });
+                            todoscentros.push(hostcentro);
+                            todostipos.push(tipoCentroLogistico);
+                        }
                     }
                 }
             }
 
+            //console.log(listaDescripcionYCodigo);
             listaDescripcionYCodigoCompleta.push(listaDescripcionYCodigo);
             setlistalogistica(listaDescripcionYCodigo);
-        })
+        });
+
+
+
+
         window.addEventListener('click', handleOutsideClickFechaini);
         window.addEventListener('click', handleOutsideClickFechafin);
         window.addEventListener('click', handleOutsideClickSeleccionar);
@@ -701,44 +775,45 @@ const ReporteVentasCorales = () => {
         const selectedCentro = event.target.value;
         setCentroSeleccionado(selectedCentro);
         if (selectedCentro.descripcionCentro === "<<TODOS LOS CENTROS>>") {
-    
+
             const selectedCentroDataArray = listalogistica.filter(item => item.codigoCentro === selectedCentro.codigoCentro);
 
             if (selectedCentroDataArray.length > 0) {
-   
+
                 const serverHostSeleccionado = selectedCentroDataArray[0].hostcentro;
 
                 const tipocentroselecionado = selectedCentroDataArray[0].tipoCentroLogistico;
-   
+
                 const newArray = serverHostSeleccionado.map(url => url.replace("http:", "https:"));
 
                 const newArray2 = tipocentroselecionado.map(nombre => nombre.replace("TI", "B"))
-               
-                setServerseleccionadolista(newArray);
 
-                console.log(newArray2);
+                setServerseleccionadolista(newArray);
+                setTipocentroseleccionadolista(newArray2);
+
+                //console.log(newArray2);
             }
             setNombrecentro(selectedCentro.descripcionCentro);
         } else {
             const selectedCentroData = listalogistica.find(item => item.codigoCentro === selectedCentro.codigoCentro);
             if (selectedCentroData) {
                 const serverHostSeleccionado = selectedCentroData.hostcentro;
-              
+
                 const tipocentroselecionado = selectedCentroData.tipoCentroLogistico;
                 const serverHostSeleccionadoHttps = serverHostSeleccionado.replace("http:", "https:");
                 const tipocentroselecionadob = tipocentroselecionado.replace("TI", "B");
                 setServerseleccionado(serverHostSeleccionadoHttps);
                 setTipocentroseleccionado(tipocentroselecionadob);
-                console.log(serverHostSeleccionadoHttps);
-                console.log(tipocentroselecionadob);
-          
+                //console.log(serverHostSeleccionadoHttps);
+                //console.log(tipocentroselecionadob);
+
             }
             setNombrecentro("");
         }
 
     };
 
-  
+
 
 
     //Lo que se va  mostrar
@@ -904,7 +979,7 @@ const ReporteVentasCorales = () => {
 
                     &nbsp;
                     <div>
-                        {DataReporteventas != ""? (
+                        {DataReporteventas != "" ? (
                             // Si la base de datos 1 no está vacía, muestra la base de datos 1
                             <DataTablaar dataar={DataReporteventas.data} loading={loading} onPageChange={onPageChange} />
                         ) : (
@@ -913,7 +988,7 @@ const ReporteVentasCorales = () => {
                                 <DataTablaar2 dataar2={DataReporteventasCentros} loading={loading} onPageChange={onPageChange2} />
                             ) : (
                                 // Si ambas bases de datos están vacías, puedes mostrar un mensaje o tomar otra acción
-                                <DataTablaar3  />
+                                <DataTablaar3 />
                             )
                         )}
                     </div>
