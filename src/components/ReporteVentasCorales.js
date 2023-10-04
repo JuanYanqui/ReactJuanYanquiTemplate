@@ -41,8 +41,8 @@ const ReporteVentasCorales = () => {
     const [dialogVisibleError, setDialogVisibleError] = useState(false);
     const [centroSeleccionado, setCentroSeleccionado] = useState('');
     const [totalRecords2, setTotalRecords2] = useState(0);
-    //console.log(DataReporteventas);
-    //console.log(DataReporteventasCentros);
+    //console.log(serverseleccionadolista);
+    //console.log(tipocentroseleccionadolista);
     //Carga de Datos Automatica
     useEffect(() => {
         const fetchData = async () => {
@@ -54,13 +54,13 @@ const ReporteVentasCorales = () => {
                 const response = await repoteventascorales.loadVentasPaginacion(numCaja, fechamodiini, fechamodifin, serverseleccionado, tipocentroseleccionado, currentPage, rowsPerPage);
                 if (response1) {
                     response1.data = response1.data.map((dataArray) => {
-                        // Verificamos si la posición 31 es "B" y si la posición 14 contiene "CORAL"
+                       
                         if (dataArray[31] === "B" && dataArray[14].includes("CORAL")) {
-                          // Reemplazamos "CORAL" con "BIKESHOP" manteniendo el resto del contenido
-                          dataArray[14] = dataArray[14].replace("CORAL", "BIKESHOP");
+                           
+                            dataArray[14] = dataArray[14].replace("CORAL", "BIKESHOP");
                         }
                         return dataArray;
-                      });
+                    });
                     setReporteventas(response1);
                     const pageSize = rowsPerPage;
                     const totalCount = response.rowCount;
@@ -79,9 +79,9 @@ const ReporteVentasCorales = () => {
                 setFechamodfin(fechaFormateadafin);
 
                 let allData = [];
-                let totalRowCount = 0; // Variable para almacenar la sumatoria de rowCount
+                let totalRowCount = 0;
 
-                // Utiliza Promise.all para esperar a que todas las solicitudes se completen
+              
                 await Promise.all(serverseleccionadolista.map(async (servidor) => {
                     await Promise.all(tipocentroseleccionadolista.map(async (tipocentro) => {
                         try {
@@ -89,8 +89,8 @@ const ReporteVentasCorales = () => {
                             //console.log(data2);
 
                             const pageSize = rowsPerPage;
-                            const rowCount = data2.rowCount; // Obtén el valor rowCount de data2
-                            totalRowCount += rowCount; // Suma el valor rowCount a totalRowCount
+                            const rowCount = data2.rowCount; 
+                            totalRowCount += rowCount; 
 
                             const totalPages = Math.ceil(rowCount / pageSize);
 
@@ -110,9 +110,9 @@ const ReporteVentasCorales = () => {
                     }));
                 }));
                 allData = allData.map((dataArray) => {
-                    // Verificamos si la posición 31 es "B" y si la posición 14 contiene "CORAL"
+                   
                     if (dataArray[31] === "B" && dataArray[14].includes("CORAL")) {
-                        // Reemplazamos "CORAL" con "BIKESHOP" manteniendo el resto del contenido
+                    
                         dataArray[14] = dataArray[14].replace("CORAL", "BIKESHOP");
                     }
                     return dataArray;
@@ -347,20 +347,20 @@ const ReporteVentasCorales = () => {
                 }
                 setLoading(true);
             }
-    
+
             if (allData == null || allData.length == 0) {
                 showWarnexe();
             } else {
-                // Aplicar la modificación a los datos antes de crear el archivo Excel
+            
                 allData = allData.map((dataArray) => {
-                    // Verificamos si la posición 31 es "B" y si la posición 14 contiene "CORAL"
+   
                     if (dataArray[31] === "B" && dataArray[14].includes("CORAL")) {
-                        // Reemplazamos "CORAL" con "BIKESHOP" manteniendo el resto del contenido
+        
                         dataArray[14] = dataArray[14].replace("CORAL", "BIKESHOP");
                     }
                     return dataArray;
                 });
-    
+
                 setLoading(false);
                 const wb = XLSX.utils.book_new();
                 const ws = XLSX.utils.aoa_to_sheet([
@@ -422,7 +422,7 @@ const ReporteVentasCorales = () => {
                     ]),
                 ]);
                 ws['A1'].s = { halign: 'center', valign: 'center' };
-    
+
                 XLSX.utils.book_append_sheet(wb, ws, 'ReporteVentas');
                 XLSX.writeFile(wb, 'ReporteVentas.xlsx');
                 exelcreado();
@@ -434,96 +434,116 @@ const ReporteVentasCorales = () => {
             setDialogVisibleError(true);
         }
     };
-    
+
 
 
     const generarExcelpropio = () => {
         setLoading(true);
-    
-        setTimeout(() => {
-            if (DataReporteventasCentros == null || DataReporteventasCentros.length == 0) {
-                showWarnexe();
-            } else {
-                let DataReporteventasCentrosmodi = DataReporteventasCentros;
-                DataReporteventasCentrosmodi = DataReporteventasCentrosmodi.map((dataArray) => {
-                    // Verificamos si la posición 31 es "B" y si la posición 14 contiene "CORAL"
-                    if (dataArray[31] === "B" && dataArray[14].includes("CORAL")) {
-                        // Reemplazamos "CORAL" con "BIKESHOP" manteniendo el resto del contenido
-                        dataArray[14] = dataArray[14].replace("CORAL", "BIKESHOP");
-                    }
-                    return dataArray;
-                });
-    
-                const wb = XLSX.utils.book_new();
-                const ws = XLSX.utils.aoa_to_sheet([
-                    [
-                        "Recap",
-                        "Lote",
-                        "Bin",
-                        "Factura",
-                        "Fecha",
-                        "Codigo/tipo/nombre",
-                        "Total",
-                        "Otros",
-                        "Iva",
-                        "Val Recap",
-                        "Descripción",
-                        "#Tarjeta",
-                        "Tipo pago",
-                        "Autorización",
-                        "Voucher",
-                        "Forma pago",
-                        "Tipo diferido",
-                        "Plazo",
-                        "Meses gracia",
-                        "Descripción",
-                        "Código Tcredito",
-                        "Nombre marca",
-                        "Tipo pago",
-                        "Red",
-                        "Respuesta",
-                        "Grupo tarjeta"
-                    ],
-                    ...DataReporteventasCentrosmodi.map(item => [
-                        item[2],
-                        item[3],
-                        item[4],
-                        item[5],
-                        item[6],
-                        item[13],
-                        item[9],
-                        item[10],
-                        item[11],
-                        item[12],
-                        item[14],
-                        item[15],
-                        item[16],
-                        item[17],
-                        item[19],
-                        item[20],
-                        item[21],
-                        item[22],
-                        item[23],
-                        item[24],
-                        item[25],
-                        item[26],
-                        item[27],
-                        item[28],
-                        item[29],
-                        item[30],
-                    ]),
-                ]);
-    
-                ws['A1'].s = { halign: 'center', valign: 'center' };
-    
-                XLSX.utils.book_append_sheet(wb, ws, 'ReporteVentas');
-                XLSX.writeFile(wb, 'ReporteVentas.xlsx');
+        //console.log(DataReporteventasCentros);
+
+      
+        const tamanoLote = 10000; 
+
+      
+        let startIndex = 0;
+        let wb = XLSX.utils.book_new();
+
+        const generarSiguienteLote = () => {
+            const endIndex = startIndex + tamanoLote;
+            let lote = DataReporteventasCentros.slice(startIndex, endIndex);
+            lote = lote.map((dataArray) => {
+                       
+                if (dataArray[31] === "B" && dataArray[14].includes("CORAL")) {
+           
+                    dataArray[14] = dataArray[14].replace("CORAL", "BIKESHOP");
+                }
+                return dataArray;
+            });
+
+            if (lote.length === 0) {
+        
                 setLoading(false);
+                XLSX.writeFile(wb, 'ReporteVentas.xlsx', { bookType: 'xlsx', bookSST: false, type: 'base64' });
                 exelcreado();
+                return;
             }
-        }, 2000);
+
+            const ws = XLSX.utils.aoa_to_sheet([
+                [
+                    "Recap",
+                    "Lote",
+                    "Bin",
+                    "Factura",
+                    "Fecha",
+                    "Codigo/tipo/nombre",
+                    "Total",
+                    "Otros",
+                    "Iva",
+                    "Val Recap",
+                    "Descripción",
+                    "#Tarjeta",
+                    "Tipo pago",
+                    "Autorización",
+                    "Voucher",
+                    "Forma pago",
+                    "Tipo diferido",
+                    "Plazo",
+                    "Meses gracia",
+                    "Descripción",
+                    "Código Tcredito",
+                    "Nombre marca",
+                    "Tipo pago",
+                    "Red",
+                    "Respuesta",
+                    "Grupo tarjeta"
+                ],
+                ...lote.map(item => [
+                    item[2],
+                    item[3],
+                    item[4],
+                    item[5],
+                    item[6],
+                    item[13],
+                    item[9],
+                    item[10],
+                    item[11],
+                    item[12],
+                    item[14],
+                    item[15],
+                    item[16],
+                    item[17],
+                    item[19],
+                    item[20],
+                    item[21],
+                    item[22],
+                    item[23],
+                    item[24],
+                    item[25],
+                    item[26],
+                    item[27],
+                    item[28],
+                    item[29],
+                    item[30],
+                ]),
+            ]);
+
+            ws['A1'].s = { halign: 'center', valign: 'center' };
+
+            XLSX.utils.book_append_sheet(wb, ws, `Pagina ${startIndex / tamanoLote + 1}`);
+
+          
+            startIndex = endIndex;
+
+      
+            setTimeout(generarSiguienteLote, 1000);
+        };
+
+        generarSiguienteLote();
     };
-    
+
+
+
+
 
     //Mensajes Mostrar
     const showWarnexe = () => {
@@ -605,9 +625,9 @@ const ReporteVentasCorales = () => {
                     }));
 
                     allData = allData.map((dataArray) => {
-                        // Verificamos si la posición 31 es "B" y si la posición 14 contiene "CORAL"
+                       
                         if (dataArray[31] === "B" && dataArray[14].includes("CORAL")) {
-                            // Reemplazamos "CORAL" con "BIKESHOP" manteniendo el resto del contenido
+                   
                             dataArray[14] = dataArray[14].replace("CORAL", "BIKESHOP");
                         }
                         return dataArray;
@@ -615,6 +635,7 @@ const ReporteVentasCorales = () => {
 
                     setLoading(false);
                     setReporteventasCentros(allData);
+                    
                 } else {
                     setLoading(true);
                     const fechaFormateadaini = `${fechaini.getFullYear()}-${(fechaini.getMonth() + 1).toString().padStart(2, '0')}-${fechaini.getDate().toString().padStart(2, '0')} ${fechaini.getHours().toString().padStart(2, '0')}:${fechaini.getMinutes().toString().padStart(2, '0')}:${fechaini.getSeconds().toString().padStart(2, '0')}`;
@@ -623,18 +644,17 @@ const ReporteVentasCorales = () => {
                     setFechamodfin(fechaFormateadafin);
                     const response1 = await repoteventascorales.loadVentas(numCaja, fechaFormateadaini, fechaFormateadafin, serverseleccionado, tipocentroseleccionado, currentPage, rowsPerPage);
 
-                    const response = await repoteventascorales.loadVentasPaginacion(numCaja, fechaFormateadaini, fechaFormateadafin, serverseleccionado, tipocentroseleccionado, currentPage, rowsPerPage
-                    );
+                    const response = await repoteventascorales.loadVentasPaginacion(numCaja, fechaFormateadaini, fechaFormateadafin, serverseleccionado, tipocentroseleccionado, currentPage, rowsPerPage);
 
                     if (response1) {
                         response1.data = response1.data.map((dataArray) => {
-                            // Verificamos si la posición 31 es "B" y si la posición 14 contiene "CORAL"
+                           
                             if (dataArray[31] === "B" && dataArray[14].includes("CORAL")) {
-                              // Reemplazamos "CORAL" con "BIKESHOP" manteniendo el resto del contenido
-                              dataArray[14] = dataArray[14].replace("CORAL", "BIKESHOP");
+              
+                                dataArray[14] = dataArray[14].replace("CORAL", "BIKESHOP");
                             }
                             return dataArray;
-                          });
+                        });
                         setReporteventas(response1);
                         const pageSize = rowsPerPage;
                         const totalCount = response.rowCount;
@@ -716,35 +736,37 @@ const ReporteVentasCorales = () => {
         const listaDescripcionYCodigoCompleta = [];
         const todoscentros = [];
         const todostipos = [];
-
+        const descripcionestipos = [];
         repoteventascorales.centrologistico(sucursal, sociedad, centrol, nombreCentro, tipoCentro).then((data) => {
-            listaDescripcionYCodigo.push({ descripcionCentro: "<<TODOS LOS CENTROS>>", codigoCentro: "99999999999", hostcentro: todoscentros, tipoCentroLogistico: todostipos });
+            listaDescripcionYCodigo.push({ descripcionCentro: "<<TODOS LOS CENTROS>>", codigoCentro: "99999999999", hostcentro: todoscentros, tipoCentroLogistico: todostipos, descripcionesCentro: descripcionestipos });
             //console.log(data);
 
             const codigoCentroExcluido = "BIKESHOP RUMIÑAHUI";
-
+            const codigoCentroExcluido2 = "BIKESHOP LOS CEIBOS";
+            const codigoCentroExcluido3 = "BIKESHOP CUMBAYA";
             for (const dato of data) {
-                if (dato.serverHost && dato.serverHost.includes("http://app")&& !dato.serverHost.includes("shop")) {
+                if (dato.serverHost && dato.serverHost.includes("http://app")) {
                     let descripcionCentro = dato.descripcionCentro.split('/')[0].trim(); // Obtenemos la primera parte antes de '/'
                     descripcionCentro = descripcionCentro.replace("TIENDA", "").trim();
                     const codigoCentro = dato.id.codigoCentro;
                     const hostcentro = dato.serverHost;
                     const tipoCentroLogistico = dato.tipoCentroLogistico;
+                    const descricentros = descripcionCentro;
+                    if (descripcionCentro === codigoCentroExcluido || descripcionCentro === codigoCentroExcluido2 || descripcionCentro === codigoCentroExcluido3) {
 
-
-                    if (descripcionCentro === codigoCentroExcluido) {
-
-                        listaDescripcionYCodigo.push({ descripcionCentro, codigoCentro, hostcentro, tipoCentroLogistico });
+                        listaDescripcionYCodigo.push({ descripcionCentro, codigoCentro, hostcentro, tipoCentroLogistico, descricentros });
                         todoscentros.push(hostcentro);
                         todostipos.push(tipoCentroLogistico);
+                        descripcionestipos.push(descricentros);
                     } else {
 
                         const existingItem = listaDescripcionYCodigo.some(item => item.tipoCentroLogistico === tipoCentroLogistico && item.hostcentro === hostcentro);
 
                         if (!existingItem) {
-                            listaDescripcionYCodigo.push({ descripcionCentro, codigoCentro, hostcentro, tipoCentroLogistico });
+                            listaDescripcionYCodigo.push({ descripcionCentro, codigoCentro, hostcentro, tipoCentroLogistico, descricentros });
                             todoscentros.push(hostcentro);
                             todostipos.push(tipoCentroLogistico);
+                            descripcionestipos.push(descricentros);
                         }
                     }
                 }
@@ -773,45 +795,132 @@ const ReporteVentasCorales = () => {
     //Manejador para el cambio en el select
     const handleSelectChange = (event) => {
         const selectedCentro = event.target.value;
+        //console.log(selectedCentro);
         setCentroSeleccionado(selectedCentro);
+        
         if (selectedCentro.descripcionCentro === "<<TODOS LOS CENTROS>>") {
-
             const selectedCentroDataArray = listalogistica.filter(item => item.codigoCentro === selectedCentro.codigoCentro);
-
+            //console.log(selectedCentro.descripcionCentro);
             if (selectedCentroDataArray.length > 0) {
-
                 const serverHostSeleccionado = selectedCentroDataArray[0].hostcentro;
-
                 const tipocentroselecionado = selectedCentroDataArray[0].tipoCentroLogistico;
-
-                const newArray = serverHostSeleccionado.map(url => url.replace("http:", "https:"));
-
-                const newArray2 = tipocentroselecionado.map(nombre => nombre.replace("TI", "B"))
-
-                setServerseleccionadolista(newArray);
-                setTipocentroseleccionadolista(newArray2);
-
-                //console.log(newArray2);
+                const descripcionCentro = selectedCentroDataArray[0].descripcionesCentro;
+                const posicion = descripcionCentro.indexOf("BIKESHOP LA CONCEPCION");
+                const posicion2 = descripcionCentro.indexOf("BIKESHOP LOS CEIBOS");
+                const posicion3 = descripcionCentro.indexOf("BIKESHOP PORTOVIEJO-CENTRO");
+        
+                if (posicion !== -1) {
+                    //console.log(descripcionCentro);
+                    const newArray = serverHostSeleccionado.map(url => url.replace("http:", "https:"));
+                    const newArray2 = tipocentroselecionado.map(nombre => nombre.replace("TI", "B"));
+                    const newArrayWithPort = newArray.map(url => url + ':18443');
+        
+                    if (newArrayWithPort.length > posicion) {
+                        newArrayWithPort[posicion] = newArrayWithPort[posicion].replace(':18443', ':28443');
+                        //console.log("Nuevo arreglo de URLs con el puerto modificado:", newArrayWithPort);
+        
+                        // Ahora, también modificamos newArrayWithPort usando posicion2
+                        if (newArrayWithPort.length > posicion2) {
+                            newArrayWithPort[posicion2] = newArrayWithPort[posicion2].replace(':18443', ':38443');
+                            //console.log("Nuevo arreglo de URLs con el puerto modificado para posicion2:", newArrayWithPort);
+                        } else {
+                            //console.log(`La posición ${posicion2} está fuera del rango del arreglo.`);
+                        }
+        
+                       
+                        if (newArrayWithPort.length > posicion3) {
+                            newArrayWithPort[posicion3] = newArrayWithPort[posicion3].replace(':18443', ':28443');
+                            //console.log("Nuevo arreglo de URLs con el puerto modificado para posicion3:", newArrayWithPort);
+                        } else {
+                           // console.log(`La posición ${posicion3} está fuera del rango del arreglo.`);
+                        }
+        
+                        //console.log(newArrayWithPort);
+                       
+        
+                    } else {
+                        //console.log(`La posición ${posicion} está fuera del rango del arreglo.`);
+                    }
+                    setServerseleccionadolista(newArrayWithPort);
+                    setTipocentroseleccionadolista(newArray2);
+                } else {
+                    //console.log("No se encontró 'BIKESHOP LA CONCEPCION' en el arreglo de URLs.");
+                }
             }
             setNombrecentro(selectedCentro.descripcionCentro);
-        } else {
+        }
+        else {
             const selectedCentroData = listalogistica.find(item => item.codigoCentro === selectedCentro.codigoCentro);
-            if (selectedCentroData) {
-                const serverHostSeleccionado = selectedCentroData.hostcentro;
+            //console.log(selectedCentroData.descripcionCentro);
+            if (selectedCentroData.descripcionCentro == "BIKESHOP LOS CEIBOS") {
+                if (selectedCentroData) {
+                    const serverHostSeleccionado = selectedCentroData.hostcentro;
+                    const tipocentroselecionado = selectedCentroData.tipoCentroLogistico;
+                    const serverHostSeleccionadoHttps = serverHostSeleccionado.replace("http:", "https:");
 
-                const tipocentroselecionado = selectedCentroData.tipoCentroLogistico;
-                const serverHostSeleccionadoHttps = serverHostSeleccionado.replace("http:", "https:");
-                const tipocentroselecionadob = tipocentroselecionado.replace("TI", "B");
-                setServerseleccionado(serverHostSeleccionadoHttps);
-                setTipocentroseleccionado(tipocentroselecionadob);
-                //console.log(serverHostSeleccionadoHttps);
-                //console.log(tipocentroselecionadob);
+                    // Concatenate :18443 to the serverHostSeleccionadoHttps
+                    const serverHostWithPort = serverHostSeleccionadoHttps + ':38443';
 
+                    const tipocentroselecionadob = tipocentroselecionado.replace("TI", "B");
+                    setServerseleccionado(serverHostWithPort);
+                    setTipocentroseleccionado(tipocentroselecionadob);
+                    //console.log(serverHostWithPort);
+                    //console.log(tipocentroselecionadob);
+                }
+
+            }else if (selectedCentroData.descripcionCentro == "BIKESHOP LA CONCEPCION") {
+                if (selectedCentroData) {
+                    const serverHostSeleccionado = selectedCentroData.hostcentro;
+                    const tipocentroselecionado = selectedCentroData.tipoCentroLogistico;
+                    const serverHostSeleccionadoHttps = serverHostSeleccionado.replace("http:", "https:");
+
+                    // Concatenate :18443 to the serverHostSeleccionadoHttps
+                    const serverHostWithPort = serverHostSeleccionadoHttps + ':28443';
+
+                    const tipocentroselecionadob = tipocentroselecionado.replace("TI", "B");
+                    setServerseleccionado(serverHostWithPort);
+                    setTipocentroseleccionado(tipocentroselecionadob);
+                    //console.log(serverHostWithPort);
+                    //console.log(tipocentroselecionadob);
+                }
+            } else if(selectedCentroData.descripcionCentro == "BIKESHOP PORTOVIEJO-CENTRO"){
+                if (selectedCentroData) {
+                    const serverHostSeleccionado = selectedCentroData.hostcentro;
+                    const tipocentroselecionado = selectedCentroData.tipoCentroLogistico;
+                    const serverHostSeleccionadoHttps = serverHostSeleccionado.replace("http:", "https:");
+
+                    // Concatenate :18443 to the serverHostSeleccionadoHttps
+                    const serverHostWithPort = serverHostSeleccionadoHttps + ':28443';
+
+                    const tipocentroselecionadob = tipocentroselecionado.replace("TI", "B");
+                    setServerseleccionado(serverHostWithPort);
+                    setTipocentroseleccionado(tipocentroselecionadob);
+                    //console.log(serverHostWithPort);
+                    //console.log(tipocentroselecionadob);
+                }
+
+
+            }else {
+                if (selectedCentroData) {
+                    const serverHostSeleccionado = selectedCentroData.hostcentro;
+                    const tipocentroselecionado = selectedCentroData.tipoCentroLogistico;
+                    const serverHostSeleccionadoHttps = serverHostSeleccionado.replace("http:", "https:");
+
+                    // Concatenate :18443 to the serverHostSeleccionadoHttps
+                    const serverHostWithPort = serverHostSeleccionadoHttps + ':18443';
+
+                    const tipocentroselecionadob = tipocentroselecionado.replace("TI", "B");
+                    setServerseleccionado(serverHostWithPort);
+                    setTipocentroseleccionado(tipocentroselecionadob);
+                    //console.log(serverHostWithPort);
+                    //console.log(tipocentroselecionadob);
+                }
             }
+
             setNombrecentro("");
         }
-
     };
+
 
 
 

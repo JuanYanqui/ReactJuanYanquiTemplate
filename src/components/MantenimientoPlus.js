@@ -672,7 +672,7 @@ const MantenimientoPlus = () => {
                 const serverHostSeleccionadoHttps = serverHostSeleccionado.replace("http:", "https:");
 
                 setServerseleccionado(serverHostSeleccionadoHttps);
-                console.log(serverHostSeleccionadoHttps);
+                //console.log(serverHostSeleccionadoHttps);
 
             }
             setNombrecentro("");

@@ -105,7 +105,7 @@ export class ReporteVentasCoralesIntermediaws {
                 //const nuevaWsUrl = data.object.wsUrl;
                 //console.log(serverseleccionado)
                 //console.log(tipocentro)
-                const nuevaWsUrl = ":18443/retailws/ws/vouchers/loadVentas";
+                const nuevaWsUrl = "/retailws/ws/vouchers/loadVentas";
                 const nuevaSerUrl = serverseleccionado;
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
@@ -159,7 +159,7 @@ export class ReporteVentasCoralesIntermediaws {
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 //const nuevaWsUrl = data.object.wsUrl;
-                const nuevaWsUrl = ":18443/retailws/ws/vouchers/loadVentas";
+                const nuevaWsUrl = "/retailws/ws/vouchers/loadVentas";
                 const nuevaSerUrl = serverseleccionado;
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
