@@ -31,7 +31,7 @@ export class GestionPropuestasIntermediaws {
                     })
                     .then((response) => {
                         const objectData = JSON.parse(response.data.object);
-                        console.log(response)
+                        //console.log(response)
                         return objectData;
 
                     })
@@ -91,14 +91,14 @@ export class GestionPropuestasIntermediaws {
     }
 
     forzarValidacion(fecha, centro, usuario, ip) {
-        const ws_nombre = "INTERMEDIAWS_SOLPED_FORZAR_VALIDACION";
+        const ws_nombre = "INTERMEDIAWS_SOLPED_FORZAR_VALIDACION_MASIVO";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
                 const nuevaSerUrl = "http://192.168.56.167:8080";
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
-                //console.log(url);
+                console.log(url);
                 const requestData = {
                     object: JSON.stringify({
                         fecha: fecha,
@@ -116,7 +116,7 @@ export class GestionPropuestasIntermediaws {
                     })
                     .then((response) => {
                         const objectData = JSON.parse(response.data.object);
-                        return objectData;
+                        return response;
 
                     })
                     .catch((error) => {
@@ -133,16 +133,15 @@ export class GestionPropuestasIntermediaws {
     }
 
 
-    
     forzarPreaprobacion(fecha, centro, usuario, ip) {
-        const ws_nombre = "INTERMEDIAWS_SOLPED_FORZAR_PREAPROBACION";
+        const ws_nombre = "INTERMEDIAWS_SOLPED_FORZAR_PREAPROBACION_MASIVO";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
                 const nuevaSerUrl = "http://192.168.56.167:8080";
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
-                //console.log(url);
+                console.log(url);
                 const requestData = {
                     object: JSON.stringify({
                         fecha: fecha,
@@ -160,31 +159,33 @@ export class GestionPropuestasIntermediaws {
                     })
                     .then((response) => {
                         const objectData = JSON.parse(response.data.object);
-                        return objectData;
+                        return response;
 
                     })
                     .catch((error) => {
-                        console.error('Error GestionPropuestasIntermediaws metodo forzarPreaprobacion', error);
+                        console.error('Error GestionPropuestasIntermediaws metodo forzarValidacion', error);
                         window.alert('Ocurrió un error: ' + error.message);
                         return null;
                     });
             })
             .catch((error) => {
-                console.error('Error GestionPropuestasIntermediaws metodo forzarPreaprobacion', error);
+                console.error('Error GestionPropuestasIntermediaws metodo forzarValidacion', error);
                 window.alert('Ocurrió un error: ' + error.message);
                 return null;
             });
     }
+
+
 
     forzarAprobacion(fecha, centro, usuario, ip) {
-        const ws_nombre = "INTERMEDIAWS_SOLPED_FORZAR_APROBACION";
+        const ws_nombre = "INTERMEDIAWS_SOLPED_FORZAR_APROBACION_MASIVO";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
                 const nuevaSerUrl = "http://192.168.56.167:8080";
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
-                //console.log(url);
+                console.log(url);
                 const requestData = {
                     object: JSON.stringify({
                         fecha: fecha,
@@ -202,31 +203,32 @@ export class GestionPropuestasIntermediaws {
                     })
                     .then((response) => {
                         const objectData = JSON.parse(response.data.object);
-                        return objectData;
+                        return response;
 
                     })
                     .catch((error) => {
-                        console.error('Error GestionPropuestasIntermediaws metodo forzarAprobacion', error);
+                        console.error('Error GestionPropuestasIntermediaws metodo forzarValidacion', error);
                         window.alert('Ocurrió un error: ' + error.message);
                         return null;
                     });
             })
             .catch((error) => {
-                console.error('Error GestionPropuestasIntermediaws metodo forzarAprobacion', error);
+                console.error('Error GestionPropuestasIntermediaws metodo forzarValidacion', error);
                 window.alert('Ocurrió un error: ' + error.message);
                 return null;
             });
     }
+
 
     forzarEnvio(fecha, centro, usuario, ip) {
-        const ws_nombre = "INTERMEDIAWS_SOLPED_FORZAR_ENVIO";
+        const ws_nombre = "INTERMEDIAWS_SOLPED_FORZAR_ENVIO_MASIVO";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
                 const nuevaWsUrl = data.object.wsUrl;
                 const nuevaSerUrl = "http://192.168.56.167:8080";
                 //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
-                //console.log(url);
+                console.log(url);
                 const requestData = {
                     object: JSON.stringify({
                         fecha: fecha,
@@ -244,21 +246,22 @@ export class GestionPropuestasIntermediaws {
                     })
                     .then((response) => {
                         const objectData = JSON.parse(response.data.object);
-                        return objectData;
+                        return response;
 
                     })
                     .catch((error) => {
-                        console.error('Error GestionPropuestasIntermediaws metodo forzarEnvio', error);
+                        console.error('Error GestionPropuestasIntermediaws metodo forzarValidacion', error);
                         window.alert('Ocurrió un error: ' + error.message);
                         return null;
                     });
             })
             .catch((error) => {
-                console.error('Error GestionPropuestasIntermediaws metodo forzarEnvio', error);
+                console.error('Error GestionPropuestasIntermediaws metodo forzarValidacion', error);
                 window.alert('Ocurrió un error: ' + error.message);
                 return null;
             });
     }
+
 
     
 }

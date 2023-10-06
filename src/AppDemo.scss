@@ -5,6 +5,23 @@
       width: 200px;
     }
   }
+
+
+  .center-header {
+    text-align: center;
+}
+
+.custom-column {
+    text-align: center !important;
+}
+
+.center-column {
+    text-align: center !important;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+}
+
 .selected-menuitem {
     background-color: #ffffff;
     color: #ffffff;

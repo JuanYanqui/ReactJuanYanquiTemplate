@@ -255,7 +255,7 @@ const AprobarArticulos = ({ usuarioUppercase }) => {
             <div className='content-layout'>
                 <form>
                     <div className="p-col-12">
-                        <div >
+                        <div>
                             <span className="Fs20 FontBold">Aprobación Cambio Articulos</span>
                             <hr className="ui-separator ui-state-default ui-corner-all" />
                             <div className="p-grid p-formgrid">

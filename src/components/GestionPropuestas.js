@@ -7,13 +7,18 @@ import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
 import { ArticulosIntermediaws } from '../serviceIntermedia/ArticulosIntermediaws';
 import { Checkbox } from 'primereact/checkbox';
-import "../assets/theme/indigo/theme-light.css";
+
 import { GestionPropuestasIntermediaws } from '../serviceIntermedia/GestionPropuestasIntermediaws';
 import { Calendar } from 'primereact/calendar';
+
+
 const GestionPropuestas = ({ usuarioUppercase }) => {
     const [isDialogVisible, setDialogVisible] = useState(false);
     const [visible, setVisible] = useState(false);
     const [position, setPosition] = useState('center');
+    const [centrostraidos, setCentrostraidos] = useState([]);
+    const [valorestraidos, setValorestraidos] = useState(0);
+    const [estadostraidos, setEstadostraidos] = useState(0);
     const toast = useRef(null);
     const fechaActual = new Date();
     fechaActual.setHours(0, 0, 0, 0);
@@ -124,35 +129,6 @@ const GestionPropuestas = ({ usuarioUppercase }) => {
 
 
     const DataTablaar = ({ dataar }) => {
-
-
-        /*const paso1 = (rowData) => {
-            return (
-                <div className="flex flex-wrap gap-2">
-                    <i className="fa-solid fa-forward" style={{ fontSize: '1.3rem' }} onClick={() => procedepaso1(rowData)} ></i>
-                </div>
-            );
-        };
-
-        const paso2 = (rowData) => {
-            return (
-                <div className="flex flex-wrap gap-2">
-                    <i className="fa-solid fa-forward" style={{ fontSize: '1.3rem' }} onClick={() => procedepaso2(rowData)} ></i>
-                </div>
-            );
-        };
-
-        const paso3 = (estadoInt) => {
-            return (
-                <div className="flex flex-wrap gap-2">
-                    <i className="fa-solid fa-forward" style={{ fontSize: '1.3rem' }} onClick={() => procedepaso3(rowData)} ></i>
-                </div>
-            );
-        };*/
-
-
-
-
         const estadoTextos = {
             0: 'Pendientes',
             2: 'Validados',
@@ -181,58 +157,58 @@ const GestionPropuestas = ({ usuarioUppercase }) => {
             if (estadoInt === 0) {
 
                 return (
-                    <div className="flex flex-wrap gap-2">
-                        <i className="fa-solid fa-forward" style={{ fontSize: '1.3rem' }} onClick={() => procedepaso3(centro, valor)} ></i>
+                    <div className="flex flex-wrap gap-2 p-text-center">
+                        <i className="pi pi-forward" style={{ fontSize: '1.7rem' }} onClick={() => procedepaso3(centro, valor, estadoInt)} ></i>
                     </div>
                 );
             } else if (estadoInt === 2) {
                 return (
-                    <div className="flex flex-wrap gap-2">
-                        <i className="fa-solid fa-forward" style={{ fontSize: '1.3rem' }} onClick={() => procedepaso3(centro, valor)} ></i>
+                    <div className="flex flex-wrap gap-2 p-text-center">
+                        <i className="pi pi-forward" style={{ fontSize: '1.7rem' }} onClick={() => procedepaso3(centro, valor, estadoInt)} ></i>
                     </div>
                 );
             } else if (estadoInt === 3) {
                 return (
-                    <div className="flex flex-wrap gap-2">
-                        <i className="fa-solid fa-forward" style={{ fontSize: '1.3rem' }} onClick={() => procedepaso3(centro, valor)} ></i>
+                    <div className="flex flex-wrap gap-2 p-text-center">
+                        <i className="pi pi-forward" style={{ fontSize: '1.7rem' }} onClick={() => procedepaso3(centro, valor, estadoInt)} ></i>
                     </div>
                 );
             } else if (estadoInt === 4) {
                 return (
-                    <div className="flex flex-wrap gap-2">
-                        <i className="fa-solid fa-forward" style={{ fontSize: '1.3rem' }} onClick={() => procedepaso3(centro, valor)} ></i>
+                    <div className="flex flex-wrap gap-2 p-text-center">
+                        <i className="pi pi-forward" style={{ fontSize: '1.7rem' }} onClick={() => procedepaso3(centro, valor, estadoInt)} ></i>
                     </div>
                 );
             } else {
-                // Si el estado no coincide con ninguno de los casos anteriores, puedes devolver algo diferente o null.
                 return null;
             }
         };
 
 
         const procesoindividual = (estadoInt, centro) => {
+            const valor = 20;
             if (estadoInt === 0) {
                 return (
-                    <div className="flex flex-wrap gap-2">
-                        <i className="fa-solid fa-forward-step" style={{ fontSize: '1.3rem' }} onClick={() => procedepaso1(centro)} ></i>
+                    <div className="flex flex-wrap gap-2 p-text-center">
+                        <i className="pi pi-play" style={{ fontSize: '1.3rem' }} onClick={() => procedepaso1(centro, valor, estadoInt)} ></i>
                     </div>
                 );
             } else if (estadoInt === 2) {
                 return (
-                    <div className="flex flex-wrap gap-2">
-                        <i className="fa-solid fa-forward-step" style={{ fontSize: '1.3rem' }} onClick={() => procedepaso2(centro)} ></i>
+                    <div className="flex flex-wrap gap-2 p-text-center">
+                        <i className="pi pi-play" style={{ fontSize: '1.3rem' }} onClick={() => procedepaso2(centro, valor, estadoInt)} ></i>
                     </div>
                 );
             } else if (estadoInt === 3) {
                 return (
-                    <div className="flex flex-wrap gap-2">
-                        <i className="fa-solid fa-forward-step" style={{ fontSize: '1.3rem' }} onClick={() => procedepaso3(centro)} ></i>
+                    <div className="flex flex-wrap gap-2 p-text-center">
+                        <i className="pi pi-play " style={{ fontSize: '1.3rem' }} onClick={() => procedepaso3(centro, valor, estadoInt)} ></i>
                     </div>
                 );
             } else if (estadoInt === 4) {
                 return (
-                    <div className="flex flex-wrap gap-2">
-                        <i className="fa-solid fa-forward-step" style={{ fontSize: '1.3rem' }} onClick={() => procedepaso4(centro)} ></i>
+                    <div className="flex flex-wrap gap-2 p-text-center">
+                        <i className="pi pi-play" style={{ fontSize: '1.3rem' }} onClick={() => procedepaso4(centro, valor, estadoInt)} ></i>
                     </div>
                 );
             } else {
@@ -242,24 +218,24 @@ const GestionPropuestas = ({ usuarioUppercase }) => {
         const todosLosCentros = DataGestion.map((registro) => registro.centro);
 
         const columns = categoriasEstado.map((estadoInt) => (
-            <Column key={estadoInt} field={`estado${estadoInt}`} header={
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'center' }}>
-                    <span>{estadoTextos[estadoInt]}</span>
-                    &nbsp; &nbsp; {Todosprocesos(null, estadoInt, todosLosCentros)}
-                </div>
-            } body={rowData => (
-                <div style={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-                    <span>{rowData[`estado${estadoInt}`]}</span>
-                    &nbsp; &nbsp; {procesoindividual(estadoInt, rowData.centro)}
-                </div>
-            )} style={{ width: '20px', textAlign: 'center' }} />
+            <Column
+                key={estadoInt}
+                field={`estado${estadoInt}`}
+                header={
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', verticalAlign: 'middle', textAlign: 'center' }}>
+                        <span className="p-text-center">{estadoTextos[estadoInt]}</span>
+                        &nbsp; &nbsp; {Todosprocesos(null, estadoInt, todosLosCentros)}
+                    </div>
+                }
+                body={rowData => (
+                    <div style={{ width: '100px', verticalAlign: 'middle', textAlign: 'center' }}>
+                        <span style={{ width: '100px', verticalAlign: 'middle', textAlign: 'center' }}>{rowData[`estado${estadoInt}`]}</span>
+                        &nbsp; &nbsp; {procesoindividual(estadoInt, rowData.centro)}
+                    </div>
+                )}
+                style={{ width: '100px', verticalAlign: 'middle', textAlign: 'center' }}
+            />
         ));
-
-
-
-
-
-
 
 
         const dataTabla = dataar.map((registro) => {
@@ -276,148 +252,87 @@ const GestionPropuestas = ({ usuarioUppercase }) => {
             return data;
         });
 
+        useEffect(() => {
+            // Encuentra el encabezado de la columna por su clase y aplícale la clase CSS personalizada
+            const header = document.querySelector('.center-header');
+            if (header) {
+                header.classList.add('center-header');
+            }
+        }, []);
+
         return (
             <div>
-                <DataTable value={dataTabla}
-                    paginator
-                    totalRecords={totalRecords}
-                    onPage={onPageChange}
-                    rows={rowsPerPage}
-                    first={currentPage * rowsPerPage}
-                    rowsPerPageOptions={[5, 10, 25]}
-                    paginatorPosition="both"
-                >
-                    <Column field="centro" header="Centro" style={{ width: '50px' }} />
-                    <Column field="nombre" header="Nombre" style={{ width: '120px' }} />
-                    {columns}
-                </DataTable>
+             <DataTable
+            value={dataTabla}
+            paginator
+            totalRecords={totalRecords}
+            onPage={onPageChange}
+            rows={rowsPerPage}
+            first={currentPage * rowsPerPage}
+            rowsPerPageOptions={[5, 10, 25]}
+            paginatorPosition="both"
+        >
+            <Column
+                field="centro"
+                header="Centro"
+                style={{ width: '50px', verticalAlign: 'middle' }}
+                className="center-header"
+            />
+            <Column
+                field="nombre"
+                header="Nombre"
+                style={{ width: '120px', verticalAlign: 'middle' }}
+                className="center-header"
+            />
+            {columns}
+        </DataTable>
             </div>
         );
     };
 
 
 
-    const obtenerdatos = (rowData) => {
-        console.log(rowData.centro);
-        console.log(usuarioUppercase);
-    }
-
-
-    const procedepaso1 = (centros, valor) => {
-        const fechaFormateadaini = `${fechaini.getFullYear()}-${(fechaini.getMonth() + 1).toString().padStart(2, '0')}-${fechaini.getDate().toString().padStart(2, '0')} ${fechaini.getHours().toString().padStart(2, '0')}:${fechaini.getMinutes().toString().padStart(2, '0')}:${fechaini.getSeconds().toString().padStart(2, '0')}`;
-        const usuario = usuarioUppercase;
-        const ip = usuarioUppercase;
-        if (valor == 1) {
-            const promesas = centros.map((centro) => {
-                return gestionprodata.forzarValidacion(fechaFormateadaini, centro, usuario, ip);
-            });
-
-            Promise.all(promesas)
-                .then((results) => {
-                    console.log(results);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        } else {
-
-            gestionprodata.forzarValidacion(fechaFormateadaini, centros, usuario, ip).then((response) => {
-                console.log(response);
-            });
-        }
-
-    }
-
-    const procedepaso2 = (centros, valor) => {
-        const fechaFormateadaini = `${fechaini.getFullYear()}-${(fechaini.getMonth() + 1).toString().padStart(2, '0')}-${fechaini.getDate().toString().padStart(2, '0')} ${fechaini.getHours().toString().padStart(2, '0')}:${fechaini.getMinutes().toString().padStart(2, '0')}:${fechaini.getSeconds().toString().padStart(2, '0')}`;
-        const usuario = usuarioUppercase;
-        const ip = usuarioUppercase;
-        if (valor == 1) {
-            const promesas = centros.map((centro) => {
-                return gestionprodata.forzarPreaprobacion(fechaFormateadaini, centro, usuario, ip);
-            });
-
-            Promise.all(promesas)
-                .then((results) => {
-                    console.log(results);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        } else {
-            gestionprodata.forzarPreaprobacion(fechaFormateadaini, centros, usuario, ip).then((response) => {
-                console.log(response);
-            });
-        }
-    }
-
-    const procedepaso3 = (centros, valor) => {
-        const fechaFormateadaini = `${fechaini.getFullYear()}-${(fechaini.getMonth() + 1).toString().padStart(2, '0')}-${fechaini.getDate().toString().padStart(2, '0')} ${fechaini.getHours().toString().padStart(2, '0')}:${fechaini.getMinutes().toString().padStart(2, '0')}:${fechaini.getSeconds().toString().padStart(2, '0')}`;
-        const usuario = usuarioUppercase;
-        const ip = usuarioUppercase;
-        if (valor == 1) {
-            const promesas = centros.map((centro) => {
-                return gestionprodata.forzarAprobacion(fechaFormateadaini, centro, usuario, ip);
-            });
-
-            Promise.all(promesas)
-                .then((results) => {
-                    console.log(results);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        } else {
-
-            gestionprodata.forzarAprobacion(fechaFormateadaini, centros, usuario, ip).then((response) => {
-                console.log(response);
-            });
-        }
-    }
-
-    const procedepaso4 = (centros, valor) => {
-        const fechaFormateadaini = `${fechaini.getFullYear()}-${(fechaini.getMonth() + 1).toString().padStart(2, '0')}-${fechaini.getDate().toString().padStart(2, '0')} ${fechaini.getHours().toString().padStart(2, '0')}:${fechaini.getMinutes().toString().padStart(2, '0')}:${fechaini.getSeconds().toString().padStart(2, '0')}`;
-        const usuario = usuarioUppercase;
-        const ip = usuarioUppercase;
-        if (valor == 1) {
-            const promesas = centros.map((centro) => {
-                return gestionprodata.forzarEnvio(fechaFormateadaini, centro, usuario, ip);
-            });
-
-            Promise.all(promesas)
-                .then((results) => {
-                    console.log(results);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        } else {
-
-            gestionprodata.forzarEnvio(fechaFormateadaini, centros, usuario, ip).then((response) => {
-                console.log(response);
-            });
-        }
-    }
-    //Almacena el id de la categoria selecionada
-    /*const handleIconClick = (rowData) => {
-        setSelectedCode(rowData[0]);
+    const procedepaso1 = (centros, valor, estadoInt) => {
         setVisible(true);
-    };*/
+        setPosition('top');
+        setEstadostraidos(estadoInt);
+        setValorestraidos(valor);
+        setCentrostraidos(centros);
+    }
 
+
+    const procedepaso2 = (centros, valor, estadoInt) => {
+        setVisible(true);
+        setPosition('top');
+        setEstadostraidos(estadoInt);
+        setValorestraidos(valor);
+        setCentrostraidos(centros);
+
+    }
+
+    const procedepaso3 = (centros, valor, estadoInt) => {
+        setVisible(true);
+        setPosition('top');
+        setEstadostraidos(estadoInt);
+        setValorestraidos(valor);
+        setCentrostraidos(centros);
+
+    }
+
+
+    const procedepaso4 = (centros, valor, estadoInt) => {
+        setVisible(true);
+        setPosition('top');
+        setEstadostraidos(estadoInt);
+        setValorestraidos(valor);
+        setCentrostraidos(centros);
+    }
 
     //Abre el dialogo Categoria
     const openNew = (position) => {
         setPosition(position);
         setDialogVisible(true);
     };
-
-
-    //Cierra el dialog Categoria y limpia los articulos selecionados
-    /* const hideDialog = () => {
-         setDialogVisible(false);
-         setSelectedItems([]);
-     };*/
-
 
 
     //Mensajes Mostrar
@@ -433,8 +348,8 @@ const GestionPropuestas = ({ usuarioUppercase }) => {
         toast.current.show({ severity: 'error', summary: 'Error', detail: 'No seleciono ningun articulo.', life: 3000 });
     }
 
-    const showErrorNivel = () => {
-        toast.current.show({ severity: 'warn', summary: 'Warning', detail: 'La Categoria debe pertencer a Nivel 4.', life: 3000 });
+    const showErrorPeticion = () => {
+        toast.current.show({ severity: 'warn', summary: 'Warning', detail: 'La petición no se pudo completar..', life: 3000 });
     }
 
 
@@ -442,16 +357,141 @@ const GestionPropuestas = ({ usuarioUppercase }) => {
 
 
     //Opcion del dialogo no metodo para cerrar el dialogo y terminar proceso
-    const handleNoClick = () => {
-        setVisible(false);
-        showErrorcancel();
+    const handleIconClick = () => {
+        const fechaFormateadaini = `${fechaini.getFullYear()}-${(fechaini.getMonth() + 1).toString().padStart(2, '0')}-${fechaini.getDate().toString().padStart(2, '0')} ${fechaini.getHours().toString().padStart(2, '0')}:${fechaini.getMinutes().toString().padStart(2, '0')}:${fechaini.getSeconds().toString().padStart(2, '0')}`;
+        const usuario = usuarioUppercase;
+        const ip = usuarioUppercase;
+        if (valorestraidos == 1) {
+            if (estadostraidos == 0) {
+
+                const promesas = centrostraidos.map((centro) => {
+                    return gestionprodata.forzarValidacion(fechaFormateadaini, centro, usuario, ip);
+                });
+
+                Promise.all(promesas)
+                    .then((results) => {
+                        console.log(results);
+                        handleCargaDatos();
+                        setVisible(false);
+                        showSuccess();
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+
+            } else if (estadostraidos == 2) {
+                const promesas = centrostraidos.map((centro) => {
+                    return gestionprodata.forzarPreaprobacion(fechaFormateadaini, centro, usuario, ip);
+                });
+
+                Promise.all(promesas)
+                    .then((results) => {
+                        console.log(results);
+                        handleCargaDatos();
+                        setVisible(false);
+                        showSuccess();
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            } else if (estadostraidos == 3) {
+                const promesas = centrostraidos.map((centro) => {
+                    return gestionprodata.forzarAprobacion(fechaFormateadaini, centro, usuario, ip);
+                });
+
+                Promise.all(promesas)
+                    .then((results) => {
+                        console.log(results);
+                        handleCargaDatos();
+                        setVisible(false);
+                        showSuccess();
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            } else if (estadostraidos == 4) {
+                const promesas = centrostraidos.map((centro) => {
+                    return gestionprodata.forzarEnvio(fechaFormateadaini, centro, usuario, ip);
+                });
+
+                Promise.all(promesas)
+                    .then((results) => {
+                        console.log(results);
+                        handleCargaDatos();
+                        setVisible(false);
+                        showSuccess();
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            } else {
+                return null;
+            }
+
+        } else {
+            if (estadostraidos == 0) {
+
+                gestionprodata.forzarValidacion(fechaFormateadaini, centrostraidos, usuario, ip).then((response) => {
+                    if (response.data.status == 1) {
+                        handleCargaDatos();
+                        setVisible(false);
+                        showSuccess();
+                    } else {
+                        showErrorPeticion();
+                    }
+
+                });
+            } else if (estadostraidos == 2) {
+
+                gestionprodata.forzarPreaprobacion(fechaFormateadaini, centrostraidos, usuario, ip).then((response) => {
+                    if (response.data.status == 1) {
+                        handleCargaDatos();
+                        setVisible(false);
+                        showSuccess();
+                    } else {
+                        showErrorPeticion();
+                    }
+                });
+            } else if (estadostraidos == 3) {
+
+                gestionprodata.forzarAprobacion(fechaFormateadaini, centrostraidos, usuario, ip).then((response) => {
+                    if (response.data.status == 1) {
+                        handleCargaDatos();
+                        setVisible(false);
+                        showSuccess();
+                    } else {
+                        showErrorPeticion();
+                    }
+                });
+            } else if (estadostraidos == 4) {
+
+                gestionprodata.forzarEnvio(fechaFormateadaini, centrostraidos, usuario, ip).then((response) => {
+                    if (response.data.status == 1) {
+                        handleCargaDatos();
+                        setVisible(false);
+                        showSuccess();
+                    } else {
+                        showErrorPeticion();
+                    }
+                });
+            } else {
+                return null;
+            }
+        }
+
     };
 
+    const handleIconClickNo = () => {
+        setVisible(false);
+        showErrorcancel();
+
+    };
 
     //Footer del dilogo de opciones si y no 
     const footerContent = (
         <div>
-            <Button label="No" icon="pi pi-times" onClick={handleNoClick} className="p-button-text" />
+            <Button label="NO" icon="pi pi-times" onClick={handleIconClickNo} className="p-button-text" />
+            <Button label="SI" icon="pi pi-check" onClick={handleIconClick} className="p-button-text" />
         </div>
     );
 
@@ -555,7 +595,7 @@ const GestionPropuestas = ({ usuarioUppercase }) => {
                 <form>
                     <div className="p-col-12">
                         <div >
-                            <span className="Fs20 FontBold">Gestion de Propúestas</span>
+                            <span className="Fs20 FontBold">Gestion de Propuestas</span>
                             <hr className="ui-separator ui-state-default ui-corner-all" />
                             <div className="p-grid p-formgrid">
                                 <span
@@ -635,7 +675,7 @@ const GestionPropuestas = ({ usuarioUppercase }) => {
 
                 <Dialog header="Confirmación" visible={visible} position={position} style={{ width: '30vw' }} onHide={() => setVisible(false)} footer={footerContent} draggable={false} resizable={false}>
                     <p className="m-0">
-                        Esta seguro de agregar esta categoria.
+                        Esta seguro de realizar este paso.
                     </p>
                 </Dialog>
                 <Toast ref={toast} />
