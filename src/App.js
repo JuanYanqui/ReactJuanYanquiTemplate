@@ -436,7 +436,7 @@ const App = ({ userData, usuarioUppercase }) => {
             const url = window.location.href;
             usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
                 const datanueva = datas
-                /*datas.object.forEach((item) => {
+                datas.object.forEach((item) => {
                     const existingUrls = datas.object.map(item => item.url);
                     const existingUrlsHijos = datas.object.flatMap(item => {
                         if (item.hijos && Array.isArray(item.hijos)) {
@@ -459,7 +459,7 @@ const App = ({ userData, usuarioUppercase }) => {
                          navigate("/rsap/access");
                         return;
                     }
-                });*/
+                });
             });
         };
 
