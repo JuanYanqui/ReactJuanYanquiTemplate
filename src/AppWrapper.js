@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import App from './App';
-import Login from './pages/Login';
-import Error from './pages/Error';
-import NotFound from './pages/NotFound';
 import Access from './pages/Access';
-import Landing from './pages/Landing';
 import ControlArticulos from './components/ControlArticulos';
 import AprobarArticulos from './components/AprobarArticulos';
 import EstadosCuenta from './components/EstadosCuenta';
 import VentasTargetas from './components/VentasTargetas';
 import ReporteVentasCorales from './components/ReporteVentasCorales';
 import MantenimientoPlus from './components/MantenimientoPlus';
+import GestionPropuestas from './components/GestionPropuestas';
 
 const AppWrapper = ({ userData, usuarioUppercase }) => {
     let location = useLocation();
@@ -48,6 +45,7 @@ const AppWrapper = ({ userData, usuarioUppercase }) => {
                     <Route path="VentasTarjeta" element={<VentasTargetas />} />
                     <Route path="ReporteVentasCorales" element={<ReporteVentasCorales />} />
                     <Route path="MantenimientoAbcPlus" element={<MantenimientoPlus />} />
+                    <Route path="GestionPropuestas" element={<GestionPropuestas usuarioUppercase={usuarioUppercase}/>} />
                 </Route>
             </Route>
         </Routes>

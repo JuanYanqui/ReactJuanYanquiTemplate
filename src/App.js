@@ -19,6 +19,7 @@ import { UsuarioService } from './service/UsuarioService';
 import '@fortawesome/fontawesome-free/css/all.css';
 import ReporteVentasCorales from './components/ReporteVentasCorales';
 import MantenimientoPlus from './components/MantenimientoPlus';
+import GestionPropuestas from './components/GestionPropuestas';
 export const RTLContext = React.createContext();
 
 const App = ({ userData, usuarioUppercase }) => {
@@ -503,6 +504,8 @@ const App = ({ userData, usuarioUppercase }) => {
                             <Route path="/VentasTarjeta" element={<VentasTargetas colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                             <Route path="/ReporteVentasCorales" element={<ReporteVentasCorales colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
                             <Route path="/MantenimientoAbcPlus" element={<MantenimientoPlus colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+                            <Route path="/GestionPropuestas" element={<GestionPropuestas usuarioUppercase={usuarioUppercase}  colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={(e) => setNewThemeLoaded(e)} location={location} />} />
+
 
                         </Routes>
                     </div>
