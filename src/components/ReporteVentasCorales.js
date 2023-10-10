@@ -442,7 +442,7 @@ const ReporteVentasCorales = () => {
         //console.log(DataReporteventasCentros);
 
       
-        const tamanoLote = 10000; 
+        const tamanoLote = 80000; 
 
       
         let startIndex = 0;
@@ -545,6 +545,7 @@ const ReporteVentasCorales = () => {
 
 
 
+
     //Mensajes Mostrar
     const showWarnexe = () => {
         toast.current.show({ severity: 'warn', summary: 'Warn Message', detail: 'No hay datos existentes' })
@@ -596,34 +597,37 @@ const ReporteVentasCorales = () => {
                     let allData = [];
                     let totalRowCount = 0;
 
+                    const processedCombos = new Set(); // Almacena las combinaciones únicas de servidor y tipo procesadas
+
                     await Promise.all(serverseleccionadolista.map(async (servidor) => {
                         await Promise.all(tipocentroseleccionadolista.map(async (tipo) => {
                             try {
-                                const data2 = await repoteventascorales.loadVentasPaginacion(numCaja, fechaFormateadaini, fechaFormateadafin, servidor, tipo, currentPage, rowsPerPage);
-                                //console.log(data2);
-
-                                const pageSize = rowsPerPage;
-                                const rowCount = data2.rowCount;
-                                totalRowCount += rowCount;
-
-                                const totalPages = Math.ceil(rowCount / pageSize);
-
-                                for (let page = 0; page < totalPages; page++) {
-                                    const dataPage = await repoteventascorales.loadVentas(numCaja, fechaFormateadaini, fechaFormateadafin, servidor, tipo, page, rowsPerPage);
-                                    //console.log(dataPage);
-
-                                    if (dataPage && dataPage.data) {
-                                        allData = [...allData, ...dataPage.data];
-                                    } else {
-                                        throw new Error(dataPage?.data?.message || 'Error desconocido');
+                                const combo = `${servidor}-${tipo}`;
+                                if (!processedCombos.has(combo)) {
+                                    processedCombos.add(combo);
+                    
+                                    const data2 = await repoteventascorales.loadVentasPaginacion(numCaja, fechaFormateadaini, fechaFormateadafin, servidor, tipo, currentPage, rowsPerPage);
+                                    const pageSize = 100;
+                                    const rowCount = data2.rowCount;
+                                    totalRowCount += rowCount;
+                    
+                                    const totalPages = Math.ceil(rowCount / pageSize);
+                    
+                                    for (let page = 0; page < totalPages; page++) {
+                                        const dataPage = await repoteventascorales.loadVentas(numCaja, fechaFormateadaini, fechaFormateadafin, servidor, tipo, page, rowsPerPage);
+                                        if (dataPage && dataPage.data) {
+                                            allData = [...allData, ...dataPage.data];
+                                        } else {
+                                            throw new Error(dataPage?.data?.message || 'Error desconocido');
+                                        }
                                     }
                                 }
                             } catch (error) {
-                                console.error('Error en la solicitud:', error);
+                                return null;
                             }
                         }));
                     }));
-
+                    
                     allData = allData.map((dataArray) => {
                        
                         if (dataArray[31] === "B" && dataArray[14].includes("CORAL")) {
@@ -842,6 +846,8 @@ const ReporteVentasCorales = () => {
                         //console.log(`La posición ${posicion} está fuera del rango del arreglo.`);
                     }
                     setServerseleccionadolista(newArrayWithPort);
+                     //(newArrayWithPort)
+                      //console.log(newArray2)
                     setTipocentroseleccionadolista(newArray2);
                 } else {
                     //console.log("No se encontró 'BIKESHOP LA CONCEPCION' en el arreglo de URLs.");

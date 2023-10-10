@@ -434,7 +434,7 @@ const App = ({ userData, usuarioUppercase }) => {
     useEffect(() => {
         const verificarYRedirigir = async () => {
             const url = window.location.href;
-            usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
+            /*usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
                 const datanueva = datas
                 datas.object.forEach((item) => {
                     const existingUrls = datas.object.map(item => item.url);
@@ -460,7 +460,7 @@ const App = ({ userData, usuarioUppercase }) => {
                         return;
                     }
                 });
-            });
+            });*/
         };
 
         verificarYRedirigir();

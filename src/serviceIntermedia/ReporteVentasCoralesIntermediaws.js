@@ -98,36 +98,39 @@ export class ReporteVentasCoralesIntermediaws {
             });
     }
 
-    loadVentas(numCaja, fechaInicio, fechaFin,serverseleccionado,tipocentro, currentPage,rowsPerPage) {
+    loadVentas(numCaja, fechaInicio, fechaFin, serverseleccionado, tipocentro, currentPage, rowsPerPage) {
         const ws_nombre = "INTERMEDIAWS_LISTAR_CENTRO";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
-                //const nuevaWsUrl = data.object.wsUrl;
-                //console.log(serverseleccionado)
-                //console.log(tipocentro)
                 const nuevaWsUrl = "/retailws/ws/vouchers/loadVentas";
                 const nuevaSerUrl = serverseleccionado;
-                //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
-                //console.log(url)
+                //console.log(url);
+    
+                numCaja = numCaja;
+                fechaInicio = fechaInicio;
+                fechaFin = fechaFin;
+                tipocentro = tipocentro;
+    
                 const paginationInfo = {
                     count: false,
                     pagesize: rowsPerPage,
                     first: currentPage * rowsPerPage,
                     sortBy: {},
                     filterBy: {}
-                  };
-                //console.log(url);
+                };
+    
                 const requestData = {
                     object: JSON.stringify({
                         numCaja: numCaja,
                         fechaInicio: fechaInicio,
                         fechaFin: fechaFin,
-                        tipocentro:tipocentro,
+                        tipocentro: tipocentro,
                         lazyInfo: JSON.stringify(paginationInfo)
                     }),
                     rowCount: 0,
                 };
+    
                 return axios
                     .post(url, requestData, {
                         headers: {
@@ -135,50 +138,48 @@ export class ReporteVentasCoralesIntermediaws {
                         }
                     })
                     .then((response) => {
-                        const objectData = JSON.parse(response.data.object);
-                        ///console.log(objectData);
-                        return objectData;
-
+                        return response.data ? JSON.parse(response.data.object) : null;
                     })
-                    .catch((error) => {
-                        console.error('Error ReporteVentasCoralesIntermediaws metodo centrologistico', error);
-                        window.alert('Ocurrió un error: ' + error.message);
+                    .catch((error) => {;
                         return null;
                     });
             })
             .catch((error) => {
-                console.error('Error ReporteVentasCoralesIntermediaws metodo centrologistico', error);
-                window.alert('Ocurrió un error: ' + error.message);
                 return null;
             });
     }
-
-
-    loadVentasPaginacion(numCaja, fechaInicio, fechaFin,serverseleccionado, tipocentro) {
+    
+    loadVentasPaginacion(numCaja, fechaInicio, fechaFin, serverseleccionado, tipocentro) {
         const ws_nombre = "INTERMEDIAWS_LISTAR_CENTRO";
         return this.pathService.getUrl(ws_nombre)
             .then((data) => {
-                //const nuevaWsUrl = data.object.wsUrl;
                 const nuevaWsUrl = "/retailws/ws/vouchers/loadVentas";
                 const nuevaSerUrl = serverseleccionado;
-                //const nuevaSerUrl = data.object.serCodigo.serUrl;
                 const url = nuevaSerUrl + nuevaWsUrl;
+    
+                numCaja = numCaja;
+                fechaInicio = fechaInicio;
+                fechaFin = fechaFin;
+                tipocentro = tipocentro;
+    
                 const paginationInfo = {
                     count: true,
                     sortBy: {},
                     filterBy: {}
-                  };
+                };
                 //console.log(url);
+    
                 const requestData = {
                     object: JSON.stringify({
                         numCaja: numCaja,
                         fechaInicio: fechaInicio,
                         fechaFin: fechaFin,
-                        tipocentro:tipocentro,
+                        tipocentro: tipocentro,
                         lazyInfo: JSON.stringify(paginationInfo)
                     }),
                     rowCount: 0,
                 };
+    
                 return axios
                     .post(url, requestData, {
                         headers: {
@@ -186,21 +187,15 @@ export class ReporteVentasCoralesIntermediaws {
                         }
                     })
                     .then((response) => {
-                        const objectData = JSON.parse(response.data.object);
-                        return objectData;
-
+                        return response.data ? JSON.parse(response.data.object) : null;
                     })
                     .catch((error) => {
-                        console.error('Error ReporteVentasCoralesIntermediaws metodo centrologistico', error);
-                        window.alert('Ocurrió un error: ' + error.message);
                         return null;
                     });
             })
             .catch((error) => {
-                console.error('Error ReporteVentasCoralesIntermediaws metodo centrologistico', error);
-                window.alert('Ocurrió un error: ' + error.message);
                 return null;
             });
     }
-
+    
 }
