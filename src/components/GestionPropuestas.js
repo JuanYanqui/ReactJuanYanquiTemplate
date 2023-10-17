@@ -138,6 +138,8 @@ const GestionPropuestas = ({ usuarioUppercase }) => {
             9: 'Anulados',
         };
 
+        const allStates = [0, 2, 3, 4, 5, 8, 9]; // Add all possible states here
+
         const categoriasEstado = dataar.reduce((categorias, registro) => {
             registro.estados.forEach((estado) => {
                 if (!categorias.includes(estado.estadoInt)) {
@@ -147,6 +149,12 @@ const GestionPropuestas = ({ usuarioUppercase }) => {
             return categorias;
         }, []);
 
+        allStates.forEach((state) => {
+            if (!categoriasEstado.includes(state)) {
+                categoriasEstado.push(state);
+            }
+        });
+    
         categoriasEstado.sort((a, b) => a - b);
 
         const Todosprocesos = (rowData, estadoInt, centro) => {
@@ -215,18 +223,18 @@ const GestionPropuestas = ({ usuarioUppercase }) => {
 
                         header={
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', verticalAlign: 'middle', textAlign: 'center' }}>
-                                &nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Todosprocesos(null, estadoInt, todosLosCentros)}
+                                &nbsp; &nbsp;  &nbsp;{Todosprocesos(null, estadoInt, todosLosCentros)}
                             </div>
                         }
                         body={rowData => (
-                            <div style={{ width: '100px', verticalAlign: 'middle', textAlign: 'center' }}>
+                            <div style={{ minWidth: '50px', verticalAlign: 'middle', textAlign: 'center' }}>
                                 {estadoInt === 0 && <i className="pi pi-play" style={{ fontSize: '1.7rem' }} onClick={() => procedepaso1(valor, estadoInt, rowData.centro)}></i>}
                                 {estadoInt === 2 && <i className="pi pi-play" style={{ fontSize: '1.7rem' }} onClick={() => procedepaso2(valor, estadoInt, rowData.centro)}></i>}
                                 {estadoInt === 3 && <i className="pi pi-play " style={{ fontSize: '1.7rem' }} onClick={() => procedepaso3(valor, estadoInt, rowData.centro)}></i>}
                                 {estadoInt === 4 && <i className="pi pi-play" style={{ fontSize: '1.7rem' }} onClick={() => procedepaso4(valor, estadoInt, rowData.centro)}></i>}
                             </div>
                         )}
-                        style={{ width: '100px', verticalAlign: 'middle', textAlign: 'center' }}
+                        style={{ minWidth: '50px', verticalAlign: 'middle', textAlign: 'center' }}
                     />
                 );
             }
@@ -270,13 +278,13 @@ const GestionPropuestas = ({ usuarioUppercase }) => {
                     <Column
                         field="centro"
                         header="Centro"
-                        style={{ width: '50px', verticalAlign: 'middle' }}
+                        style={{ minWidth: '100px', verticalAlign: 'middle' }}
                         className="center-header"
                     />
                     <Column
                         field="nombre"
                         header="Nombre"
-                        style={{ width: '400px', verticalAlign: 'middle' }}
+                        style={{ minWidth: '300px', verticalAlign: 'middle' }}
                         className="center-header"
                     />
                     {orderedColumns}
@@ -534,7 +542,7 @@ const GestionPropuestas = ({ usuarioUppercase }) => {
                             centro,
                             nombre: registro.nombre,
                             rowKey: registro.rowKey,
-                            estados: {}, // Aquí almacenaremos los estados dinámicamente.
+                            estados: {},
                         };
                     }
 
@@ -545,12 +553,12 @@ const GestionPropuestas = ({ usuarioUppercase }) => {
                     registrosAgrupados[centro].estados[estado] += entero1;
                 });
 
-                // Convertir el objeto de estados nuevamente a un arreglo de objetos
+               
                 const registrosCombinados = Object.values(registrosAgrupados).map((registro) => {
                     const estados = [];
                     for (const estado in registro.estados) {
                         estados.push({
-                            estadoInt: parseInt(estado), // Convertir de cadena a número si es necesario.
+                            estadoInt: parseInt(estado), 
                             entero1: registro.estados[estado],
                         });
                     }

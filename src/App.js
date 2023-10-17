@@ -135,42 +135,35 @@ const App = ({ userData, usuarioUppercase }) => {
     //Ingreso a los menus 
     const onMenuItemClick = (event, item) => {
         if (!item) {
-          // Handle the case where 'item' is not defined or is falsy
-          return;
+            // Handle the case where 'item' is not defined or is falsy
+            return;
         }
-      
+    
         if (!item.items) {
-          hideOverlayMenu();
+            hideOverlayMenu();
         } else {
-          event.preventDefault();
+            event.preventDefault();
         }
-      
+    
         if (item.to) {
-          const url = item.to;
-          const url2 = url.trim();
-          if (url2.includes("/rsap")) {
-            usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datan) => {
-              datan.object.forEach((item) => {
-                const currentUrl = url;
-                const existingUrls = datan.object.map((item) => item.url);
-                const existingUrlsHijos = datan.object.flatMap((item) => {
-                  if (item.hijos && Array.isArray(item.hijos)) {
-                    return item.hijos.map((hijo) => hijo.url);
-                  }
-                  return [];
+            const url = item.to;
+            const url2 = url.trim();
+            if (url2.includes("/rsap")) {
+                usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datan) => {
+                    const existingUrls = datan.object.map(item => item.url);
+                    const existingUrlsHijos = datan.object.flatMap(item => (item.hijos && Array.isArray(item.hijos)) ? item.hijos.map(hijo => hijo.url) : []);
+            
+                    if (existingUrls.includes(url) || existingUrlsHijos.includes(url)) {
+                        redirectToExternalUrl(url);
+                    } else {
+                        navigate("/rsap/access");
+                    }
                 });
-                if (existingUrls.includes(url) || existingUrlsHijos.includes(url)) {
-                  redirectToExternalUrl(url);
-                } else {
-                  navigate("/rsap/access");
-                }
-              });
-            });
-          } else {
-            redirectToExternalUrl(url);
-          }
+            } else {
+                redirectToExternalUrl(url);
+            }
         }
-      };
+    };
       
 
 
@@ -434,9 +427,9 @@ const App = ({ userData, usuarioUppercase }) => {
     useEffect(() => {
         const verificarYRedirigir = async () => {
             const url = window.location.href;
-            /*usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
+            usuarioservice.GetMenuUsuarioIngreso(usuarioUppercase).then((datas) => {
                 const datanueva = datas
-                datas.object.forEach((item) => {
+                /*datas.object.forEach((item) => {
                     const existingUrls = datas.object.map(item => item.url);
                     const existingUrlsHijos = datas.object.flatMap(item => {
                         if (item.hijos && Array.isArray(item.hijos)) {
@@ -459,8 +452,8 @@ const App = ({ userData, usuarioUppercase }) => {
                          navigate("/rsap/access");
                         return;
                     }
-                });
-            });*/
+                });*/
+            });
         };
 
         verificarYRedirigir();
